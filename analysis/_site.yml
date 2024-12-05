@@ -1,17 +1,30 @@
-name: "20241205_OC_ML_image_analyses_single_agents"
+name: "Gorringe_Lab_OliviaCraig_ORG66BR2"
 output_dir: ../docs
 navbar:
-  title: "20241205_OC_ML_image_analyses_single_agents"
+  title: "Gorringe_Lab_OliviaCraig_ORG66BR2"
+ # type: inverse
   left:
-  - text: Home
-    href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+    - text: "Home"
+      href: index.html
+    - text: "SVM analyses of Single Organoids"
+      menu:
+        - text: "Brightfield channel only"
+          href: SVM_1_ORG66BR2_BFonly.html
+        - text: "Brightfield and Hoechst"
+          href: SVM_1_ORG66BR2_Dox.html
+
+
+
+
+
+
 output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
-    theme: cosmo
+    toc_collapsed: true
+    toc_depth: 3
+    code_folding: hide
+    theme: flatly
     highlight: textmate
+

@@ -1,11 +1,126 @@
 ---
-title: "Home"
+title: "<img src=\"Cropped_VCFG_Logo2019.png\" style=\"float:right;height:77.1429px;width:152px\"/>Home<br>"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
+    theme: flatly
     toc: false
+    code_folding: hide
 editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+
+<style type="text/css">
+
+body{ /* Normal  */
+      font-size: 16px;
+  }
+td {  /* Table  */
+  font-size: 14px;
+  white-space: nowrap;
+}
+h1.title {
+  font-size: 32px;
+  color: Black;
+}
+h1 { /* Header 1 */
+  font-size: 24px;
+  color: Black;
+}
+h2 { /* Header 2 */
+    font-size: 18px;
+  color: Black;
+}
+h3 { /* Header 3 */
+  font-size: 18px;
+  color: Black;
+}
+h4 { /* Header 4 */
+  font-size: 18px;
+  color: Black;
+}
+h5 { /* Normal  */
+  font-size: 16px;
+  color: Black;
+  class = "author"
+}
+h6 { /* Normal  */
+  font-size: 16px;
+  color: Black;
+  class = "data"
+}
+a, a:hover {
+  color: #7d2b8b
+}
+code.r{ /* Code block */
+    font-size: 12px;
+}
+pre { /* Code block - determines code spacing between lines */
+    font-size: 14px;
+}
+</style>
+
+
+<style type="text/css">
+#TOC { /* Normal  */
+  color: Black; 
+  border-color: #7d2b8b
+}
+a {
+color: Black;
+}
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    background-color: #7d2b8b;
+    border-color: #7d2b8b;
+}
+</style>
+
+<style>
+div.a {
+  text-indent: 50px;
+}
+</style>
+
+<style>
+.nav-pills>li>a {
+    position: relative;
+    display: block;
+    color: #3c2372;
+    border: 1px solid #7d2b8b;
+    background-color: #ffffff;
+
+    }
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: #ffffff;
+    background-color: #7d2b8b;
+    border: 1px solid #ffffff;
+
+    }
+</style>
+<style>
+
+.tabset-dropdown > .nav-tabs {
+	display: inline-block;
+	max-height: 500px;
+	min-height: 44px;
+	overflow-y: auto;
+	background: white;
+	border: 1px solid #7d2b8b;
+	border-radius: 4px;
+	color:#7d2b8b;
+}
+</style>
+
+<br>
+
+
+## Back to [<span style="color: #7d2b8b">_Confluence_</span>](https://atlassian.petermac.org.au/confluence/display/VCFG/Feasibility+Study+Analyses+PM3D170)
+
+
+
+
+
+
+
+
