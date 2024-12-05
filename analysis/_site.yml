@@ -1,0 +1,17 @@
+name: "20241205_OC_ML_image_analyses_single_agents"
+output_dir: ../docs
+navbar:
+  title: "20241205_OC_ML_image_analyses_single_agents"
+  left:
+  - text: Home
+    href: index.html
+  - text: About
+    href: about.html
+  - text: License
+    href: license.html
+output:
+  workflowr::wflow_html:
+    toc: yes
+    toc_float: yes
+    theme: cosmo
+    highlight: textmate
