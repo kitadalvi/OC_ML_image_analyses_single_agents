@@ -8,8 +8,6 @@ navbar:
       href: index.html
     - text: "SVM analyses of Single Organoids"
       menu:
-        - text: "Brightfield channel only"
-          href: SVM_1_ORG66BR2_BFonly.html
         - text: "Brightfield and Hoechst"
           href: SVM_1_ORG66BR2_Dox.html
 
