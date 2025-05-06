@@ -1173,7 +1173,7 @@ id <- colnames(raw2[c(1:7,9)])
 features <- colnames(raw2[c(8,10,12,13)])
 
 pred_all_data_melt <- raw2 %>% 
-  melt(id.vars = id, measure.vars = features) 
+  reshape2::melt(id.vars = id, measure.vars = features) 
 
 
 data_norm_plot <- pred_all_data_melt %>%
@@ -1181,7 +1181,7 @@ data_norm_plot <- pred_all_data_melt %>%
   group_by(Compound_ID, Plate_ID, Patient, Concentration, variable) %>% 
   summarise_at(vars(value), funs(mean, sd))
 
-normplot <- data_norm_plot %>%
+normplot <- data_norm_plot2 %>%
   unite("Identifyer", c(Plate_ID, Patient), sep = "_", remove = FALSE) %>% 
   ggplot(., aes(x = Concentration, 
                 y = mean,
@@ -1194,7 +1194,7 @@ normplot <- data_norm_plot %>%
   facet_wrap(~Compound_ID, ncol = 3) +
   scale_x_continuous(trans = "log10", labels = scales::number_format(accuracy = 0.1)) + 
   labs(title = "SVM results ORG66BR2\n",
-       x = "Log10 Concentration",
+       x = "Log10 Concentration (uM)",
        y = "Probability of being alive") +
   theme_bw() +
   theme(axis.title.x = element_text(margin = margin(t = 10, r = 10, b = 20, l = 20)), 
@@ -1216,7 +1216,7 @@ normplot
 ## Single organoid results
 
 ```{r, fig.height=10, fig.width=10}
-# avoid the use of scientific notions
+# avoid the use of scientific notation 
 options(scipen=999)
 
 
@@ -1243,8 +1243,6 @@ p1 <- pred_all_data %>%
   )
 
 print(p1)
-
-
 
 ```
 
