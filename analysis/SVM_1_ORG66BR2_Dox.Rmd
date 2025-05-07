@@ -260,7 +260,7 @@ all_data_raw <-
 
 annotationsCTG <- read_csv(here::here("data/OC_ORG66BR2_annotation_Dox.csv")) %>% dplyr::select(-WELL_ID)
 
-generate_heatmaps(annotationsCTG)
+#generate_heatmaps(annotationsCTG)
 
 # annotationsCTG <- read_csv(here::here("data", "OC_ORG66BR2_annotation_Dox.csv")) %>% 
 #   left_join(annotationsCTG, by = c("Well_ID", "VCFG_Plate_ID", "Concentration", "Units", "Description", "Compound_ID", "Patient")) 
@@ -566,7 +566,7 @@ id <- colnames(raw2[c(1:10)])
 features <- colnames(raw2[, 11:ncol(raw2)])
 
 CleanedAn_melt <- raw2 %>% 
-  melt(id.vars = id, measure.vars = features) 
+  reshape2::melt(id.vars = id, measure.vars = features) 
 
 ```
 
@@ -1180,7 +1180,7 @@ data_norm_plot <- pred_all_data_melt %>%
   group_by(Compound_ID, Plate_ID, Patient, Concentration, variable) %>% 
   summarise_at(vars(value), funs(mean, sd))
 
-normplot <- data_norm_plot2 %>%
+normplot <- data_norm_plot %>%
   unite("Identifyer", c(Plate_ID, Patient), sep = "_", remove = FALSE) %>% 
   ggplot(., aes(x = Concentration, 
                 y = mean,
