@@ -251,7 +251,7 @@ The following Wells were excluded from Media and DMSO controls: H13, G13, I13, N
 # per-image data
 all_data_raw <- 
     list.files(gsub(" ", "", paste(here::here("data/raw_data/staining/SingleOrganoid/"))), 
-                 pattern = "*.csv", 
+                 pattern = "*ORG66BR2.csv", 
                  full.names = T) %>% 
     map_df(~fread(.)) %>% 
   mutate(VCFG_Plate_ID = 1) %>% 
@@ -291,7 +291,6 @@ Bins were added to positive, negative, and library wells.
 
 ```{r}
 
-
 all_data_with_bins <- all_data_raw %>%
   filter(!Well_ID %in% c("H13", "G13", "I13", "N13", "M13", "F13", "L13", "C13", "F2", "L2", "F12", "G12")) %>% 
   left_join(., norm_CTG, by = c("Well_ID")) %>% 
@@ -311,7 +310,7 @@ all_data_with_bins <- all_data_with_bins %>%
 
 
 
-#write.csv(all_data_with_bins, here::here("output/all_data_with_bins.csv"))
+write.csv(all_data_with_bins, here::here("output/",patient,"/all_data_with_bins.csv"))
 
 ```
 
@@ -502,9 +501,9 @@ all_data_clean <- all_data_with_bins %>%
   filter(!AreaShape_Area<1000) 
 
 clean_features <- names(all_data_clean[,-c(1:13)])
-#write.csv(all_data_clean, here::here("output/all_data_clean.csv"))
+write.csv(all_data_clean, here::here("output/",patient,"/all_data_clean.csv"))
 
-#write.csv(all_data_clean, here::here("output/Feature_reduced_raw_data.csv"))
+write.csv(all_data_clean, here::here("output/",patient,"/Feature_reduced_raw_data.csv"))
 ```
 
 Of the total feature count of `r ncol(all_data_with_bins)` there were `r length(to_remove)` removed during feature clean-up 
@@ -548,7 +547,7 @@ data_all_short <- CleanedAn
 control_short <- data_all_short%>% 
   filter(!Bin =="Sample") 
 
-#write.csv(data_all_short, "data_all_short.csv")
+write.csv(data_all_short, here::here(paste0("output/",patient,"/data_all_short.csv")))
 
 ```
 
@@ -692,14 +691,12 @@ trainTransformed_scr <- transform(trainTransformed, Bin = sample(Bin) )
 ```
 
 
-By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 50%. 
+By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 59%. 
  
 ```{r}
 pred_scr <- predict(svmfit2,trainTransformed_scr, probability = TRUE) 
 
 confusionMatrix(pred_scr,trainTransformed_scr$Bin)
-
-
 ```
 
 # Tuning SVM 
@@ -707,12 +704,12 @@ confusionMatrix(pred_scr,trainTransformed_scr$Bin)
 The kernel argument has a variety of possible types including linear, polynomial, radial, and sigmoid. We use kernel=”radial” for this classification problem.
 You can tune the operation of svm() with two additional arguments: gamma and cost, where gamma is the argument for use by the kernel function, and cost allows us to specify the cost of a violation to the margin. When cost is small, the margins will be wide, resulting in many support vectors. You can experiment with different values of gamma and cost to find the best classification accuracy.
 
-**Here, changing cost from 1 to 50 and keep gamma at default improved the model performance from 96% to 100% accuracy.**
+**Here, changing cost from 1 to 50 and keep gamma at default improved the model performance from 96% to 99% accuracy.**
 
 ```{r}
 # Define new values for gamma and cost
 new_gamma <- 0.01
-new_cost <- 50
+new_cost <- 10
 
 # Create the SVM model with the new gamma and cost values
 svm_model_after_tune = svm(Bin ~ ., 
@@ -725,10 +722,8 @@ svm_model_after_tune = svm(Bin ~ .,
 summary(svm_model_after_tune)
 
 save(svm_model_after_tune, file = here::here("output/svm_model_after_tune.RData"))
-
 ```
 ```{r}
-
 load(here::here("output/svm_model_after_tune.RData"))
 ```
 
@@ -919,7 +914,7 @@ confusionMatrix(prediction,testTransformed$Bin)
 
 ## Testing with scrambled labels
 
-Testing the SVM model on the last 20% of data after scrambling the category labels gives a random 50% accuracy in prediction.  
+Testing the SVM model on the last 20% of data after scrambling the category labels gives a random 58% accuracy in prediction.  
 
 ```{r}
 test_dat2_scr <- transform(testTransformed, Bin = sample(Bin) )
@@ -945,7 +940,7 @@ dat2[, 1] <- as.factor(dat2[, 1])  # Convert Bin to a factor
 
 data_all_short_all <- data_all_short %>% 
   dplyr::select(Bin, everything()) 
-#write.csv(data_all_short_all, "data_all_short_all1.csv")
+write.csv(data_all_short_all, here::here(paste0("output/",patient,"/data_all_short_all1.csv")))
 
 dat_V <- data_all_short_all%>% as.data.frame() %>% 
   dplyr::select(-c(2:11))
@@ -960,7 +955,7 @@ prob <- attr(prediction, "probabilities")
 confusionMatrix(prediction, LibTransformed$Bin)
 
 summary = data.frame(data_all_short_all, as.numeric(levels(prediction))[prediction])
-write.csv(summary, here::here("output/summary_morphology_ORG66BR2.csv"))
+write.csv(summary, here::here(paste0("output/",patient,"/summary_morphology_ORG66BR2.csv")))
 ```
 
 
@@ -969,8 +964,6 @@ write.csv(summary, here::here("output/summary_morphology_ORG66BR2.csv"))
 Link to download "pred_all_data.csv" from PRIME
 
 ```{r}
-
-
 pred_all_data = data.frame(prob, data_all_short_all) 
 
 # Group by WELL_ID and count ObjectNumber rows
@@ -1008,10 +1001,7 @@ pred_all_data_mean<- pred_all_data %>% ungroup() %>% dplyr::select(-AreaShape_Ar
   unique() %>%
    mutate(across(where(is.numeric), ~ round(.x, 2))) %>% 
   ungroup()
-
-write.csv(pred_all_data, here::here("output/pred_all_data_ORG66BR2.csv"))
-
-
+write.csv(pred_all_data, here::here(paste0("output/",patient,"/pred_all_data_ORG66BR2.csv")))
 
 #select_pred_all_data <- pred_all_data %>% 
 #  filter(!Description == "Empty" & Condition %in% c("3RR+F", "3R+LY"))
@@ -1033,7 +1023,8 @@ write.csv(pred_all_data, here::here("output/pred_all_data_ORG66BR2.csv"))
   #scrollX = TRUE
 #))
 
-#write.csv(pred_all_data, here::here("output/pred_all_data.csv"))
+write.csv(pred_all_data, here::here("output/pred_all_data.csv"))
+
 ```
 
 
@@ -1056,7 +1047,8 @@ datatable(pred_all_data_mean, extensions = c('Buttons', 'Scroller'), rownames = 
   scrollX = TRUE
 ))
 
-write.csv(pred_all_data_mean, here::here("output/pred_all_data_mean_ORG66BR2.csv"))
+write.csv(pred_all_data_mean, here::here(paste0("output/",patient,"/pred_all_data_mean_ORG66BR2.csv")))
+
 ```
 
 
@@ -1176,7 +1168,7 @@ pred_all_data_melt <- raw2 %>%
 
 
 data_norm_plot <- pred_all_data_melt %>%
-  #filter(!Concentration ==0) %>% 
+  filter(!Concentration ==0) %>% 
   group_by(Compound_ID, Plate_ID, Patient, Concentration, variable) %>% 
   summarise_at(vars(value), funs(mean, sd))
 
@@ -1268,4 +1260,3 @@ print(p1)
 
 &nbsp;
 
-#test

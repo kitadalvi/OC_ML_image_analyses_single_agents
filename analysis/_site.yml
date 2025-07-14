@@ -1,7 +1,7 @@
-name: "Gorringe_Lab_OliviaCraig_ORG66BR2"
+name: "SVM Based Image Analysis of Organoids - Single Agent"
 output_dir: ../docs
 navbar:
-  title: "Gorringe_Lab_OliviaCraig_ORG66BR2"
+  title: "SVM Based Image Analysis of Organoids - Single Agent"
  # type: inverse
   left:
     - text: "Home"

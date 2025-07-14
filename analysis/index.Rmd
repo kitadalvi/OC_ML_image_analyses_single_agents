@@ -114,8 +114,32 @@ div.a {
 
 <br>
 
-## Data 
-[ORG66 BR2 Image Analysis](SVM_1_ORG66BR2_Dox.html)
+## Data Summary
+
+|Sample | Replicate|Classification    |Status         |Link     |
+|:------|---------:|:-----------------|:--------------|:--------|
+|ORG38  |         2|mixed small dense |complete-edit. |[ORG38BR2](SVM_1_ORG38BR2_Dox.html)|
+|ORG41  |         1|mixed small dense |complete       |[ORG41BR1](SVM_1_ORG41BR1_Dox.html)|
+|ORG41  |         2|mixed small dense |Under review   |Images look funky|
+|ORG46  |         1|mixed small dense |Under review   |Images look funky|
+|ORG49  |         2|mixed small dense |Under review   |Images look funky|
+|ORG55  |         1|mixed small dense |incomplete     |-|
+|ORG55  |         2|mixed small dense |incomplete     |-|
+|ORG61  |         1|mixed small dense |incomplete     |-|
+|ORG61  |         2|mixed small dense |incomplete     |-|
+|ORG65  |         1|mixed small dense |incomplete     |-|
+|ORG65  |         2|mixed small dense |incomplete     |-|
+|ORG66  |         2|mixed small dense |complete       |[ORG66BR2](SVM_1_ORG66BR2_Dox.html)|
+|ORG66  |         3|mixed small dense |complete       |[ORG66BR3](SVM_1_ORG66BR3_Dox.html)|
+|ORG73  |         1|mixed small dense |incomplete     |-|
+|ORG76  |         1|mixed small dense |incomplete     |-|
+|ORG60  |         3|cystic            |incomplete     |[ORG60BR3](SVM_1_ORG60BR3.html)|
+|ORG64  |         3|cystic            |under revision |[ORG64BR3](SVM_1_ORG64BR3_Dox.html)|
+|ORG70  |         1|cystic            |incomplete     |[ORG70BR1](SVM_1_ORG70BR1.html)|
+|ORG70  |         2|cystic            |incomplete     |[ORG70BR2](SVM_1_ORG70BR2.html)|
+|ORG71  |         1|cystic            |N/A            |N/A - not MOC|
+|ORG71  |         2|cystic            |N/A            |N/A - not MOC|
+
 
 ## Back to [<span style="color: #7d2b8b">_Confluence_</span>](https://atlassian.petermac.org.au/confluence/display/VCFG/Feasibility+Study+Analyses+PM3D170)
 

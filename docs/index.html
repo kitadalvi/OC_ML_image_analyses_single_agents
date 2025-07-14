@@ -252,7 +252,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Gorringe_Lab_OliviaCraig_ORG66BR2</a>
+      <a class="navbar-brand" href="index.html">SVM Based Image Analysis of Organoids - Single Agent</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -299,7 +299,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -310,8 +310,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -320,13 +320,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-05-07
+<strong>Last updated:</strong> 2025-07-14
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -350,33 +350,36 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkitadalviOCMLimageanalysessingleagentstree6ff7b414081ccaa8d6065399e9301db23ed2bfectargetblank6ff7b41a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkitadalviOCMLimageanalysessingleagentstree82ea504476a83c4d5cb6be2b9069f6f4d133f491targetblank82ea504a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/tree/6ff7b414081ccaa8d6065399e9301db23ed2bfec" target="_blank">6ff7b41</a>
+<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/tree/82ea504476a83c4d5cb6be2b9069f6f4d133f491" target="_blank">82ea504</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomkitadalviOCMLimageanalysessingleagentstree6ff7b414081ccaa8d6065399e9301db23ed2bfectargetblank6ff7b41a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomkitadalviOCMLimageanalysessingleagentstree82ea504476a83c4d5cb6be2b9069f6f4d133f491targetblank82ea504a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -386,7 +389,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/tree/6ff7b414081ccaa8d6065399e9301db23ed2bfec" target="_blank">6ff7b41</a>.
+<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/tree/82ea504476a83c4d5cb6be2b9069f6f4d133f491" target="_blank">82ea504</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -404,16 +407,44 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/.RData
     Ignored:    analysis/.Rhistory
+    Ignored:    analysis/SVM_1_ORG38BR2_Dox.html
     Ignored:    data/.DS_Store
     Ignored:    data/raw_data/
+    Ignored:    output/ORG38BR2/
+    Ignored:    output/ORG41BR1/
+    Ignored:    output/ORG60BR3/
+    Ignored:    output/ORG66BR2/
+    Ignored:    output/ORG66BR3/
+    Ignored:    output/ORG70BR1/
+    Ignored:    output/ORG70BR2/
 
 Untracked files:
-    Untracked:  20241205_OC_ML_image_analyses_single_agents.Rproj
+    Untracked:  analysis/Phenotype_Visualisation.Rmd
+    Untracked:  analysis/SVM_1_ORG38BR2_Dox.Rmd
+    Untracked:  analysis/SVM_1_ORG38BR2_Dox.knit.md
+    Untracked:  analysis/SVM_1_ORG41BR1_Dox.Rmd
+    Untracked:  analysis/SVM_1_ORG60BR3.Rmd
+    Untracked:  analysis/SVM_1_ORG64BR3_Dox.Rmd
+    Untracked:  analysis/SVM_1_ORG66BR3_Dox.Rmd
+    Untracked:  analysis/SVM_1_ORG70BR1.Rmd
+    Untracked:  analysis/SVM_1_ORG70BR2.Rmd
+    Untracked:  data/OC_ORG38BR2_CTG.csv
+    Untracked:  data/OC_ORG41BR1_CTG.csv
+    Untracked:  data/OC_ORG60BR3_CTG.csv
+    Untracked:  data/OC_ORG66BR3_CTG.csv
+    Untracked:  data/OC_ORG70BR1_CTG.csv
+    Untracked:  data/OC_ORG70BR2_CTG.csv
+    Untracked:  data/OC_ORG73BR1_CTG.csv
+    Untracked:  data/images/
 
 Unstaged changes:
-    Deleted:    OC_ML_image_analyses_single_agents.Rproj
     Modified:   analysis/SVM_1_ORG66BR2_Dox.Rmd
+    Modified:   analysis/_site.yml
+    Modified:   analysis/index.Rmd
+    Deleted:    data/OC_ORG64_annotatedCTG.csv
+    Deleted:    data/ORG73_CTG.xlsx
 
 </code></pre>
 <p>
@@ -458,6 +489,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/kitadalvi/OC_ML_image_analyses_single_agents/82ea504476a83c4d5cb6be2b9069f6f4d133f491/docs/index.html" target="_blank">82ea504</a>
+</td>
+<td>
+kitadalvi
+</td>
+<td>
+2025-05-07
+</td>
+<td>
+Index and ORG66BR2 image analysis addec
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -681,9 +729,175 @@ div.a {
 }
 </style>
 <p><br></p>
-<div id="data" class="section level2">
-<h2>Data</h2>
-<p><a href="SVM_1_ORG66BR2_Dox.html">ORG66 BR2 Image Analysis</a></p>
+<div id="data-summary" class="section level2">
+<h2>Data Summary</h2>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="16%" />
+<col width="30%" />
+<col width="25%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Sample</th>
+<th align="right">Replicate</th>
+<th align="left">Classification</th>
+<th align="left">Status</th>
+<th align="left">Link</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ORG38</td>
+<td align="right">2</td>
+<td align="left">mixed small dense</td>
+<td align="left">complete-edit.</td>
+<td align="left"><a href="SVM_1_ORG38BR2_Dox.html">ORG38BR2</a></td>
+</tr>
+<tr class="even">
+<td align="left">ORG41</td>
+<td align="right">1</td>
+<td align="left">mixed small dense</td>
+<td align="left">complete</td>
+<td align="left"><a href="SVM_1_ORG41BR1_Dox.html">ORG41BR1</a></td>
+</tr>
+<tr class="odd">
+<td align="left">ORG41</td>
+<td align="right">2</td>
+<td align="left">mixed small dense</td>
+<td align="left">Under review</td>
+<td align="left">Images look funky</td>
+</tr>
+<tr class="even">
+<td align="left">ORG46</td>
+<td align="right">1</td>
+<td align="left">mixed small dense</td>
+<td align="left">Under review</td>
+<td align="left">Images look funky</td>
+</tr>
+<tr class="odd">
+<td align="left">ORG49</td>
+<td align="right">2</td>
+<td align="left">mixed small dense</td>
+<td align="left">Under review</td>
+<td align="left">Images look funky</td>
+</tr>
+<tr class="even">
+<td align="left">ORG55</td>
+<td align="right">1</td>
+<td align="left">mixed small dense</td>
+<td align="left">incomplete</td>
+<td align="left">-</td>
+</tr>
+<tr class="odd">
+<td align="left">ORG55</td>
+<td align="right">2</td>
+<td align="left">mixed small dense</td>
+<td align="left">incomplete</td>
+<td align="left">-</td>
+</tr>
+<tr class="even">
+<td align="left">ORG61</td>
+<td align="right">1</td>
+<td align="left">mixed small dense</td>
+<td align="left">incomplete</td>
+<td align="left">-</td>
+</tr>
+<tr class="odd">
+<td align="left">ORG61</td>
+<td align="right">2</td>
+<td align="left">mixed small dense</td>
+<td align="left">incomplete</td>
+<td align="left">-</td>
+</tr>
+<tr class="even">
+<td align="left">ORG65</td>
+<td align="right">1</td>
+<td align="left">mixed small dense</td>
+<td align="left">incomplete</td>
+<td align="left">-</td>
+</tr>
+<tr class="odd">
+<td align="left">ORG65</td>
+<td align="right">2</td>
+<td align="left">mixed small dense</td>
+<td align="left">incomplete</td>
+<td align="left">-</td>
+</tr>
+<tr class="even">
+<td align="left">ORG66</td>
+<td align="right">2</td>
+<td align="left">mixed small dense</td>
+<td align="left">complete</td>
+<td align="left"><a href="SVM_1_ORG66BR2_Dox.html">ORG66BR2</a></td>
+</tr>
+<tr class="odd">
+<td align="left">ORG66</td>
+<td align="right">3</td>
+<td align="left">mixed small dense</td>
+<td align="left">complete</td>
+<td align="left"><a href="SVM_1_ORG66BR3_Dox.html">ORG66BR3</a></td>
+</tr>
+<tr class="even">
+<td align="left">ORG73</td>
+<td align="right">1</td>
+<td align="left">mixed small dense</td>
+<td align="left">incomplete</td>
+<td align="left">-</td>
+</tr>
+<tr class="odd">
+<td align="left">ORG76</td>
+<td align="right">1</td>
+<td align="left">mixed small dense</td>
+<td align="left">incomplete</td>
+<td align="left">-</td>
+</tr>
+<tr class="even">
+<td align="left">ORG60</td>
+<td align="right">3</td>
+<td align="left">cystic</td>
+<td align="left">incomplete</td>
+<td align="left"><a href="SVM_1_ORG60BR3.html">ORG60BR3</a></td>
+</tr>
+<tr class="odd">
+<td align="left">ORG64</td>
+<td align="right">3</td>
+<td align="left">cystic</td>
+<td align="left">under revision</td>
+<td align="left"><a href="SVM_1_ORG64BR3_Dox.html">ORG64BR3</a></td>
+</tr>
+<tr class="even">
+<td align="left">ORG70</td>
+<td align="right">1</td>
+<td align="left">cystic</td>
+<td align="left">incomplete</td>
+<td align="left"><a href="SVM_1_ORG70BR1.html">ORG70BR1</a></td>
+</tr>
+<tr class="odd">
+<td align="left">ORG70</td>
+<td align="right">2</td>
+<td align="left">cystic</td>
+<td align="left">incomplete</td>
+<td align="left"><a href="SVM_1_ORG70BR2.html">ORG70BR2</a></td>
+</tr>
+<tr class="even">
+<td align="left">ORG71</td>
+<td align="right">1</td>
+<td align="left">cystic</td>
+<td align="left">N/A</td>
+<td align="left">N/A - not MOC</td>
+</tr>
+<tr class="odd">
+<td align="left">ORG71</td>
+<td align="right">2</td>
+<td align="left">cystic</td>
+<td align="left">N/A</td>
+<td align="left">N/A - not MOC</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="back-to-confluence" class="section level2">
 <h2>Back to <a

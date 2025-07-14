@@ -1,0 +1,1276 @@
+---
+title: "<img src=\"Cropped_VCFG_Logo2019.png\" style=\"float:right;height:77.1429px;width:152px\"/>ORG60BR3<br>3D Image-based Classification <br> SVM analyses<br>"
+output: 
+  html_document:
+    keep_md: true
+    theme: flatly
+    toc: true
+    toc_float: true
+    toc_collapsed: true
+    toc_depth: 3
+    code_folding: hide
+    df_print: kable
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, tidy = TRUE)
+```
+
+
+<style type="text/css">
+
+body{ /* Normal  */
+      font-size: 16px;
+  }
+td {  /* Table  */
+  font-size: 14px;
+  white-space: nowrap;
+}
+h1.title {
+  font-size: 32px;
+  color: Black;
+}
+h1 { /* Header 1 */
+  font-size: 24px;
+  color: Black;
+}
+h2 { /* Header 2 */
+    font-size: 20px;
+  color: Black;
+}
+h3 { /* Header 3 */
+  font-size: 18px;
+  color: Black;
+}
+h4 { /* Header 4 */
+  font-size: 18px;
+  color: Black;
+}
+h5 { /* Normal  */
+  font-size: 16px;
+  color: Black;
+  class = "author"
+}
+h6 { /* Normal  */
+  font-size: 16px;
+  color: Black;
+  class = "data"
+}
+a, a:hover {
+  color: #7d2b8b
+}
+code.r{ /* Code block */
+    font-size: 12px;
+}
+pre { /* Code block - determines code spacing between lines */
+    font-size: 14px;
+}
+</style>
+
+
+<style type="text/css">
+#TOC { /* Normal  */
+  color: Black; 
+  border-color: #7d2b8b
+}
+a {
+color: Black;
+}
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    background-color: #7d2b8b;
+    border-color: #7d2b8b;
+}
+</style>
+
+<style>
+div.a {
+  text-indent: 50px;
+}
+</style>
+
+<style>
+.nav-pills>li>a {
+    position: relative;
+    display: block;
+    color: #3c2372;
+    border: 1px solid #7d2b8b;
+    background-color: #ffffff;
+
+    }
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: #ffffff;
+    background-color: #7d2b8b;
+    border: 1px solid #ffffff;
+
+    }
+</style>
+<style>
+
+.tabset-dropdown > .nav-tabs {
+	display: inline-block;
+	max-height: 500px;
+	min-height: 44px;
+	overflow-y: auto;
+	background: white;
+	border: 1px solid #7d2b8b;
+	border-radius: 4px;
+	color:#7d2b8b;
+}
+</style>
+
+
+# Information
+
+The purpose of this screen was to develop an image-based classification to characterize dead or alive organoids in addition to standard CTG analyses<br>
+We address organoid heterogeneity by creating an image-based signature for independent quantification of spheroids killed by cancer drugs. <br>
+
+The readouts from the high-content image analysis include morphology, intensity, and texture features of the spheroids in BF and Hoechst live-cell images.
+
+## Conditions
+
+* Alive/ healthy control (Vehicle control Wells from patient ORG60BR3)  
+* Dead organoids (high dose drug control Wells)  
+* Unknown phenotypes (all other Wells)  
+
+<br>
+
+## Instrument
+Cytation 10 (1 field @ 4X magnification)
+
+
+## Compound Classes
+The following classes (bins) were assigned to Wells averages in control Wells:  <br>
+
+* **1. Controls with healthy/alive phenotype**  
+* **2. Controls with dead phenotype** 
+* **3. Unknown Wells**  (all other Wells)  
+
+
+
+
+## Required R packages
+tidyverse, e1071, plotly, rminer, matrixStats
+```{r, message=FALSE, warning=FALSE}
+# load the required packages
+library(e1071)
+library(tidyverse)
+library(platetools)
+library(gridExtra)
+library(ggpubr)
+library(DT)
+library(plotly)
+library(knitr)
+library(kableExtra)
+library(reshape2)
+library(caret)
+#library(factoextra)
+library(dendextend)
+library(data.table)
+#library(rminer)
+library(matrixStats)
+library(viridis)
+library(here)
+
+library(assertthat)
+library(corrplot)
+library(NbClust)
+library(pheatmap)
+library(RColorBrewer)
+library(Rtsne)
+library(writexl)
+library(patchwork)
+
+
+
+library(drc)
+library(tidyr)
+library(stringr)
+
+
+#check if here() correctly identified the directory
+here::here()
+
+# additional functions
+source(here::here("code/heatmap_metadata.R"))
+
+Mode <- function(x, na.rm = FALSE) {
+  if(na.rm){
+    x = x[!is.na(x)]
+  }
+
+  ux <- unique(x)
+  return(ux[which.max(tabulate(match(x, ux)))])
+}
+
+
+# fix facetted ggplotly axis labels (widw = long axis labels, narrow = short axis labels)
+layout_ggplotly_wide <- function(gg, x = -0.06, y = -0.05){
+  # The 1 and 2 goes into the list that contains the options for the x and y axis labels respectively
+  gg[['x']][['layout']][['annotations']][[1]][['y']] <- x
+  gg[['x']][['layout']][['annotations']][[2]][['x']] <- y
+  gg
+}
+
+layout_ggplotly_narrow <- function(gg, x = -0.02, y = -0.055){
+  # The 1 and 2 goes into the list that contains the options for the x and y axis labels respectively
+  gg[['x']][['layout']][['annotations']][[1]][['y']] <- x
+  gg[['x']][['layout']][['annotations']][[2]][['x']] <- y
+  gg
+}
+
+# set the file prefix
+
+prefix <- "OC_ORG60BR3"
+patient <- "ORG60BR3"
+
+```
+
+
+<br>
+
+***
+
+# QC considerations
+
+We used the Vehicle and Media wells as controls. <br>
+
+
+***
+
+# Data processing
+
+## Data annotation and import
+Raw single organoid data was imported from CellProfiler outputs and CTG with annotations was imported from previous R outputs. 
+The following Wells were excluded from Media and DMSO controls: NONE. <br>
+
+*in addition to Staurosporine and high-dose Mitomycin, we added high-dose Doxorubicin and high-dose Topotecan to the positive controls.*
+
+ 
+
+```{r, fig.height=10, fig.width=10}
+# per-image data
+all_data_raw <- 
+    list.files(gsub(" ", "", paste(here::here("data/raw_data/staining/SingleOrganoid/"))), 
+                 pattern = "*ORG60BR3.csv", 
+                 full.names = T) %>% 
+    map_df(~fread(.)) %>% 
+  mutate(VCFG_Plate_ID = 1) %>% 
+  dplyr::select(VCFG_Plate_ID, Plate_ID = Metadata_Plate...7, Well_ID = Metadata_Well...11, ImageNumber, ObjectNumber, contains(c("AreaShape", "Intensity", "Texture", "Neighbors", "Spheroids", "RadialDistribution"))) 
+
+
+annotationsCTG <- read_csv(here::here("data/OC_ORG60BR3_CTG.csv")) %>% dplyr::select(-WELL_ID)
+
+```
+
+Normalise CTG to media and DMSO controls.
+
+```{r}
+annotationsCTG <- read_csv(here::here("data/OC_ORG60BR3_CTG.csv")) 
+
+# calculate normalised values
+norm_CTG <- annotationsCTG %>%
+  filter(Compound_ID %in% c("Media", "DMSO")) %>% 
+  ### list exluded wells below. 
+  #filter(!Well_ID %in% c()) %>% 
+  group_by(Patient) %>% 
+  dplyr::summarise(neg_median = median(CTG)) %>% 
+  inner_join(annotationsCTG, ., by = c("Patient")) %>% 
+  mutate(CTG = CTG/neg_median) %>% 
+  dplyr::select(-neg_median) #%>% 
+  ### list exluded wells below.
+  #filter(!Well_ID %in% c()) 
+
+
+```
+
+
+Bins were added to positive, negative, and library wells. 
+
+```{r}
+all_data_with_bins <- all_data_raw %>%
+  #filter(!Well_ID %in% c()) %>% 
+  left_join(., norm_CTG, by = c("Well_ID")) %>% 
+  na.omit()
+
+# Now join this back to the original data and create the Bin column
+all_data_with_bins <- all_data_with_bins %>%
+  mutate(Bin = case_when(
+    Description %in% c("negative_control")   ~ "negative_control",
+    Description %in% c("positive_control")  ~ "positive_control",
+    TRUE ~ "Sample"
+  )) %>%
+  dplyr::select(Bin, Plate_ID, Replicate, ObjectNumber, WELL_ID, Concentration, Units, Description, Compound_ID, Patient, CTG, 
+                contains(c("AreaShape", "Intensity", "Texture", "Location", "Neighbors", "Spheroids", "RadialDistribution"))) 
+ # filter(AreaShape_Area >= 2000)
+
+write.csv(all_data_with_bins, here::here(paste0("output/",patient,"/all_data_with_bins.csv")))
+
+```
+
+
+## Data overview
+
+Compare raw data of all dead and alive control Wells it the current Patient. 
+
+```{r, fig.height=5, fig.width=5}
+### Compare spheroid size between positive and negative controls 
+plot <- all_data_with_bins %>%
+  filter(!AreaShape_Area<1000) %>% 
+  filter(Bin %in% c("negative_control","positive_control")) %>% 
+  ggplot(., aes(y =AreaShape_Area, x = as.factor(Bin), group = Patient)) +
+  geom_point(aes(colour = as.factor(Bin)), alpha = 0.5, position = position_jitter(width = 0.2, height = 0.2))+
+  theme(axis.text.x = element_text())+
+  labs(title = "Spheroid Area", y = "raw area per single organoid (px2)", x="Patient") + 
+  theme(legend.position = "none", 
+      axis.text.x = element_text(angle = 45, colour = "black", hjust = 1),
+      axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 10)), 
+      axis.title.x = element_blank(), 
+      plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
+      plot.subtitle = element_text(margin = margin(t = 0, r = 0, b = 10, l = 0), size = 6), 
+      strip.text.x = element_text(size = 8)) 
+
+
+### Compare spatial intensity distribution between positive and negative controls
+plot2 <- all_data_with_bins %>%
+  filter(!AreaShape_Area<1000) %>% 
+  filter(Bin %in% c("negative_control","positive_control")) %>% 
+  ggplot(., aes(y = RadialDistribution_MeanFrac_CropBF_4of4, x = as.factor(Bin), group = Patient)) +
+  geom_point(aes(colour = as.factor(Bin)), alpha = 0.5, position = position_jitter(width = 0.2, height = 0.2))+
+  theme(axis.text.x = element_text())+
+  labs(title = "BF Radial Distribution", y = "raw BF Radial Distrib single organoid", x="Patient") + 
+  theme(legend.position = "none", 
+      axis.text.x = element_text(angle = 45, colour = "black", hjust = 1),
+      axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 10)), 
+      axis.title.x = element_blank(), 
+      plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
+      plot.subtitle = element_text(margin = margin(t = 0, r = 0, b = 10, l = 0), size = 6), 
+      strip.text.x = element_text(size = 8)) 
+
+
+### Compare viability (log2(CTG)) across positive and negative controls 
+plot3 <- all_data_with_bins %>%
+  filter(!AreaShape_Area<1000) %>% 
+  filter(Bin %in% c("negative_control","positive_control")) %>% 
+  ggplot(., aes(y = log2(CTG), x = as.factor(Bin), group = Patient)) +
+  geom_point(aes(colour = as.factor(Bin)), alpha = 0.5, position = position_jitter(width = 0.2, height = 0.2))+
+  theme(axis.text.x = element_text())+
+  labs(title = "CTG raw", y = "raw CTG (log2) per WELL_ID", x="Patient") + 
+  theme(legend.position = "none", 
+      axis.text.x = element_text(angle = 45, colour = "black", hjust = 1),
+      axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 10)), 
+      axis.title.x = element_blank(), 
+      plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
+      plot.subtitle = element_text(margin = margin(t = 0, r = 0, b = 10, l = 0), size = 6), 
+      strip.text.x = element_text(size = 8)) 
+
+
+plot
+plot2
+plot3
+
+
+### interactive plot
+plotly::ggplotly(plot, tooltip = c("Cell_Line", "Count_Spheroids"))
+
+### remove plot variables from environment to clear up space
+rm(plot,plot2, plot3)
+```
+
+Area measurements of healthy organoids
+*Need to update with images for ORG60BR3*
+```{r, echo=FALSE}
+# htmltools::img(src = knitr::image_uri(here::here("data", "organoid_area_negcontrol.png")), 
+#                style = 'height:934px;width:1501px')
+```
+
+<br>
+<br>
+
+Area measurements of dead organoids
+*Need to update with images for ORG60BR3*
+```{r, echo=FALSE}
+# htmltools::img(src = knitr::image_uri(here::here("data", "organoid_area_tox.png")), 
+#                style = 'height:934px;width:1501px')
+```
+
+<br>
+<br>
+
+Next, we generate an overlayed histogram of spheroid area distribtion to compare positive and negative controls and mark the respective median values. As expected, median spheroid area of negative controls (cells that are "likely alive" in Media/DMSO) is larger than positive controls (cells that are "likely dead" in Straurosporine/ Doxorubicin/ Mitomycin C/ Topotecan).
+
+```{r}
+# Filter and process data
+data_with_medians <- all_data_with_bins %>%
+  filter(Bin %in% c("negative_control", "positive_control")) %>%
+  group_by(Bin) %>%
+  summarize(Median = median(AreaShape_Area, na.rm = TRUE)) %>%
+  ungroup() 
+
+# Histogram with density overlay 
+histogram_plot <- all_data_with_bins %>%
+  filter(Bin %in% c("negative_control", "positive_control")) %>%
+  ggplot(aes(x = AreaShape_Area, fill = Bin, color = Bin)) +
+  geom_histogram(aes(y = ..density..), bins = 100, alpha = 0.4, position = "identity") +
+  geom_density(alpha = 0.6) +
+  xlim(0,6000)+
+  geom_vline(data = data_with_medians, aes(xintercept = Median, color = Bin), linetype = "dashed", size = 0.8) +
+  labs(title = "Spheroid Area Distribution by Bin - all sizes", 
+       x = "Spheroid Area (px²)", 
+       y = "Density") +
+  theme_minimal() +
+  theme(legend.position = "top",
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        plot.title = element_text(size = 14, face = "bold"))
+
+# Display the histogram
+print(histogram_plot)
+
+# Display the median values
+print(data_with_medians)
+```
+
+
+**Filter out tiny organoids (<1000 in Area) because they are in all wells and bias the single organoid classification of the negative controls.**
+
+```{r}
+# Filter and process data
+data_with_medians <- all_data_with_bins %>%
+  filter(Bin %in% c("negative_control", "positive_control")) %>%
+  filter(!AreaShape_Area<1000) %>% 
+  group_by(Bin) %>%
+  summarize(Median = median(AreaShape_Area, na.rm = TRUE)) %>%
+  ungroup() 
+
+# Histogram with density overlay
+histogram_plot <- all_data_with_bins %>%
+  filter(!AreaShape_Area<1000) %>% 
+  filter(Bin %in% c("negative_control", "positive_control")) %>%
+  ggplot(aes(x = AreaShape_Area, fill = Bin, color = Bin)) +
+  geom_histogram(aes(y = ..density..), bins = 100, alpha = 0.4, position = "identity") +
+  geom_density(alpha = 0.6) +
+  xlim(0,6000)+
+  geom_vline(data = data_with_medians, aes(xintercept = Median, color = Bin), linetype = "dashed", size = 0.8) +
+  labs(title = "Spheroid Area Distribution by Bin (small ones exluded)", 
+       x = "Spheroid Area (px²)", 
+       y = "Density") +
+  theme_minimal() +
+  theme(legend.position = "top",
+        axis.text.x = element_text(angle = 0, hjust = 0.5),
+        plot.title = element_text(size = 14, face = "bold"))
+
+# Display the histogram
+print(histogram_plot)
+
+# Display the median values
+print(data_with_medians)
+```
+
+## Feature cleanup
+
+### Remove NA, NaNs, Inf and others
+
+```{r}
+# First, create a function that checks if a column contains NA, NaN, or Inf values
+check_column <- function(column) {
+  any(is.na(column)) || any(is.nan(column)) || any(is.infinite(column))
+}
+
+# Next, create a list of the column names in the data frame
+column_names <- names(all_data_with_bins)
+
+# Loop through the column names and check if the corresponding column should be removed
+to_remove <- c()
+for (column_name in column_names[13:length(column_names)]) {
+  column <- all_data_with_bins[[column_name]]
+  if (check_column(column) || is.character(column) || all(column %in% c(0, -1)) || 
+      any(grepl("Execution|Align|Height|Group_|ImageNumber|EulerNumber|_Center_|Scaling|Threshold|Width|Channel|Location", column_name))) {
+    to_remove <- c(to_remove, column_name)
+  }
+}
+
+# Remove the columns that should be removed
+all_data_clean <- all_data_with_bins %>% 
+  dplyr::select(-to_remove) %>% 
+  filter(!AreaShape_Area<1000) 
+
+clean_features <- names(all_data_clean[,-c(1:13)])
+write.csv(all_data_clean, here::here(paste0("output/",patient,"/all_data_clean.csv")))
+
+write.csv(all_data_clean, here::here(paste0("output/",patient,"/Feature_reduced_raw_data.csv")))
+```
+
+Of the total feature count of `r ncol(all_data_with_bins)` there were `r length(to_remove)` removed during feature clean-up 
+
+
+
+### Remove highly correlated features
+
+All features with a Pearson's correlation > 0.9 were removed. 
+
+```{r, fig.height=20, fig.width=12}
+#Remove highly correlated features 
+raw2 <- all_data_clean 
+x <- raw2[,13:ncol(raw2)]
+x2 <- data.frame(lapply(x, as.numeric))
+x3 <- x2[!sapply(x2,function(x) any(is.na(x)))]
+y <- raw2[,1:12]
+all_features <- colnames(x3)
+
+#make correlation_threshold function
+correlation_threshold <- function(variables, sample, cutoff = 0.9,
+                                  method = "pearson") {
+  excluded_indexes <-
+    sample %>%
+    dplyr::select(.dots = variables) %>%
+    cor(method = method) %>%
+    caret::findCorrelation(cutoff = cutoff)
+
+  variables[excluded_indexes]
+}
+
+CorData <- correlation_threshold(all_features, x3)
+Cleaned <- x3[!(names(x3) %in% CorData)]
+CleanedAn <- bind_cols(y, Cleaned)
+cleaned_features <- colnames(Cleaned)
+
+
+data_all_short <- CleanedAn 
+
+#remove all Samples (bin 3) and only keep the controls for classification
+control_short <- data_all_short%>% 
+  filter(!Bin =="Sample") 
+
+write.csv(data_all_short, here::here(paste0("output/",patient,"/data_all_short.csv")))
+
+```
+
+There were `r ncol(Cleaned)` feature left after feature exclusion. 
+<br>
+
+```{r}
+
+### prepare the data frame back to long
+### long format data = better for visualisation purposes
+
+raw2 <- CleanedAn %>% data.frame() 
+
+id <- colnames(raw2[c(1:10)])
+
+features <- colnames(raw2[, 11:ncol(raw2)])
+
+CleanedAn_melt <- raw2 %>% 
+  reshape2::melt(id.vars = id, measure.vars = features) 
+
+```
+
+
+### Download feature reduced, raw data set
+
+
+Download the raw data set used for Training and Testing of the SVM model from PRIME ("Feature_reduced_raw_data.csv"). 
+
+
+<br>
+
+## Feature correlation
+
+A correlation matrix was generated to investigate the relationship between each pair of features after feature reduction. A useful application of this plot may be to see which features are correlated with changes in cell area.  <br>
+<br>
+
+
+```{r, fig.height=10, fig.width=10, dpi = 600}
+# use only numerical data for correlation matrix
+melt_cor1 <- data_all_short %>% 
+  dplyr::select(-c(1:11))
+  
+# generate correlation matrix
+dat.cor = cor(melt_cor1, method = c("pearson"))
+
+#str(melt_cor1)
+
+# plot
+corrplot(dat.cor, tl.col = "black", order = "hclust", hclust.method = "complete", tl.cex = 0.45)
+
+
+# save the plot as a PDF
+#pdf(gsub(" ", "", paste("output/SVM_plots/", "PN_SVM", "_Feature_Correlation", ".pdf")), width = 7, height = 7)
+#corrplot(dat.cor, tl.col = "black", order = "hclust", hclust.method = "complete", tl.cex = 0.5)
+#dev.off()
+```
+
+
+
+# Train the SVM model
+
+## Split data into training and test data set
+
+80% of the controls are used for training, the remaining 20% of data points will be used to test the SVM algorithm. <br>
+Now we make a data frame of the data, turning Bin (category 1 or 2) into a factor variable. 
+
+```{r}
+### convert back to dataframa
+dat2 <- control_short %>% as.data.frame() %>% 
+  dplyr::select(-c(2:11))
+
+### convert bin to a factor - needed for categorical classification models
+dat2[, 1] <- as.factor(dat2[, 1])  
+
+### Number of observations
+n <- nrow(dat2)  
+
+### number of observations needed to constitute 80% of observations for training set
+ntrain <- round(n*0.80)  
+
+### Set seed for reproducible results
+set.seed(316)   
+
+### Take random sample of indexes of size ntrain from n
+tindex <- sample(n, ntrain)  
+
+### Create training set using indexes from full dataset
+train_dat2 <- dat2[tindex,]   
+
+### Create test set of remaining 20% of idexes not used in training set
+test_dat2 <- dat2[-tindex,]  
+
+```
+<br>
+
+## Centering and Scaling
+
+Below, 80% of the data are used to estimate the location and scale of the predictors. The function *preProcess* doesn’t actually pre-process the data. <br>
+*predict.preProcess* is used to pre-process this and other data sets (e.g. test set and validation set).
+
+```{r}
+preProcValues <- preProcess(train_dat2, method = c("center", "scale"))
+
+trainTransformed <- predict(preProcValues, train_dat2)
+testTransformed <- predict(preProcValues, test_dat2)
+```
+
+
+## Training without tuning
+
+After that, we make a call to svm on this data frame, using Bin as the response variable and other variables as the predictors. The data frame will have unpacked the matrix x into 2 columns named negative_control and positive_control. 
+
+```{r}
+### Training SVM to classify based on "Bin" factor variable (positive control VS negative control), based on all OTHER features 
+
+svmfit2 = svm(Bin ~ ., 
+              data = trainTransformed, 
+              kernel="radial", # kernel = radial for nonlinear relationships
+              probability=TRUE) # model will generate probability estimates based on probability = TRUE
+
+summary(svmfit2)
+
+### Number of columns in the data frame, excluding the response variable
+num_features <- ncol(trainTransformed) - 1 
+
+### Calculate default gamma
+### smaller gamma = broader influence, larger gamma = tighter influence
+default_gamma <- 1 / num_features 
+
+default_gamma
+```
+
+We tell SVM that the kernel is **radial**, the tune-in parameter cost is 1 and the gamma is `r default_gamma`. 
+
+
+
+## Prediction and Confusion Matrix {.tabset .tabset-fade .tabset-pills}
+
+### True labels 
+
+Here is the result of the prediction of the training set, comparing the result of SVM "Prediction" and the class data provided by us in Bin variable as "Reference".
+
+```{r}
+### Test predictions on training set data
+pred <- predict(svmfit2,trainTransformed, probability  = TRUE)
+system.time(pred <- predict(svmfit2,trainTransformed))
+
+### Evaluate performance 
+confusionMatrix(pred,trainTransformed$Bin)
+```
+
+
+
+### Scrambled category labels
+
+```{r}
+### Randomly scramble bin (control) labels of training data set
+trainTransformed_scr <- transform(trainTransformed, Bin = sample(Bin) )
+```
+
+
+By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 53%. 
+ 
+```{r}
+pred_scr <- predict(svmfit2,trainTransformed_scr, probability = TRUE) 
+
+confusionMatrix(pred_scr,trainTransformed_scr$Bin)
+
+```
+
+# Tuning SVM 
+ 
+The kernel argument has a variety of possible types including linear, polynomial, radial, and sigmoid. We use kernel=”radial” for this classification problem.
+You can tune the operation of svm() with two additional arguments: gamma and cost, where gamma is the argument for use by the kernel function, and cost allows us to specify the cost of a violation to the margin. When cost is small, the margins will be wide, resulting in many support vectors. You can experiment with different values of gamma and cost to find the best classification accuracy.
+
+**Here, changing cost from 1 to 7 and keep gamma at default improved the model performance from 94% to 99% accuracy.**
+
+```{r}
+# Define new values for gamma and cost
+new_gamma <- 0.01
+new_cost <- 15
+
+# Create the SVM model with the new gamma and cost values
+svm_model_after_tune = svm(Bin ~ ., 
+                 data = trainTransformed, 
+                 kernel = "radial", 
+                 gamma = default_gamma, 
+                 cost = new_cost, 
+                 probability = TRUE)
+
+summary(svm_model_after_tune)
+
+save(svm_model_after_tune, file = here::here(paste0("output/",patient,"/svm_model_after_tune.RData")))
+
+```
+
+```{r}
+
+load(here::here(paste0("output/",patient,"/svm_model_after_tune.RData")))
+```
+
+
+```{r}
+
+ #svm_tune <- tune(svm, 
+  #                Bin~., 
+   #               data = trainTransformed, 
+    #              kernel="radial", 
+     #             ranges=list(cost=10^(-2:3), 
+      #                      gamma=c(.00001, .001,.01,.1,.5,1))
+       #           )
+
+#save(svm_tune, file = here::here("output/svm_tune.RData"))
+#load(here::here("output/svm_tune.RData"))
+
+#print(svm_tune)
+#print(svm_tune$performances)
+#performances <- svm_tune$performances
+#plot(performances)
+
+
+```
+ 
+
+ 
+## Prediction and Confusion Matrix with new model
+ 
+```{r}
+pred2 <- predict(svm_model_after_tune,trainTransformed, probability = TRUE)
+
+confusionMatrix(pred2,trainTransformed$Bin)
+```
+
+
+
+
+# Plot Model Characteristics
+
+## Decision Values {.tabset .tabset-fade .tabset-pills}
+
+### True labels 
+
+You can also learn something when you display the Decision Values (DV) calculated by SVM using the svmfit2$DV component of the fitted model, versus the assigned Category labels.
+ 
+```{r, fig.height=5, fig.width=4}
+
+DV <- svm_model_after_tune$decision.values
+
+prob <- attr(pred2, "probabilities")
+plot(trainTransformed$Bin, DV, ylab="DV", xlab="Category")
+#plot(SV[,1], SV[,2])
+
+#plot(prob, pch = 19, ylab="probability of category 2", xlab="probability of category 1")
+
+# bind probabilities and Bin labels together
+trainTransformed_x <- trainTransformed %>% mutate(id = row_number())
+prob_x <- prob %>% data.frame() %>% mutate(id = row_number())
+
+
+trainTransformed_prob <- left_join(prob_x,trainTransformed_x, by=c("id")) %>% 
+  dplyr::mutate(prob_alive = negative_control, prob_dead = positive_control, true_labels = Bin) %>%
+  dplyr::select(-c(negative_control, positive_control, id))
+
+plot2 <- trainTransformed_prob %>%
+  ggplot(., aes(y = prob_alive, x = true_labels, group = true_labels)) +
+  geom_point(aes(colour = true_labels), alpha = 0.5, position = position_jitter(width = 0.2, height = 0.2))+
+  theme(axis.text.x = element_text())+
+  labs(title = "True labels vs Probabilities", y = "Probability of being categorised as cystic", x="true labels") + 
+  geom_hline(aes(yintercept = 0.50), linetype="solid", color = "black")+
+    theme(legend.title = element_text(), legend.text = element_blank(), 
+      axis.text.x = element_text(angle = 25, colour = "black"),
+      axis.title.y = element_text(margin = margin(t = 0, r = 30, b = 0, l = 30)), 
+      axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 30, l = 0)), 
+      plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
+      plot.subtitle = element_text(margin = margin(t = 0, r = 0, b = 10, l = 0), size = 6), 
+      strip.text.x = element_text(size = 8)) 
+      
+
+plot2
+#plotly::ggplotly(plot2, tooltip = c("prob_alive", "true_labels"))
+
+
+# save the plot as a PDF
+#pdf(gsub(" ", "", paste("output/SVM_plots/", "PN_SVM", "_DV_after_tuning", ".pdf")), width = 3, height = 3)
+#plot(trainTransformed$Bin, DV, ylab="DV", xlab="Category")
+#dev.off()
+
+```
+
+### Scrambled labels 
+
+
+ 
+```{r, fig.height=5, fig.width=4}
+DV <- svm_model_after_tune$decision.values
+
+prob_scr <- attr(pred_scr, "probabilities")
+plot(trainTransformed_scr$Bin, DV, ylab="DV", xlab="Category")
+#plot(SV[,1], SV[,2])
+
+#plot(prob_scr, pch = 19, ylab="probability of category 2", xlab="probability of category 1")
+
+
+# bind probabilities and Bin labels together
+trainTransformed_scr_x <- trainTransformed_scr %>% mutate(id = row_number())
+prob_scr_x <- prob_scr %>% data.frame() %>% mutate(id = row_number())
+#names(pred_x)[1] <- "pred_tox"
+
+trainTransformed_prob <- left_join(prob_scr_x,trainTransformed_scr_x, by=c("id")) %>% 
+  dplyr::mutate(prob_alive = negative_control, prob_dead = positive_control, scrambled_labels = Bin) %>%
+  dplyr::select(-c(negative_control, positive_control, id))
+
+plot2 <- trainTransformed_prob %>%
+  ggplot(., aes(y = prob_alive, x = scrambled_labels, group = scrambled_labels)) +
+  geom_point(aes(colour = scrambled_labels),alpha = 0.5, position = position_jitter(width = 0.2, height = 0.2))+
+  theme(axis.text.x = element_text())+
+  labs(title = "Scrambled labels vs Probabilities", y = "Probability of being categorised as cystic", x="scrambled labels") + 
+  geom_hline(aes(yintercept = 0.50), linetype="solid", color = "black")+
+    theme(legend.title = element_text(), legend.text = element_blank(), 
+      axis.text.x = element_text(angle = 25, colour = "black"),
+      axis.title.y = element_text(margin = margin(t = 0, r = 30, b = 0, l = 30)), 
+      axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 30, l = 0)), 
+      plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
+      plot.subtitle = element_text(margin = margin(t = 0, r = 0, b = 10, l = 0), size = 6), 
+      strip.text.x = element_text(size = 8)) 
+      
+
+      
+
+plot2
+#plotly::ggplotly(plot2, tooltip = c("prob_alive", "scrambled_labels"))
+
+
+
+# save the plot as a PDF
+#pdf(gsub(" ", "", paste("output/SVM_plots/", "PN_SVM", "_DV_after_label_randomisation", ".pdf")), width = 3, height = 3)
+#plot(trainTransformed_scr$Bin, DV, ylab="DV", xlab="Category")
+#dev.off()
+
+```
+
+
+## Contributions of the variables to the model performance
+
+This list ranks the Importance values of each imaging feature regarding their contribution to the model performance. 
+
+```{r}
+
+w <- t(svm_model_after_tune$coefs) %*% svm_model_after_tune$SV                 # weight vectors
+w <- apply(w, 2, function(v){sqrt(sum(v^2))})       # weight
+w <- sort(w, decreasing = T) %>% data.frame()
+w <- setDT(w, keep.rownames = TRUE)[]
+colnames(w) <- c("Feature", "Importance")
+
+datatable(w, extensions = c('Buttons', 'Scroller'), rownames = FALSE, 
+ options = list(
+  dom = 'Blrt',
+  lengthMenu = list(c(10, 30), c('10', '30')),
+          pageLength = 10,
+  buttons = list(list(extend = 'csv',
+                      filename = 'IMP_Names'),
+                list(extend = 'excel',
+                     filename = 'IMP_Names',
+                      title = 'IMP_Names')),
+  searching = FALSE,
+  scrollX = TRUE
+))
+
+```
+
+
+# Testing
+
+Now we can use the predict() function with the trained SVM model to make predictions using the test set. The result is delivered as a factor variable containing the predicted classes for each observation in the test set. Next, we can use the confusionMatrix() function to create a “confusion matrix” for checking the accuracy of the model. 
+<br>
+
+## Testing with correct labels
+
+Testing the SVM model on the last 20% of data gives a 90% accuracy in prediction.  
+
+```{r}
+prediction <- predict(svm_model_after_tune, testTransformed, probability = TRUE)
+
+confusionMatrix(prediction,testTransformed$Bin)
+```
+
+## Testing with scrambled labels
+
+Testing the SVM model on the last 20% of data after scrambling the category labels gives a random 53% accuracy in prediction.  
+
+```{r}
+test_dat2_scr <- transform(testTransformed, Bin = sample(Bin) )
+
+prediction_scr <- predict(svm_model_after_tune, test_dat2_scr, probability = TRUE)
+
+confusionMatrix(prediction_scr,test_dat2_scr$Bin)
+```
+
+# View how all organoids are categorised 
+
+Here is a table of all the conditions and a display of the pre-assigned category (1, 2, 3) and the probability of being alive (negative_control) or dead (positive_control). <br>
+
+
+The data is displayed as the original raw data (rather than the centred and scaled data format that was used to build the model). 
+
+```{r}
+dat2 <- control_short %>% as.data.frame() %>% 
+  dplyr::select(-c(2:11))
+dat2[, 1] <- as.factor(dat2[, 1])  # Convert Bin to a factor
+
+
+data_all_short_all <- data_all_short %>% 
+  dplyr::select(Bin, everything()) 
+write.csv(data_all_short_all, here::here(paste0("output/",patient,"/data_all_short_all1.csv")))
+
+dat_V <- data_all_short_all%>% as.data.frame() %>% 
+  dplyr::select(-c(2:11))
+dat_V[, 1] <- as.factor(dat_V[, 1])  # Convert Bin to a factor
+
+LibTransformed <- predict(preProcValues, dat_V) #centering and scaling
+
+
+prediction <- predict(svm_model_after_tune, LibTransformed, probability = TRUE)
+prob <- attr(prediction, "probabilities")
+
+confusionMatrix(prediction, LibTransformed$Bin)
+
+summary = data.frame(data_all_short_all, as.numeric(levels(prediction))[prediction])
+write.csv(summary, here::here(paste0("output/",patient,"/summary_morphology_ORG60BR3.csv")))
+```
+
+
+## All organoids
+
+Link to download "pred_all_data.csv" from PRIME
+
+```{r}
+
+pred_all_data = data.frame(prob, data_all_short_all) 
+
+# Group by WELL_ID and count ObjectNumber rows
+well_object_count <- data_all_short_all %>%
+  group_by(WELL_ID, Description, Patient) %>%
+  summarise(Object_count = n())
+
+well_object_count_norm <- well_object_count %>% 
+  filter(Description %in% c("negative_control")) %>% 
+  group_by(Patient) %>% 
+  dplyr::summarise(neg_median = median(Object_count)) %>% 
+  inner_join(well_object_count, ., by = c("Patient")) %>% 
+  mutate(Object_count = Object_count/neg_median) %>% 
+  dplyr::select(-neg_median)
+
+
+pred_all_data_norm <- pred_all_data %>% 
+  dplyr::select(WELL_ID, Description, Patient, AreaShape_Area) %>% 
+  filter(Description %in% c("negative_control")) %>% 
+  group_by(Patient) %>% 
+  dplyr::summarise(neg_median = median(AreaShape_Area)) %>% 
+  inner_join(pred_all_data, ., by = c("Patient")) %>% 
+  mutate(AreaShape_Area = AreaShape_Area/neg_median) %>% 
+  dplyr::select(WELL_ID, Description, Patient, AreaShape_Area) %>% 
+  group_by(WELL_ID, Patient) %>% 
+  dplyr::summarise(AreaShape_Area = median(AreaShape_Area)) 
+
+
+pred_all_data_mean<- pred_all_data %>% ungroup() %>% dplyr::select(-AreaShape_Area) %>% 
+  left_join(.,pred_all_data_norm, by=c("WELL_ID", "Patient") ) %>% 
+  dplyr::select(Plate_ID, Replicate, Patient, Description, Compound_ID, Concentration,  WELL_ID, CTG, Bin, AreaShape_Area, negative_control, positive_control) %>%
+  group_by(Plate_ID, WELL_ID, Patient, Description, Compound_ID, Concentration) %>%
+ dplyr::mutate(prob_alive = mean(negative_control), prob_dead = mean(positive_control), Area = mean(AreaShape_Area)) %>%
+  dplyr::select(-c(positive_control, negative_control, AreaShape_Area)) %>% 
+  unique() %>%
+   mutate(across(where(is.numeric), ~ round(.x, 2))) %>% 
+  ungroup()
+
+write.csv(pred_all_data, here::here(paste0("output/", patient,"/pred_all_data_ORG60BR3.csv")))
+
+
+
+#select_pred_all_data <- pred_all_data %>% 
+#  filter(!Description == "Empty" & Condition %in% c("3RR+F", "3R+LY"))
+  
+  
+
+
+#datatable(pred_all_data, extensions = c('Buttons', 'Scroller'), rownames = FALSE, 
+ #options = list(
+  #dom = 'Blrt',
+  #lengthMenu = list(c(10, 20), c('10', '20')),
+   #       pageLength = 10,
+  #buttons = list(list(extend = 'csv',
+   #                   filename = 'prediction'),
+    #            list(extend = 'excel',
+     #                filename = 'prediction',
+      #                title = 'prediction')),
+  #searching = TRUE,
+  #scrollX = TRUE
+#))
+
+#write.csv(pred_all_data, here::here(paste0("output/",patient,"/pred_all_data.csv")))
+```
+
+
+## Average predictions
+
+Link to download and "pred_all_data_mean.csv".
+
+```{r}
+datatable(pred_all_data_mean, extensions = c('Buttons', 'Scroller'), rownames = FALSE, 
+ options = list(
+  dom = 'Blrt',
+  lengthMenu = list(c(10, 30), c('10', '30')),
+          pageLength = 10,
+  buttons = list(list(extend = 'csv',
+                      filename = 'pred_all_data_mean'),
+                list(extend = 'excel',
+                     filename = 'pred_all_data_mean',
+                      title = 'pred_all_data_mean')),
+  searching = FALSE,
+  scrollX = TRUE
+))
+
+write.csv(pred_all_data_mean, here::here(paste0("output/",patient,"/pred_all_data_mean_ORG60BR3.csv")))
+```
+
+
+## Heat map
+
+<br>
+
+Plot the Patient average probability of the population being alive by Compound and Concentration.  
+
+```{r, out.width="50%", out.height="2%",fig.show='hold',fig.align='default'}
+# create a unique ID column
+data_heat <- pred_all_data_mean %>% 
+  unite(Batch, c(Plate_ID), sep = " - ", remove = FALSE)
+
+plate_list <- unique(data_heat$Batch)
+
+for (i in plate_list){
+
+  data_plot <- data_heat %>% 
+  filter(Batch == i)
+  
+  # calculate the min, median and max of the dataset in order to set the same scale for all plates
+  feature_vect <- data_plot$prob_alive
+  
+  med <- median(feature_vect)
+  max <- max(feature_vect)
+  min <- min(feature_vect)
+  
+  # make plots
+  plots <- data_plot %>%
+    dplyr::group_by(Batch) %>%
+    dplyr::do(plots = platetools::raw_map(data = .$prob_alive,
+                                          well = .$WELL_ID,
+                                          plate = 384) + 
+                ggtitle(.$Batch[1]) +
+                scale_fill_gradient2(low = "blue", mid = "white",
+                                     high = "red", midpoint = med,
+                                     limits = c(floor(min), ceiling(max))) +
+                theme(plot.title = element_text(size = 22),
+                      axis.text.x = element_text(size = 4), 
+                      axis.text.y = element_text(size = 4))
+              )
+  
+    myplots <- list()
+  for (i in 1:length(unique(data_plot$Batch))){
+    p1 <- eval(substitute(
+    print(plots$plots[[i]])
+    ,list(i=i)))
+    myplots[[i]] <- p1
+  }
+  
+}
+```
+
+
+
+
+## Correlation CTG vs SVM probabilities {.tabset .tabset-fade .tabset-pills}
+
+
+```{r, fig.height=6, fig.width=6}
+
+library(purrr)
+
+# Step 1: Compute R^2 for each patient
+r2_by_patient <- pred_all_data_mean %>%
+  group_by(Patient) %>%
+  nest() %>%
+  mutate(model = map(data, ~ lm(prob_alive ~ CTG, data = .x)),
+         summary_model = map(model, ~ base::summary(.x)),
+         r2 = map_dbl(summary_model, ~ .$r.squared)) %>%
+  dplyr::select(Patient,  r2)
+
+# Step 2: Make the plot and annotate with R^2 values for each facet
+normplot1 <- pred_all_data_mean %>%
+  ggplot(., aes(x = CTG, y = prob_alive, group = Patient)) +
+  geom_point(aes(colour = Patient,
+                 text = paste('Compound_Name:', Compound_ID,
+                                                   '<br>CTG:', CTG,
+                                                  '<br>Concentration:', Concentration,
+                                                  '<br>ML classificaton:', prob_alive,
+                                                   '<br>Well_ID:', WELL_ID
+                                                   )), 
+                 alpha = 0.8, size = 1.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
+  geom_text(data = r2_by_patient, aes(label = sprintf("R^2 = %.2f", r2), x = Inf, y = Inf), hjust = 1, vjust = 1, inherit.aes = FALSE, size = 5) +
+  labs(title = "CTG Norm vs SVM probabilities \n", x = "CTG Raw", y = "Probability of being alive") +
+  theme_bw() +
+  theme(axis.title.x = element_text(margin = margin(t = 10, r = 10, b = 20, l = 20)), 
+        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 20)),
+        axis.text.x = element_text(angle = 0, colour = "black", size = 10, hjust = 1),
+        axis.text.y = element_text(colour = "black", size = 10),
+        strip.text = element_text(size = 11),
+        plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
+        plot.margin = margin(t = 0, r = 30, b = 0, l = 30),
+        legend.position = "none")
+
+print(normplot1)
+#plotly::ggplotly(normplot1, tooltip = c("text"))
+
+```
+
+## SVM-probabilities dose-response curves compared to CTG
+
+
+```{r, fig.height=10, fig.width=10}
+
+raw2 <- pred_all_data_mean %>% data.frame() %>% 
+  left_join(., well_object_count_norm, by=c("WELL_ID", "Patient", "Description"))
+
+id <- colnames(raw2[c(1:7,9)])
+
+features <- colnames(raw2[c(8,10,12,13)])
+
+pred_all_data_melt <- raw2 %>% 
+  reshape2::melt(id.vars = id, measure.vars = features) 
+
+
+data_norm_plot <- pred_all_data_melt %>%
+  filter(!Concentration ==0) %>% 
+  group_by(Compound_ID, Plate_ID, Patient, Concentration, variable) %>% 
+  summarise_at(vars(value), funs(mean, sd))
+
+normplot <- data_norm_plot %>%
+  unite("Identifyer", c(Plate_ID, Patient), sep = "_", remove = FALSE) %>% 
+  ggplot(., aes(x = Concentration, 
+                y = mean,
+                group = variable)) +
+  geom_point(aes(colour = variable), alpha = 0.8, size = 1.6) +
+  geom_errorbar(aes(ymin = mean - sd, 
+                    ymax = mean + sd), width=0.2, size = 0.2) +
+  geom_line(aes(colour = variable), alpha = 0.8, size = 0.8) +
+  geom_hline(aes(yintercept = 1.0), linetype = "solid", size = 0.2) +
+  facet_wrap(~Compound_ID, ncol = 3) +
+  scale_x_continuous(trans = "log10", labels = scales::number_format(accuracy = 0.1)) + 
+  labs(title = "SVM results ORG60BR3\n",
+       x = "Log10 Concentration (uM)",
+       y = "Probability of being alive") +
+  theme_bw() +
+  theme(axis.title.x = element_text(margin = margin(t = 10, r = 10, b = 20, l = 20)), 
+        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 20)),
+        axis.text.x = element_text(angle = 25, colour = "black", size = 10, hjust = 1),
+        axis.text.y = element_text(colour = "black", size = 10),
+        strip.text = element_text(size = 12),
+        plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
+        plot.margin = margin(t = 0, r = 30, b = 0, l = 30))
+
+normplot
+
+
+```
+
+
+
+
+## Single organoid results
+
+```{r, fig.height=10, fig.width=10}
+# avoid the use of scientific notation 
+options(scipen=999)
+
+
+p1 <- pred_all_data %>% 
+  filter(!Concentration ==0) %>% 
+  ggplot(., aes(x = as.factor(Concentration), y = negative_control, fill = Compound_ID)) +  # Converted Concentration to factor for discrete x-axis
+  geom_violin(width = 0.8, alpha = 1) +  # Violin plot
+  geom_hline(aes(yintercept = 0.50), linetype = "solid") +  # Horizontal line
+  labs(
+    title = "Dose-Response of Single Organoids",
+    y = "Response (Probability of being categorised as alive)",
+    x = "Concentration (uM)"
+  ) +
+  facet_wrap(~Compound_ID, ncol = 3) +  
+  theme(
+    legend.title = element_text(),
+    legend.text = element_blank(),
+    axis.text.x = element_text(angle = 90, colour = "black", size = 8),
+    axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 10)),
+    axis.title.x = element_text(margin = margin(t = 10, r = 10, b = 20, l = 20)),
+    plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14),
+    strip.text.x = element_text(size = 14),
+    legend.position = "none"
+  )
+
+print(p1)
+
+```
+
+
+
+<br>
+
+<br>
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/v4-shims.css">
+
+  &nbsp;
+<hr />
+<p style="text-align: center;">Analysed by Susanne Ramm</a></p>
+<p style="text-align: center;"><span style="color: #7d2b8b;"><em>Susanne.Ramm@petermac.org</em></span></p>
+<p style="text-align: center;"><a href="https://www.petermac.org/research/core-facilities/victorian-centre-functional-genomics"><span style="color: #7d2b8b;">Victorian Centre for Functional Genomics</span></a></p>
+
+
+  <!-- Needs the "fab" prefix, V5 <i class="fab fa-twitter"></i> -->
+<p style="text-align: center;">  
+  <a href="https://twitter.com/VCFGconnect"> <i class="fa fa-twitter"></i></a>
+</p>
+
+&nbsp;
