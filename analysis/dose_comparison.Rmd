@@ -1,0 +1,102 @@
+---
+title: "1 VS 2 dose comparison"
+/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output: html_document
+date: "2025-10-28"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+ORG38BR2 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG38BR2/pred_all_data_mean_ORG38BR2.csv',header = TRUE)
+ORG41BR1 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG41BR1/pred_all_data_mean_ORG41BR1.csv',header = TRUE)
+ORG41BR2 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG41BR2/pred_all_data_mean_ORG41BR2.csv',header = TRUE)
+ORG46BR1 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG46BR1/pred_all_data_mean_ORG46BR1.csv',header = TRUE)
+ORG49BR2 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG49BR2/pred_all_data_mean_ORG49BR2.csv',header = TRUE)
+ORG55BR1 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG55BR1/pred_all_data_mean_ORG55BR1.csv',header = TRUE)
+ORG55BR2 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG55BR2/pred_all_data_mean_ORG55BR2.csv',header = TRUE)
+ORG60BR3 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG60BR3/pred_all_data_mean_ORG60BR3.csv',header = TRUE)
+ORG61BR1 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG61BR1/pred_all_data_mean_ORG61BR1.csv',header = TRUE)
+ORG61BR2 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG61BR2/pred_all_data_mean_ORG61BR2.csv',header = TRUE)
+ORG64BR3 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG64BR3/pred_all_data_mean_ORG64BR3.csv',header = TRUE)
+ORG65BR1 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG65BR1/pred_all_data_mean_ORG65BR1.csv',header = TRUE)
+ORG65BR2 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG65BR2/pred_all_data_mean_ORG65BR2.csv',header = TRUE)
+ORG66BR2 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG66BR2/pred_all_data_mean_ORG66BR2.csv',header = TRUE)
+ORG66BR3 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG66BR3/pred_all_data_mean_ORG66BR3.csv',header = TRUE)
+ORG70BR1 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG70BR1/pred_all_data_mean_ORG70BR1.csv',header = TRUE)
+ORG70BR2 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG70BR2/pred_all_data_mean_ORG70BR2.csv',header = TRUE)
+ORG73BR1 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG73BR1/pred_all_data_mean_ORG73BR1.csv',header = TRUE)
+#ORG73BR2 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG73BR2/pred_all_data_mean_ORG73.csv', header = TRUE)
+ORG76BR1 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG76BR1/pred_all_data_mean_ORG76BR1.csv', header = TRUE)
+
+### combine datasets
+combined <- rbind(ORG38BR2, ORG41BR1)
+combined <- rbind(combined, ORG41BR2)
+combined <- rbind(combined, ORG46BR1)
+combined <- rbind(combined, ORG49BR2)
+combined <- rbind(combined, ORG55BR1)
+combined <- rbind(combined, ORG55BR2)
+combined <- rbind(combined, ORG60BR3)
+combined <- rbind(combined, ORG61BR1)
+combined <- rbind(combined, ORG61BR2)
+combined <- rbind(combined, ORG64BR3)
+combined <- rbind(combined, ORG65BR1)
+combined <- rbind(combined, ORG65BR2)
+combined <- rbind(combined, ORG66BR2)
+combined <- rbind(combined, ORG66BR3)
+combined <- rbind(combined, ORG70BR1)
+combined <- rbind(combined, ORG70BR2)
+combined <- rbind(combined, ORG73BR1)
+#combined <- rbind(combined, ORG73BR2)
+combined <- rbind(combined, ORG76BR1)
+
+### remove media, dmso, and TritonX
+df <- combined %>%
+  filter(!Compound_ID %in% c("Media", "DMSO", 'TritonX', 'Staurosporine'))
+
+write.csv(df, file = '/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/mean_average_prob_across_organoids.csv')
+df <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/mean_average_prob_across_organoids.csv', header=T)
+
+### annotating dose
+single_dose <- c('ORG46BR1','ORG49BR2','ORG61BR1','ORG61BR2','ORG65BR1','ORG65BR2','ORG76BR1', 'ORG73BR2')
+
+df_mean <- df %>%
+  group_by(Plate_ID, Compound_ID) %>%
+  summarise(mean_prob_alive = mean(prob_alive, na.rm = TRUE)) %>%
+  mutate(mean_prob_alive = format(mean_prob_alive, digits=TRUE)) %>%
+  mutate(dose = ifelse(Plate_ID %in% single_dose, "single_dose", "double_dose")) %>%
+  #mutate(Plate_ID = factor(Plate_ID,levels = c(single_dose, setdiff(unique(Plate_ID), single_dose))) %>%
+  ungroup()
+
+```
+
+```{r, fig.height=5}
+### Load in data
+drugs <- as.factor(df_mean$Compound_ID)
+drugs <- c(levels(drugs))
+
+for (x in drugs) {
+  data <- df_mean[df_mean$Compound_ID==`x`,] %>%
+    arrange(dose) %>%
+    mutate(Plate_ID = factor(Plate_ID, levels = unique(Plate_ID)))
+  
+  plot <- ggplot(data, aes(x = Plate_ID, y = mean_prob_alive, fill=dose)) +
+  geom_bar(stat = "identity", width = 0.5) + # Use stat="identity" for pre-calculated y values
+  scale_fill_manual(values = c("single_dose" = "salmon", "double_dose" = "skyblue")) +
+  facet_wrap(~ Compound_ID, scales = "free") + # Facet by 'facet_variable' with free x-scales
+  labs(title = "mean prob_alive per organoid",
+       x = "ORG",
+       y = "mean_prob_alive") +
+  theme_linedraw()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1)) 
+  
+  print(plot)
+} 
+
+```

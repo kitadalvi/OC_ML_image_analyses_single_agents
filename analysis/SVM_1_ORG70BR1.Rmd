@@ -240,7 +240,7 @@ We used the Vehicle and Media wells as controls. <br>
 
 ## Data annotation and import
 Raw single organoid data was imported from CellProfiler outputs and CTG with annotations was imported from previous R outputs. 
-The following Wells were excluded from Media and DMSO controls: O13 and H13. <br>
+The following Wells were excluded from Media and DMSO controls: H13-23, O13-23, N13-15, G13-15, I13-15, D14, K14, F3, M3, H2, O12. <br>
 
 *in addition to Staurosporine and high-dose Mitomycin, we added high-dose Doxorubicin and high-dose Topotecan to the positive controls.*
 
@@ -275,14 +275,14 @@ annotationsCTG <- read_csv(here::here("data/OC_ORG70BR1_CTG.csv"))
 norm_CTG <- annotationsCTG %>%
   filter(Compound_ID %in% c("Media", "DMSO")) %>% 
   ### list exluded wells below. 
-  filter(!Well_ID %in% c('H13','O13')) %>% 
+  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3', 'O12')) %>% 
   group_by(Patient) %>% 
   dplyr::summarise(neg_median = median(CTG)) %>% 
   inner_join(annotationsCTG, ., by = c("Patient")) %>% 
   mutate(CTG = CTG/neg_median) %>% 
   dplyr::select(-neg_median) %>% 
   ### list exluded wells below.
-  filter(!Well_ID %in% c('H13','O13')) 
+  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3', 'O12')) 
 
 
 ```
@@ -291,10 +291,8 @@ norm_CTG <- annotationsCTG %>%
 Bins were added to positive, negative, and library wells. 
 
 ```{r}
-
-
 all_data_with_bins <- all_data_raw %>%
-  filter(!Well_ID %in% c('H13','O13')) %>% 
+  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3', 'O12')) %>% 
   left_join(., norm_CTG, by = c("Well_ID")) %>% 
   na.omit()
 
@@ -309,7 +307,7 @@ all_data_with_bins <- all_data_with_bins %>%
                 contains(c("AreaShape", "Intensity", "Texture", "Location", "Neighbors", "Spheroids", "RadialDistribution"))) 
  # filter(AreaShape_Area >= 2000)
 
-#write.csv(all_data_with_bins, here::here(paste0("output/",patient,"/all_data_with_bins.csv")))
+write.csv(all_data_with_bins, here::here(paste0("output/",patient,"/all_data_with_bins.csv")))
 
 ```
 
@@ -500,9 +498,9 @@ all_data_clean <- all_data_with_bins %>%
   filter(!AreaShape_Area<1000) 
 
 clean_features <- names(all_data_clean[,-c(1:13)])
-#write.csv(all_data_clean, here::here(paste0("output/",patient,"/all_data_clean.csv")))
+write.csv(all_data_clean, here::here(paste0("output/",patient,"/all_data_clean.csv")))
 
-#write.csv(all_data_clean, here::here(paste0("output/",patient,"/Feature_reduced_raw_data.csv")))
+write.csv(all_data_clean, here::here(paste0("output/",patient,"/Feature_reduced_raw_data.csv")))
 ```
 
 Of the total feature count of `r ncol(all_data_with_bins)` there were `r length(to_remove)` removed during feature clean-up 
@@ -546,7 +544,7 @@ data_all_short <- CleanedAn
 control_short <- data_all_short%>% 
   filter(!Bin =="Sample") 
 
-#write.csv(data_all_short, here::here(paste0("output/",patient,"/data_all_short.csv")))
+write.csv(data_all_short, here::here(paste0("output/",patient,"/data_all_short.csv")))
 
 ```
 
@@ -628,7 +626,7 @@ n <- nrow(dat2)
 ntrain <- round(n*0.80)  
 
 ### Set seed for reproducible results
-set.seed(316)   
+set.seed(701)   
 
 ### Take random sample of indexes of size ntrain from n
 tindex <- sample(n, ntrain)  
@@ -708,7 +706,7 @@ trainTransformed_scr <- transform(trainTransformed, Bin = sample(Bin) )
 ```
 
 
-By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 50%. 
+By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 52%. 
  
 ```{r}
 pred_scr <- predict(svmfit2,trainTransformed_scr, probability = TRUE) 
@@ -722,12 +720,12 @@ confusionMatrix(pred_scr,trainTransformed_scr$Bin)
 The kernel argument has a variety of possible types including linear, polynomial, radial, and sigmoid. We use kernel=”radial” for this classification problem.
 You can tune the operation of svm() with two additional arguments: gamma and cost, where gamma is the argument for use by the kernel function, and cost allows us to specify the cost of a violation to the margin. When cost is small, the margins will be wide, resulting in many support vectors. You can experiment with different values of gamma and cost to find the best classification accuracy.
 
-**Here, changing cost from 1 to 25 and keep gamma at default improved the model performance from 98% to 99% accuracy.**
+**Here, changing cost from 1 to 10 and changing gamma from 0.012 to 0.015 improved the model performance from 98% to 99% accuracy.**
 
 ```{r}
 # Define new values for gamma and cost
-new_gamma <- 0.01
-new_cost <- 25
+new_gamma <- 0.015
+new_cost <- 10
 
 # Create the SVM model with the new gamma and cost values
 svm_model_after_tune = svm(Bin ~ ., 
@@ -925,7 +923,7 @@ Now we can use the predict() function with the trained SVM model to make predict
 
 ## Testing with correct labels
 
-Testing the SVM model on the last 20% of data gives a 96% accuracy in prediction.  
+Testing the SVM model on the last 20% of data gives a 97% accuracy in prediction.  
 
 ```{r}
 prediction <- predict(svm_model_after_tune, testTransformed, probability = TRUE)
@@ -935,7 +933,7 @@ confusionMatrix(prediction,testTransformed$Bin)
 
 ## Testing with scrambled labels
 
-Testing the SVM model on the last 20% of data after scrambling the category labels gives a random 54% accuracy in prediction.  
+Testing the SVM model on the last 20% of data after scrambling the category labels gives a random 52% accuracy in prediction.  
 
 ```{r}
 test_dat2_scr <- transform(testTransformed, Bin = sample(Bin) )
@@ -960,7 +958,7 @@ dat2[, 1] <- as.factor(dat2[, 1])  # Convert Bin to a factor
 
 data_all_short_all <- data_all_short %>% 
   dplyr::select(Bin, everything()) 
-#write.csv(data_all_short_all, here::here(paste0("output/",patient,"/data_all_short_all1.csv")))
+write.csv(data_all_short_all, here::here(paste0("output/",patient,"/data_all_short_all1.csv")))
 
 dat_V <- data_all_short_all%>% as.data.frame() %>% 
   dplyr::select(-c(2:11))
@@ -975,7 +973,7 @@ prob <- attr(prediction, "probabilities")
 confusionMatrix(prediction, LibTransformed$Bin)
 
 summary = data.frame(data_all_short_all, as.numeric(levels(prediction))[prediction])
-#write.csv(summary, here::here(paste0("output/",patient,"/summary_morphology_ORG70BR1.csv")))
+write.csv(summary, here::here(paste0("output/",patient,"/summary_morphology_ORG70BR1.csv")))
 ```
 
 
@@ -1023,7 +1021,7 @@ pred_all_data_mean<- pred_all_data %>% ungroup() %>% dplyr::select(-AreaShape_Ar
    mutate(across(where(is.numeric), ~ round(.x, 2))) %>% 
   ungroup()
 
-#write.csv(pred_all_data, here::here(paste0("output/", patient,"/pred_all_data_ORG70BR1.csv")))
+write.csv(pred_all_data, here::here(paste0("output/", patient,"/pred_all_data_ORG70BR1.csv")))
 
 
 
@@ -1070,7 +1068,7 @@ datatable(pred_all_data_mean, extensions = c('Buttons', 'Scroller'), rownames = 
   scrollX = TRUE
 ))
 
-#write.csv(pred_all_data_mean, here::here(paste0("output/",patient,"/pred_all_data_mean_ORG70BR1.csv")))
+write.csv(pred_all_data_mean, here::here(paste0("output/",patient,"/pred_all_data_mean_ORG70BR1.csv")))
 ```
 
 

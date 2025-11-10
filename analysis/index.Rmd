@@ -116,30 +116,33 @@ div.a {
 
 ## Data Summary
 
-|Sample | Replicate|Classification    |Status         |Link     |
-|:------|---------:|:-----------------|:--------------|:--------|
-|ORG38  |         2|mixed small dense |complete-edit. |[ORG38BR2](SVM_1_ORG38BR2_Dox.html)|
-|ORG41  |         1|mixed small dense |complete       |[ORG41BR1](SVM_1_ORG41BR1_Dox.html)|
-|ORG41  |         2|mixed small dense |Under review   |Images look funky|
-|ORG46  |         1|mixed small dense |Under review   |Images look funky|
-|ORG49  |         2|mixed small dense |Under review   |Images look funky|
-|ORG55  |         1|mixed small dense |incomplete     |-|
-|ORG55  |         2|mixed small dense |incomplete     |-|
-|ORG61  |         1|mixed small dense |incomplete     |-|
-|ORG61  |         2|mixed small dense |incomplete     |-|
-|ORG65  |         1|mixed small dense |incomplete     |-|
-|ORG65  |         2|mixed small dense |incomplete     |-|
-|ORG66  |         2|mixed small dense |complete       |[ORG66BR2](SVM_1_ORG66BR2_Dox.html)|
-|ORG66  |         3|mixed small dense |complete       |[ORG66BR3](SVM_1_ORG66BR3_Dox.html)|
-|ORG73  |         1|mixed small dense |incomplete     |-|
-|ORG76  |         1|mixed small dense |incomplete     |-|
-|ORG60  |         3|cystic            |incomplete     |[ORG60BR3](SVM_1_ORG60BR3.html)|
-|ORG64  |         3|cystic            |under revision |[ORG64BR3](SVM_1_ORG64BR3_Dox.html)|
-|ORG70  |         1|cystic            |incomplete     |[ORG70BR1](SVM_1_ORG70BR1.html)|
-|ORG70  |         2|cystic            |incomplete     |[ORG70BR2](SVM_1_ORG70BR2.html)|
+|Sample | Replicate|Classification    |Status         |Link                               |Model metrics on test data |
+|:------|---------:|:-----------------|:--------------|:----------------------------------|:--------------------------|
+|ORG38  |         2|mixed small dense |COMPLETE       |[ORG38BR2](SVM_1_ORG38BR2_Dox.html)|Accuracy = 93%.|
+|ORG41  |         1|mixed small dense |COMPLETE       |[ORG41BR1](SVM_1_ORG41BR1_Dox.html)|Accuracy = 96%.|
+|ORG41  |         2|mixed small dense |COMPLETE       |[ORG41BR2](SVM_1_ORG41BR2.html)    |Accuracy = 88%.|
+|ORG46  |         1|mixed small dense |COMPLETE       |[ORG46BR1](SVM_1_ORG46BR1.html)    |Accuracy = 82%.|
+|ORG49  |         2|mixed small dense |COMPLETE       |[ORG49BR2](SVM_1_ORG49BR2.html)    |Accuracy = 93%.|
+|ORG55  |         1|mixed small dense |COMPLETE       |[ORG55BR1](SVM_1_ORG55BR1.html)    |Accuracy = 93%.|
+|ORG55  |         2|mixed small dense |COMPLETE       |[ORG55BR2](SVM_1_ORG55BR2.html)    |Accuracy = 96%.|
+|ORG61  |         1|mixed small dense |COMPLETE       |[ORG61BR1](SVM_1_ORG61BR1.html)    |Accuracy = 88%.|
+|ORG61  |         2|mixed small dense |COMPLETE       |[ORG61BR2](SVM_1_ORG61BR2.html)    |Accuracy = 81%.|
+|ORG65  |         1|mixed small dense |COMPLETE       |[ORG65BR1](SVM_1_ORG65BR1.html)    |Accuracy = 86%.|
+|ORG65  |         2|mixed small dense |COMPLETE       |[ORG65BR2](SVM_1_ORG65BR2.html)    |Accuracy = 97%.|
+|ORG66  |         2|mixed small dense |COMPLETE       |[ORG66BR2](SVM_1_ORG66BR2_Dox.html)|Accuracy = 94%.|
+|ORG66  |         3|mixed small dense |COMPLETE       |[ORG66BR3](SVM_1_ORG66BR3_Dox.html)|Accuracy = 75%.|
+|ORG73  |         1|mixed small dense |COMPLETE       |[ORG73BR1](SVM_1_ORG73BR1.html)    |Accuracy = 99%.|
+|ORG76  |         1|mixed small dense |COMPLETE       |[ORG76BR1](SVM_1_ORG76BR1.html)    |Accuracy = 85%.|
+|ORG60  |         3|cystic            |COMPLETE       |[ORG60BR3](SVM_1_ORG60BR3.html)    |Accuracy = 90%.|
+|ORG64  |         3|cystic            |COMPLETE       |[ORG64BR3](SVM_1_ORG64BR3.html)    |Accuracy = 98%.|
+|ORG70  |         1|cystic            |COMPLETE       |[ORG70BR1](SVM_1_ORG70BR1.html)    |Accuracy = 97%.|
+|ORG70  |         2|cystic            |COMPLETE       |[ORG70BR2](SVM_1_ORG70BR2.html)    |Accuracy = 95%.|
 |ORG71  |         1|cystic            |N/A            |N/A - not MOC|
 |ORG71  |         2|cystic            |N/A            |N/A - not MOC|
 
+
+## Dose Compariuson
+[Dose 1 VS Dose 2](dose_comparison.html)
 
 ## Back to [<span style="color: #7d2b8b">_Confluence_</span>](https://atlassian.petermac.org.au/confluence/display/VCFG/Feasibility+Study+Analyses+PM3D170)
 

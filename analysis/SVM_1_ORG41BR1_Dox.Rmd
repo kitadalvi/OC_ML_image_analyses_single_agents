@@ -269,14 +269,14 @@ annotationsCTG <- read_csv(here::here("data/OC_ORG41BR1_CTG.csv"))
 norm_CTG <- annotationsCTG %>%
   filter(Compound_ID %in% c("Media", "DMSO")) %>% 
   ### list excluded wells below. 
-  #filter(!Well_ID %in% c()) %>% 
+  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3')) %>% 
   group_by(Patient) %>% 
   dplyr::summarise(neg_median = median(CTG)) %>% 
   inner_join(annotationsCTG, ., by = c("Patient")) %>% 
   mutate(CTG = CTG/neg_median) %>% 
-  dplyr::select(-neg_median) #%>% 
+  dplyr::select(-neg_median) %>% 
   ### list exxluded wells below.
- # filter(!Well_ID %in% c()) 
+  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3'))
 
 
 ```
@@ -285,10 +285,8 @@ norm_CTG <- annotationsCTG %>%
 Bins were added to positive, negative, and library wells. 
 
 ```{r}
-
-
 all_data_with_bins <- all_data_raw %>%
-  #filter(!Well_ID %in% c()) %>% 
+  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3')) %>% 
   left_join(., norm_CTG, by = c("Well_ID")) %>% 
   na.omit()
 
@@ -303,7 +301,7 @@ all_data_with_bins <- all_data_with_bins %>%
                 contains(c("AreaShape", "Intensity", "Texture", "Location", "Neighbors", "Spheroids", "RadialDistribution"))) 
  # filter(AreaShape_Area >= 2000)
 
-#write.csv(all_data_with_bins, here::here(paste0("output/",patient,"/all_data_with_bins.csv")))
+write.csv(all_data_with_bins, here::here(paste0("output/",patient,"/all_data_with_bins.csv")))
 
 ```
 
@@ -520,8 +518,8 @@ data_all_short <- CleanedAn
 control_short <- data_all_short%>% 
   filter(!Bin =="Sample") 
 
-#write.csv(data_all_short, here::here(paste0("output/",patient,"/data_all_short.csv")))
-
+write.csv(data_all_short, here::here(paste0("output/",patient,"/data_all_short.csv")))
+write.csv(CorData, here::here(paste0("output/",patient,"/CorData_removed.csv")))
 ```
 
 There were `r ncol(Cleaned)` feature left after feature exclusion. 
@@ -601,7 +599,7 @@ n <- nrow(dat2)
 ntrain <- round(n*0.80)  
 
 ### Set seed for reproducible results
-set.seed(317)   
+set.seed(411)   
 
 ### Take random sample of indexes of size ntrain from n
 tindex <- sample(n, ntrain)  
@@ -681,7 +679,7 @@ trainTransformed_scr <- transform(trainTransformed, Bin = sample(Bin) )
 ```
 
 
-By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 58%. 
+By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 56%. 
  
 ```{r}
 pred_scr <- predict(svmfit2,trainTransformed_scr, probability = TRUE) 
@@ -695,12 +693,12 @@ confusionMatrix(pred_scr,trainTransformed_scr$Bin)
 The kernel argument has a variety of possible types including linear, polynomial, radial, and sigmoid. We use kernel=”radial” for this classification problem.
 You can tune the operation of svm() with two additional arguments: gamma and cost, where gamma is the argument for use by the kernel function, and cost allows us to specify the cost of a violation to the margin. When cost is small, the margins will be wide, resulting in many support vectors. You can experiment with different values of gamma and cost to find the best classification accuracy.
 
-**Here, changing cost from 1 to 10 and keep gamma at default improved the model performance from 97% to 99% accuracy.**
+**Here, changing cost from 1 to 2 and keep gamma at default improved the model performance from 97% to 98% accuracy.**
 
 ```{r}
 # Define new values for gamma and cost
 new_gamma <- 0.01
-new_cost <- 10
+new_cost <- 2
 
 # Create the SVM model with the new gamma and cost values
 svm_model_after_tune = svm(Bin ~ ., 
@@ -908,7 +906,7 @@ confusionMatrix(prediction,testTransformed$Bin)
 
 ## Testing with scrambled labels
 
-Testing the SVM model on the last 20% of data after scrambling the category labels gives a random 56% accuracy in prediction.  
+Testing the SVM model on the last 20% of data after scrambling the category labels gives a random 58% accuracy in prediction.  
 
 ```{r}
 test_dat2_scr <- transform(testTransformed, Bin = sample(Bin) )
@@ -996,7 +994,7 @@ pred_all_data_mean<- pred_all_data %>% ungroup() %>% dplyr::select(-AreaShape_Ar
    mutate(across(where(is.numeric), ~ round(.x, 2))) %>% 
   ungroup()
 
-#write.csv(pred_all_data, here::here(paste0("output/", patient,"/pred_all_data_ORG41BR1.csv")))
+write.csv(pred_all_data, here::here(paste0("output/", patient,"/pred_all_data_ORG41BR1.csv")))
 
 
 
@@ -1020,7 +1018,7 @@ pred_all_data_mean<- pred_all_data %>% ungroup() %>% dplyr::select(-AreaShape_Ar
   #scrollX = TRUE
 #))
 
-#write.csv(pred_all_data, here::here(paste0("output/",patient,"pred_all_data.csv")))
+write.csv(pred_all_data, here::here(paste0("output/",patient,"pred_all_data.csv")))
 ```
 
 
@@ -1043,7 +1041,7 @@ datatable(pred_all_data_mean, extensions = c('Buttons', 'Scroller'), rownames = 
   scrollX = TRUE
 ))
 
-#write.csv(pred_all_data_mean, here::here(paste0("output/",patient,"/pred_all_data_mean_ORG41BR1.csv")))
+write.csv(pred_all_data_mean, here::here(paste0("output/",patient,"/pred_all_data_mean_ORG41BR1.csv")))
 ```
 
 
@@ -1232,7 +1230,71 @@ print(p1)
 
 ```
 
+```{r}
+plot(
+  svm_model_after_tune,
+  testTransformed,
+  Texture_InverseDifferenceMoment_CropDAPI_3_01_256 ~ Texture_DifferenceVariance_CropDAPI_3_01_256,
+  main='SVM Decision boundary'
+)
+```
 
+```{r}
+# assume your data frame is named `df`
+# assume you have trained:
+# svm_model <- svm(Bin ~ ., data = df, type = "C-classification", kernel = "radial")
+
+df <- testTransformed
+# pick two numeric predictors to visualise
+x_var <- "Texture_InverseDifferenceMoment_CropDAPI_3_01_256"
+y_var <- "Texture_DifferenceVariance_CropDAPI_3_01_256"
+
+# create sequences over the ranges
+x_seq <- seq(min(df[[x_var]])-1, max(df[[x_var]])+1, by = 0.01)
+y_seq <- seq(min(df[[y_var]])-1, max(df[[y_var]])+1, by = 0.01)
+
+grid <- expand.grid(
+  X1 = x_seq,
+  X2 = y_seq
+)
+colnames(grid) <- c(x_var, y_var)
+
+# For all other predictors, set to their median (or a typical value)
+for (col in setdiff(names(df), c("Bin", x_var, y_var))) {
+  if (is.numeric(df[[col]])) {
+    grid[[col]] <- median(df[[col]], na.rm = TRUE)
+  } else {
+    # if any factor, choose first level
+    grid[[col]] <- levels(df[[col]])[1]
+  }
+}
+
+# predict class for each grid point
+grid$pred <- predict(svm_model_after_tune, newdata = grid, probability = TRUE)
+
+# convert pred to factor if needed
+grid$pred <- factor(grid$pred, levels = levels(df$Bin))
+
+# plot
+ggplot() +
+  geom_tile(data = grid,
+            aes_string(x = x_var, y = y_var, fill = "pred"),
+            alpha = 0.3) +
+  geom_point(data = df,
+             aes_string(x = x_var, y = y_var, color = "Bin"),
+             size = 1.5, alpha = 0.8) +
+  scale_fill_manual(values = c("negative_control" = "lightpink", 
+                               "positive_control" = "lightgreen"),
+                    name = "Predicted class") +
+  scale_color_manual(values = c("negative_control" = "red", 
+                                "positive_control" = "darkgreen"),
+                     name = "Actual Bin") +
+  labs(title = "SVM Decision Boundary for Bin",
+       x = x_var,
+       y = y_var) +
+  theme_minimal()
+
+```
 
 <br>
 

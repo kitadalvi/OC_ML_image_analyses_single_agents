@@ -240,7 +240,7 @@ We used the Vehicle and Media wells as controls. <br>
 
 ## Data annotation and import
 Raw single organoid data was imported from CellProfiler outputs and CTG with annotations was imported from previous R outputs. 
-The following Wells were excluded from Media and DMSO controls: N13, O13 and H13. <br>
+The following Wells were excluded from Media and DMSO controls: H13-23, O13-23, N13-15, G13-15, I13-15, D14, K14, F3, M3, I4. <br>
 
 *in addition to Staurosporine and high-dose Mitomycin, we added high-dose Doxorubicin and high-dose Topotecan to the positive controls.*
 
@@ -270,15 +270,14 @@ annotationsCTG <- read_csv(here::here("data/OC_ORG70BR2_CTG.csv"))
 norm_CTG <- annotationsCTG %>%
   filter(Compound_ID %in% c("Media", "DMSO")) %>% 
   ### list exluded wells below. 
-  filter(!Well_ID %in% c('N13','H13','O13')) %>% 
+  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3', 'I4')) %>% 
   group_by(Patient) %>% 
   dplyr::summarise(neg_median = median(CTG)) %>% 
   inner_join(annotationsCTG, ., by = c("Patient")) %>% 
   mutate(CTG = CTG/neg_median) %>% 
   dplyr::select(-neg_median) %>% 
   ### list exluded wells below.
-  filter(!Well_ID %in% c('N13','H13','O13')) 
-
+  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3', 'I4')) 
 
 ```
 
@@ -287,7 +286,7 @@ Bins were added to positive, negative, and library wells.
 
 ```{r}
 all_data_with_bins <- all_data_raw %>%
-  filter(!Well_ID %in% c('N13','H13','O13')) %>% 
+  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3', 'I4')) %>% 
   left_join(., norm_CTG, by = c("Well_ID")) %>% 
   na.omit()
 
@@ -621,7 +620,7 @@ n <- nrow(dat2)
 ntrain <- round(n*0.80)  
 
 ### Set seed for reproducible results
-set.seed(316)   
+set.seed(702)   
 
 ### Take random sample of indexes of size ntrain from n
 tindex <- sample(n, ntrain)  
@@ -701,7 +700,7 @@ trainTransformed_scr <- transform(trainTransformed, Bin = sample(Bin) )
 ```
 
 
-By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 50%. 
+By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 51%. 
  
 ```{r}
 pred_scr <- predict(svmfit2,trainTransformed_scr, probability = TRUE) 
@@ -715,12 +714,12 @@ confusionMatrix(pred_scr,trainTransformed_scr$Bin)
 The kernel argument has a variety of possible types including linear, polynomial, radial, and sigmoid. We use kernel=”radial” for this classification problem.
 You can tune the operation of svm() with two additional arguments: gamma and cost, where gamma is the argument for use by the kernel function, and cost allows us to specify the cost of a violation to the margin. When cost is small, the margins will be wide, resulting in many support vectors. You can experiment with different values of gamma and cost to find the best classification accuracy.
 
-**Here, changing cost from 1 to 10 and keep gamma at default improved the model performance from 98% to 99% accuracy.**
+**Here, changing cost from 1 to 3 and changing gamma from 0.01 to 0.05 improved the model performance from 98% to 99% accuracy.**
 
 ```{r}
 # Define new values for gamma and cost
-new_gamma <- 0.01
-new_cost <- 10
+new_gamma <- 0.05
+new_cost <- 3
 
 # Create the SVM model with the new gamma and cost values
 svm_model_after_tune = svm(Bin ~ ., 
@@ -1040,7 +1039,7 @@ write.csv(pred_all_data, here::here(paste0("output/", patient,"/pred_all_data_OR
   #scrollX = TRUE
 #))
 
-write.csv(pred_all_data, here::here(paste0("output/",patient,"pred_all_data.csv")))
+write.csv(pred_all_data, here::here(paste0("output/",patient,"/pred_all_data.csv")))
 ```
 
 
