@@ -721,18 +721,18 @@ confusionMatrix(pred_scr,trainTransformed_scr$Bin)
 The kernel argument has a variety of possible types including linear, polynomial, radial, and sigmoid. We use kernel=”radial” for this classification problem.
 You can tune the operation of svm() with two additional arguments: gamma and cost, where gamma is the argument for use by the kernel function, and cost allows us to specify the cost of a violation to the margin. When cost is small, the margins will be wide, resulting in many support vectors. You can experiment with different values of gamma and cost to find the best classification accuracy.
 
-**Here, changing cost from 1 to 15 and changing gamma from a default of 0.01 to 0.03 improved the model performance from 83% to 98% accuracy.**
+**Here, changing cost from 1 to 5 and changing gamma from a default of 0.01 to 0.03 improved the model performance from 83% to 98% accuracy.**
 
 ```{r}
 # Define new values for gamma and cost
 new_gamma <- 0.03
-new_cost <- 15
+new_cost <- 5
 
 # Create the SVM model with the new gamma and cost values
 svm_model_after_tune = svm(Bin ~ ., 
                  data = trainTransformed, 
                  kernel = "radial", 
-                 gamma = default_gamma, 
+                 gamma = new_gamma, 
                  cost = new_cost, 
                  probability = TRUE)
 

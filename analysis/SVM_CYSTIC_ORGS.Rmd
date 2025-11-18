@@ -1,5 +1,5 @@
 ---
-title: "<img src=\"Cropped_VCFG_Logo2019.png\" style=\"float:right;height:77.1429px;width:152px\"/>ORG38BR2<br>3D Image-based Classification <br> SVM analyses<br>"
+title: "<img src=\"Cropped_VCFG_Logo2019.png\" style=\"float:right;height:77.1429px;width:152px\"/>CYSTIC ORGANOIDS<br>3D Image-based Classification <br> SVM analyses<br>"
 output: 
   html_document:
     keep_md: true
@@ -127,7 +127,7 @@ The readouts from the high-content image analysis include morphology, intensity,
 
 ## Conditions
 
-* Alive/ healthy control (Vehicle control Wells from patient ORG66BR3)  
+* Alive/ healthy control (Vehicle control Wells from CYSTIC organoids)  
 * Dead organoids (high dose drug control Wells)  
 * Unknown phenotypes (all other Wells)  
 
@@ -218,10 +218,11 @@ layout_ggplotly_narrow <- function(gg, x = -0.02, y = -0.055){
 }
 
 # set the file prefix
+```
 
-prefix <- "OC_ORG38BR2"
-patient <- "ORG38BR2"
-
+```{r}
+prefix <- "CYSTIC"
+patient <- "CYSTIC"
 ```
 
 
@@ -239,85 +240,38 @@ We used the Vehicle and Media wells as controls. <br>
 # Data processing
 
 ## Data annotation and import
-Raw single organoid data was imported from CellProfiler outputs and CTG with annotations was imported from previous R outputs. 
-The following Wells were excluded from Media and DMSO controls: H13-23, O13-23, N13-15, G13-15, I13-15, D14, K14, F3, M3. <br>
 
-*in addition to Staurosporine and high-dose Mitomycin, we added high-dose Doxorubicin and high-dose Topotecan to the positive controls.*
+Raw single organoid data was imported from CellProfiler outputs and CTG with annotations was imported from previous R outputs. Wells were excluded on a per-orgaonid QC basis, and CTG normalisation to DMSO/Media controls was completed within and organoid, before normalised results were combined together for all cystic organoids,
+ <br>
 
- 
-
-```{r, fig.height=10, fig.width=10}
-# per-image data
-all_data_raw <- 
-    list.files(gsub(" ", "", paste(here::here("data/raw_data/staining/SingleOrganoid/"))), 
-                 pattern = "*ORG38BR2.csv", 
-                 full.names = T) %>% 
-    map_df(~fread(.)) %>% 
-  mutate(VCFG_Plate_ID = 1) %>% 
-  dplyr::select(VCFG_Plate_ID, Plate_ID = Metadata_Plate...7, Well_ID = Metadata_Well...11, ImageNumber, ObjectNumber, contains(c("AreaShape", "Intensity", "Texture", "Neighbors", "Spheroids", "RadialDistribution"))) 
-
-
-annotationsCTG <- read_csv(here::here("data/OC_ORG38BR2_CTG.csv")) %>% dplyr::select(-WELL_ID)
-
-#generate_heatmaps(annotationsCTG)
-
-# annotationsCTG2 <- read_csv(here::here("data", "OC_ORG66BR3_CTG.csv")) %>% 
-#    left_join(annotationsCTG, by = c("Well_ID", "Concentration", "Units", "Description", "Compound_ID", "Patient")) 
-
-```
-
-Images of negative control wells excluded from analysis: M2
-
-```{r, echo=FALSE}
-htmltools::img(src = knitr::image_uri(here::here("data/images", "ORG38BR2_M2.png")), 
-               style = 'height:500px;width:500px')
-```
-
-Normalise CTG to media and DMSO controls.
 
 ```{r}
-annotationsCTG <- read_csv(here::here("data/OC_ORG38BR2_CTG.csv")) 
+### Define organoids of interest
+cystic_organoids <- c('ORG60BR3','ORG64BR3','ORG70BR1')
 
-# calculate normalised values
-norm_CTG <- annotationsCTG %>%
-  filter(Compound_ID %in% c("Media", "DMSO")) %>% 
-  ### list exluded wells below. 
-  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3')) %>% 
-  group_by(Patient) %>% 
-  dplyr::summarise(neg_median = median(CTG)) %>% 
-  inner_join(annotationsCTG, ., by = c("Patient")) %>% 
-  mutate(CTG = CTG/neg_median) %>% 
-  dplyr::select(-neg_median) %>% 
-  ### list exluded wells below.
-  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3')) 
+### Create empty list to append data frames to
+df_list <- list()
 
+### Iterate through list of defined organoids
+for (i in 1:length(cystic_organoids)) {
+  organoid <- cystic_organoids[i]
+  ### Generate filepath for each organoid in list
+  filepath <- paste0('output/', organoid, '/all_data_with_bins.csv')
+  print(paste('Reading file:', filepath))
+  ### Read cleaned DF and generate new combined ID column
+  df <- read_csv(here::here(filepath)) %>%
+    mutate(WELL_ID = paste0(Plate_ID, '_', WELL_ID))
+  ### add dataframe to list
+  df_list[[i]] <- df
+  print(paste('CellProfiler data for', organoid, 'stored.'))
+  
+}
 
+### Combine all dataframes together
+all_data_with_bins <- do.call(rbind, df_list)
+all_data_with_bins <- all_data_with_bins[,-c(1)]
 ```
 
-
-Bins were added to positive, negative, and library wells. 
-
-```{r}
-
-all_data_with_bins <- all_data_raw %>%
-  filter(!Well_ID %in% c('H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','O13','O14','O15','O16','O17','O18','O19','O20','O21','O22','O23','N13','N14','N15','G13','G14','G15','I13','I14','I15','D14','K14','F3','M3')) %>% 
-  left_join(., norm_CTG, by = c("Well_ID")) %>% 
-  na.omit()
-
-# Now join this back to the original data and create the Bin column
-all_data_with_bins <- all_data_with_bins %>%
-  mutate(Bin = case_when(
-    Description %in% c("negative_control")   ~ "negative_control",
-    Description %in% c("positive_control")  ~ "positive_control",
-    TRUE ~ "Sample"
-  )) %>%
-  dplyr::select(Bin, Plate_ID, Replicate, ObjectNumber, WELL_ID, Concentration, Units, Description, Compound_ID, Patient, CTG, 
-                contains(c("AreaShape", "Intensity", "Texture", "Location", "Neighbors", "Spheroids", "RadialDistribution"))) 
- # filter(AreaShape_Area >= 2000)
-
-#write.csv(all_data_with_bins, here::here(paste0("output/",patient,"/all_data_with_bins.csv")))
-
-```
 
 
 ## Data overview
@@ -342,7 +296,7 @@ plot <- all_data_with_bins %>%
       strip.text.x = element_text(size = 8)) 
 
 
-### Compare spatial intensity distribution between positive and negative controls
+### Compare spatial intensity distribution between positive and negative cointrols
 plot2 <- all_data_with_bins %>%
   filter(!AreaShape_Area<1000) %>% 
   filter(Bin %in% c("negative_control","positive_control")) %>% 
@@ -359,7 +313,7 @@ plot2 <- all_data_with_bins %>%
       strip.text.x = element_text(size = 8)) 
 
 
-### Compare viability (log2(CTG)) across positive and negative controls 
+### Compare viability (log2(CTG) )across positive and negative controls 
 plot3 <- all_data_with_bins %>%
   filter(!AreaShape_Area<1000) %>% 
   filter(Bin %in% c("negative_control","positive_control")) %>% 
@@ -388,27 +342,9 @@ plotly::ggplotly(plot, tooltip = c("Cell_Line", "Count_Spheroids"))
 rm(plot,plot2, plot3)
 ```
 
-Area measurements of healthy organoids
-*Need to update with images for ORG38BR2*
-```{r, echo=FALSE}
-# htmltools::img(src = knitr::image_uri(here::here("data", "organoid_area_negcontrol.png")), 
-#                style = 'height:934px;width:1501px')
-```
 
-<br>
-<br>
 
-Area measurements of dead organoids
-*Need to update with images for ORG38BR2*
-```{r, echo=FALSE}
-# htmltools::img(src = knitr::image_uri(here::here("data", "organoid_area_tox.png")), 
-#                style = 'height:934px;width:1501px')
-```
-
-<br>
-<br>
-
-Next, we generate an overlayed histogram of spheroid area distribtion to compare positive and negative controls and mark the respective median values. As expected, median spheroid area of negative controls (cells that are "likely alive" in Media/DMSO) is larger than positive controls (cells that are "likely dead" in Straurosporine/ Doxorubicin/ Mitomycin C/ Topotecan).
+Next, we generate an overlayed histogram of spheroid area distribtion to compare positive and negative controls and mark the respective median values. As expected, median spheroid area of negative controls (cells that are "likely alive" in Media/DMSO) is larger than positive controls.
 
 ```{r}
 # Filter and process data
@@ -418,7 +354,7 @@ data_with_medians <- all_data_with_bins %>%
   summarize(Median = median(AreaShape_Area, na.rm = TRUE)) %>%
   ungroup() 
 
-# Histogram with density overlay 
+# Histogram with density overlay
 histogram_plot <- all_data_with_bins %>%
   filter(Bin %in% c("negative_control", "positive_control")) %>%
   ggplot(aes(x = AreaShape_Area, fill = Bin, color = Bin)) +
@@ -506,9 +442,9 @@ all_data_clean <- all_data_with_bins %>%
   filter(!AreaShape_Area<1000) 
 
 clean_features <- names(all_data_clean[,-c(1:13)])
-#write.csv(all_data_clean, here::here(paste0("output/",patient,"/all_data_clean.csv")))
+write.csv(all_data_clean, here::here(paste0("output/",patient,"/all_data_clean.csv")))
 
-#write.csv(all_data_clean, here::here(paste0("output/",patient,"/Feature_reduced_raw_data.csv")))
+write.csv(all_data_clean, here::here(paste0("output/",patient,"/Feature_reduced_raw_data.csv")))
 ```
 
 Of the total feature count of `r ncol(all_data_with_bins)` there were `r length(to_remove)` removed during feature clean-up 
@@ -552,7 +488,7 @@ data_all_short <- CleanedAn
 control_short <- data_all_short%>% 
   filter(!Bin =="Sample") 
 
-#write.csv(data_all_short, here::here(paste0("output/",patient,"/data_all_short.csv")))
+write.csv(data_all_short, here::here(paste0("output/",patient,"/data_all_short.csv")))
 
 ```
 
@@ -634,7 +570,7 @@ n <- nrow(dat2)
 ntrain <- round(n*0.80)  
 
 ### Set seed for reproducible results
-set.seed(316)   
+set.seed(123)   
 
 ### Take random sample of indexes of size ntrain from n
 tindex <- sample(n, ntrain)  
@@ -699,11 +635,13 @@ Here is the result of the prediction of the training set, comparing the result o
 ### Test predictions on training set data
 pred <- predict(svmfit2,trainTransformed, probability  = TRUE)
 system.time(pred <- predict(svmfit2,trainTransformed))
+```
 
+```{r}
 ### Evaluate performance 
 cf <- confusionMatrix(pred,trainTransformed$Bin)
 cf
-fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix before tuning")
 ```
 
 
@@ -716,12 +654,13 @@ trainTransformed_scr <- transform(trainTransformed, Bin = sample(Bin) )
 ```
 
 
-By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 49%. 
+By randomising/scrambling the category labels, we create a data set that should not be predicted correctly and indeed, the prediction accuracy for the scrambled data drops down to 55%. 
  
 ```{r}
 pred_scr <- predict(svmfit2,trainTransformed_scr, probability = TRUE) 
 
-cf <- confusionMatrix(pred_scr,trainTransformed_scr$Bin)
+### Evaluate performance 
+cf <-confusionMatrix(pred_scr,trainTransformed_scr$Bin)
 cf
 fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
@@ -731,24 +670,24 @@ fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 The kernel argument has a variety of possible types including linear, polynomial, radial, and sigmoid. We use kernel=”radial” for this classification problem.
 You can tune the operation of svm() with two additional arguments: gamma and cost, where gamma is the argument for use by the kernel function, and cost allows us to specify the cost of a violation to the margin. When cost is small, the margins will be wide, resulting in many support vectors. You can experiment with different values of gamma and cost to find the best classification accuracy.
 
-**Here, changing cost from 1 to 25 and keep gamma at default improved the model performance from 95% to 99% accuracy.**
+**Here, changing cost from 1 to 2 and changing gamma from a default of 0.01 to 0.03 improved the model performance from 97% to 98% accuracy.**
 
 ```{r}
 # Define new values for gamma and cost
-new_gamma <- 0.01
-new_cost <- 25
+new_gamma <- 0.03
+new_cost <- 2
 
 # Create the SVM model with the new gamma and cost values
 svm_model_after_tune = svm(Bin ~ ., 
                  data = trainTransformed, 
                  kernel = "radial", 
-                 gamma = default_gamma, 
+                 gamma = new_gamma, 
                  cost = new_cost, 
                  probability = TRUE)
 
 summary(svm_model_after_tune)
 
-#save(svm_model_after_tune, file = here::here(paste0("output/",patient,"/svm_model_after_tune.RData")))
+save(svm_model_after_tune, file = here::here(paste0("output/",patient,"/svm_model_after_tune.RData")))
 
 ```
 
@@ -788,7 +727,7 @@ pred2 <- predict(svm_model_after_tune,trainTransformed, probability = TRUE)
 
 cf <- confusionMatrix(pred2,trainTransformed$Bin)
 cf
-fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix after tuning")
 ```
 
 
@@ -936,7 +875,7 @@ Now we can use the predict() function with the trained SVM model to make predict
 
 ## Testing with correct labels
 
-Testing the SVM model on the last 20% of data gives a 93% accuracy in prediction.  
+Testing the SVM model on the last 20% of data gives a 95% accuracy in prediction.  
 
 ```{r}
 prediction <- predict(svm_model_after_tune, testTransformed, probability = TRUE)
@@ -948,14 +887,16 @@ fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 
 ## Testing with scrambled labels
 
-Testing the SVM model on the last 20% of data after scrambling the category labels gives a random 49% accuracy in prediction.  
+Testing the SVM model on the last 20% of data after scrambling the category labels gives a random 54% accuracy in prediction.  
 
 ```{r}
 test_dat2_scr <- transform(testTransformed, Bin = sample(Bin) )
 
 prediction_scr <- predict(svm_model_after_tune, test_dat2_scr, probability = TRUE)
 
-confusionMatrix(prediction_scr,test_dat2_scr$Bin)
+cf <-confusionMatrix(prediction_scr,test_dat2_scr$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 # View how all organoids are categorised 
@@ -971,9 +912,10 @@ dat2 <- control_short %>% as.data.frame() %>%
 dat2[, 1] <- as.factor(dat2[, 1])  # Convert Bin to a factor
 
 
+
 data_all_short_all <- data_all_short %>% 
   dplyr::select(Bin, everything()) 
-write.csv(data_all_short_all, here::here(paste0("output/",patient,"/data_all_short_all1.csv")))
+#write.csv(data_all_short_all, "data_all_short_all1.csv")
 
 dat_V <- data_all_short_all%>% as.data.frame() %>% 
   dplyr::select(-c(2:11))
@@ -988,7 +930,7 @@ prob <- attr(prediction, "probabilities")
 confusionMatrix(prediction, LibTransformed$Bin)
 
 summary = data.frame(data_all_short_all, as.numeric(levels(prediction))[prediction])
-#write.csv(summary, here::here(paste0("output/",patient,"/summary_morphology_ORG38BR2.csv")))
+write.csv(summary, here::here(paste0("output/",patient,"/summary_morphology.csv")))
 ```
 
 
@@ -1014,16 +956,16 @@ well_object_count_norm <- well_object_count %>%
   dplyr::select(-neg_median)
 
 
-pred_all_data_norm <- pred_all_data %>% 
-  dplyr::select(WELL_ID, Description, Patient, AreaShape_Area) %>% 
-  filter(Description %in% c("negative_control")) %>% 
-  group_by(Patient) %>% 
-  dplyr::summarise(neg_median = median(AreaShape_Area)) %>% 
-  inner_join(pred_all_data, ., by = c("Patient")) %>% 
-  mutate(AreaShape_Area = AreaShape_Area/neg_median) %>% 
-  dplyr::select(WELL_ID, Description, Patient, AreaShape_Area) %>% 
-  group_by(WELL_ID, Patient) %>% 
-  dplyr::summarise(AreaShape_Area = median(AreaShape_Area)) 
+pred_all_data_norm <- pred_all_data %>%
+  dplyr::select(WELL_ID, Description, Patient, AreaShape_Area) %>%
+  filter(Description %in% c("negative_control")) %>%
+  group_by(Patient) %>%
+  dplyr::summarise(neg_median = median(AreaShape_Area)) %>%
+  inner_join(pred_all_data, ., by = c("Patient")) %>%
+  mutate(AreaShape_Area = AreaShape_Area/neg_median) %>%
+  dplyr::select(WELL_ID, Description, Patient, AreaShape_Area) %>%
+  group_by(WELL_ID, Patient) %>%
+  dplyr::summarise(AreaShape_Area = median(AreaShape_Area))
 
 
 pred_all_data_mean<- pred_all_data %>% ungroup() %>% dplyr::select(-AreaShape_Area) %>% 
@@ -1036,7 +978,7 @@ pred_all_data_mean<- pred_all_data %>% ungroup() %>% dplyr::select(-AreaShape_Ar
    mutate(across(where(is.numeric), ~ round(.x, 2))) %>% 
   ungroup()
 
-#write.csv(pred_all_data, here::here(paste0("output/", patient,"/pred_all_data_ORG38BR2.csv")))
+write.csv(pred_all_data, here::here(paste0("output/", patient,"/pred_all_data.csv")))
 
 
 
@@ -1083,7 +1025,7 @@ datatable(pred_all_data_mean, extensions = c('Buttons', 'Scroller'), rownames = 
   scrollX = TRUE
 ))
 
-#write.csv(pred_all_data_mean, here::here(paste0("output/",patient,"/pred_all_data_mean_ORG38BR2.csv")))
+write.csv(pred_all_data_mean, here::here(paste0("output/",patient,"/pred_all_data_mean_ORG66BR3.csv")))
 ```
 
 
@@ -1150,12 +1092,12 @@ library(purrr)
 
 # Step 1: Compute R^2 for each patient
 r2_by_patient <- pred_all_data_mean %>%
-  group_by(Patient) %>%
+  group_by(Plate_ID) %>%
   nest() %>%
   mutate(model = map(data, ~ lm(prob_alive ~ CTG, data = .x)),
          summary_model = map(model, ~ base::summary(.x)),
          r2 = map_dbl(summary_model, ~ .$r.squared)) %>%
-  dplyr::select(Patient,  r2)
+  dplyr::select(Plate_ID,  r2)
 
 # Step 2: Make the plot and annotate with R^2 values for each facet
 normplot1 <- pred_all_data_mean %>%
@@ -1169,7 +1111,9 @@ normplot1 <- pred_all_data_mean %>%
                                                    )), 
                  alpha = 0.8, size = 1.6) +
   geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
-  geom_text(data = r2_by_patient, aes(label = sprintf("R^2 = %.2f", r2), x = Inf, y = Inf), hjust = 1, vjust = 1, inherit.aes = FALSE, size = 5) +
+  geom_text(data = r2_by_patient[1,],aes(label = sprintf("R^2 [%s] = %.2f",Plate_ID,r2),x = Inf, y = Inf), hjust = 1, vjust = 1, inherit.aes = FALSE, size = 5) +
+  geom_text(data = r2_by_patient[2,],aes(label = sprintf("R^2 [%s] = %.2f",Plate_ID,r2),x = Inf, y = Inf), hjust = 1, vjust = 2.5, inherit.aes = FALSE, size = 5) +
+  geom_text(data = r2_by_patient[3,],aes(label = sprintf("R^2 [%s] = %.2f",Plate_ID,r2),x = Inf, y = Inf), hjust = 1, vjust = 4, inherit.aes = FALSE, size = 5) +
   labs(title = "CTG Norm vs SVM probabilities \n", x = "CTG Raw", y = "Probability of being alive") +
   theme_bw() +
   theme(axis.title.x = element_text(margin = margin(t = 10, r = 10, b = 20, l = 20)), 
@@ -1186,57 +1130,132 @@ print(normplot1)
 
 ```
 
-## SVM-probabilities dose-response curves compared to CTG
+### For individual organoids {.tabset}
 
 
-```{r, fig.height=10, fig.width=10}
-
-raw2 <- pred_all_data_mean %>% data.frame() %>% 
-  left_join(., well_object_count_norm, by=c("WELL_ID", "Patient", "Description"))
-
-id <- colnames(raw2[c(1:7,9)])
-
-features <- colnames(raw2[c(8,10,12,13)])
-
-pred_all_data_melt <- raw2 %>% 
-  reshape2::melt(id.vars = id, measure.vars = features) 
-
-
-data_norm_plot <- pred_all_data_melt %>%
-  filter(!Concentration ==0) %>% 
-  group_by(Compound_ID, Plate_ID, Patient, Concentration, variable) %>% 
-  summarise_at(vars(value), funs(mean, sd))
-
-normplot <- data_norm_plot %>%
-  unite("Identifyer", c(Plate_ID, Patient), sep = "_", remove = FALSE) %>% 
-  ggplot(., aes(x = Concentration, 
-                y = mean,
-                group = variable)) +
-  geom_point(aes(colour = variable), alpha = 0.8, size = 1.6) +
-  geom_errorbar(aes(ymin = mean - sd, 
-                    ymax = mean + sd), width=0.2, size = 0.2) +
-  geom_line(aes(colour = variable), alpha = 0.8, size = 0.8) +
-  geom_hline(aes(yintercept = 1.0), linetype = "solid", size = 0.2) +
-  facet_wrap(~Compound_ID, ncol = 3) +
-  scale_x_continuous(trans = "log10", labels = scales::number_format(accuracy = 0.1)) + 
-  labs(title = "SVM results ORG38BR2\n",
-       x = "Log10 Concentration (uM)",
-       y = "Probability of being alive") +
+```{r}
+ctg_plot_list = list()
+for (organoid in cystic_organoids){
+  ### Subset df to only include org of interest
+  data <- pred_all_data_mean[pred_all_data_mean$Plate_ID==organoid,]
+  r2_data <- r2_by_patient[r2_by_patient$Plate_ID==organoid,]
+  #print(r2_data)
+  #print(r2_data[1,])
+  
+  ###
+  normplot1 <- data %>%
+  ggplot(., aes(x = CTG, y = prob_alive, group = Patient)) +
+  geom_point(aes(colour = Patient,
+                 text = paste('Compound_Name:', Compound_ID,
+                                                   '<br>CTG:', CTG,
+                                                  '<br>Concentration:', Concentration,
+                                                  '<br>ML classificaton:', prob_alive,
+                                                   '<br>Well_ID:', WELL_ID
+                                                   )), 
+                 alpha = 0.8, size = 1.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
+  geom_text(data = r2_data,aes(label = sprintf("R^2 [%s] = %.2f",Plate_ID,r2),x = Inf, y = Inf), hjust = 1, vjust = 1, inherit.aes = FALSE, size = 5) +
+  labs(title = "CTG Norm vs SVM probabilities \n", x = "CTG Raw", y = "Probability of being alive") +
   theme_bw() +
   theme(axis.title.x = element_text(margin = margin(t = 10, r = 10, b = 20, l = 20)), 
         axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 20)),
-        axis.text.x = element_text(angle = 25, colour = "black", size = 10, hjust = 1),
+        axis.text.x = element_text(angle = 0, colour = "black", size = 10, hjust = 1),
         axis.text.y = element_text(colour = "black", size = 10),
-        strip.text = element_text(size = 12),
+        strip.text = element_text(size = 11),
         plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
-        plot.margin = margin(t = 0, r = 30, b = 0, l = 30))
+        plot.margin = margin(t = 0, r = 30, b = 0, l = 30),
+        legend.position = "none")
+  
+  ctg_plot_list[[organoid]] <- normplot1
+}
+```
 
-normplot
+#### ORG60BR3
 
+```{r, fig.height=4, fig.width=6}
+ctg_plot_list[['ORG60BR3']]
+```
 
+#### ORG64BR3
+
+```{r, fig.height=4, fig.width=6}
+ctg_plot_list[['ORG64BR3']]
+```
+
+#### ORG70BR1
+
+```{r, fig.height=4, fig.width=6}
+ctg_plot_list[['ORG70BR1']]
 ```
 
 
+## SVM-probabilities dose-response curves compared to CTG {.tabset}
+
+
+```{r}
+plot_list = list()
+
+for (organoid in cystic_organoids){
+  ### Subset df to only include org of interest
+  data <- pred_all_data_mean[pred_all_data_mean$Plate_ID==organoid,]
+  raw2 <- data %>% data.frame() %>% 
+  left_join(., well_object_count_norm, by=c("WELL_ID", "Patient", "Description"))
+  
+  id <- colnames(raw2[c(1:7,9)])
+  features <- colnames(raw2[c(8,10,12,13)])
+  
+  pred_all_data_melt <- raw2 %>% 
+    reshape2::melt(id.vars = id, measure.vars = features) 
+
+  data_norm_plot <- pred_all_data_melt %>%
+    filter(!Concentration ==0) %>% 
+    group_by(Compound_ID, Plate_ID, Patient, Concentration, variable) %>% 
+    summarise_at(vars(value), funs(mean, sd))
+
+  normplot <- data_norm_plot %>%
+    unite("Identifyer", c(Plate_ID, Patient), sep = "_", remove = FALSE) %>% 
+    ggplot(., aes(x = Concentration, 
+                  y = mean,
+                  group = variable)) +
+    geom_point(aes(colour = variable), alpha = 0.8, size = 1.6) +
+    geom_errorbar(aes(ymin = mean - sd, 
+                      ymax = mean + sd), width=0.2, size = 0.2) +
+    geom_line(aes(colour = variable), alpha = 0.8, size = 0.8) +
+    geom_hline(aes(yintercept = 1.0), linetype = "solid", size = 0.2) +
+    facet_wrap(~Compound_ID, ncol = 3) +
+    scale_x_continuous(trans = "log10", labels = scales::number_format(accuracy = 0.1)) + 
+    labs(title = paste("SVM results", organoid, "\n"),
+         x = "Log10 Concentration (uM)",
+         y = "Probability of being alive") +
+    theme_bw() +
+    theme(axis.title.x = element_text(margin = margin(t = 10, r = 10, b = 20, l = 20)), 
+          axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 20)),
+          axis.text.x = element_text(angle = 25, colour = "black", size = 10, hjust = 1),
+          axis.text.y = element_text(colour = "black", size = 10),
+          strip.text = element_text(size = 12),
+          plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
+          plot.margin = margin(t = 0, r = 30, b = 0, l = 30))
+  plot_list[[organoid]] <- normplot
+}
+```
+
+### ORG60BR3
+
+```{r, fig.height=10, fig.width=10}
+plot_list[['ORG60BR3']]
+```
+
+### ORG64BR3
+
+```{r, fig.height=10, fig.width=10}
+plot_list[['ORG64BR3']]
+```
+
+### ORG70BR1
+
+```{r, fig.height=10, fig.width=10}
+plot_list[['ORG70BR1']]
+```
 
 
 ## Single organoid results

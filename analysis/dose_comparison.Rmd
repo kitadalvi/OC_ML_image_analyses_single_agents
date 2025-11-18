@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r}
 library(ggplot2)
 library(dplyr)
+library(DT)
 ```
 
 ```{r}
@@ -98,5 +99,43 @@ for (x in drugs) {
   
   print(plot)
 } 
+
+```
+
+## Relative AUC of pred_probs
+
+```{r}
+samples <- levels(as.factor(combined$Plate_ID))
+compounds <- levels(as.factor(combined$Compound_ID))
+
+### loop through roganoids to create a dataframe for each ORG line
+for (organoid in samples) {
+  data <- combined[combined$Plate_ID == organoid,]
+  
+  patient <- rep(organoid, length(compounds))
+  neutral_auc <- rep(0, length(compounds))
+  auc_val <- rep(0, length(compounds))
+  
+  result_df <- data.frame(patient = patient,
+                           drug = compounds,
+                           neutral_auc = neutral_auc,
+                           auc_val = auc_val)
+  
+  for (compound in compounds){
+    auc_df <- data[data$Compound_ID == compound, c("Compound_ID","Concentration","prob_alive")]
+    auc_df_mean <- auc_df %>%
+      group_by(Concentration) %>%
+      summarise(mean = mean(prob_alive, na.rm = TRUE)) 
+    neutral_auc <- max(auc_df_mean$Concentration) - min(auc_df_mean)
+    result_df[result_df$drug == compound,]$neutral_auc <- neutral_auc
+    auc_val <- MESS::auc(auc_df_mean$Concentration, auc_df_mean$mean, type ="linear")
+    result_df[result_df$drug == compound,]$auc_val <- auc_val
+  }
+  
+  result_df <- result_df %>%
+    mutate(relative_auc = paste(auc_val/neutral_auc))
+  print(paste0("result for" , organoid, ": "))
+  print(result_df)
+}
 
 ```

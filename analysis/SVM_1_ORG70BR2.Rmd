@@ -301,7 +301,7 @@ all_data_with_bins <- all_data_with_bins %>%
                 contains(c("AreaShape", "Intensity", "Texture", "Location", "Neighbors", "Spheroids", "RadialDistribution"))) 
  # filter(AreaShape_Area >= 2000)
 
-write.csv(all_data_with_bins, here::here(paste0("output/",patient,"/all_data_with_bins.csv")))
+#write.csv(all_data_with_bins, here::here(paste0("output/",patient,"/all_data_with_bins.csv")))
 
 ```
 
@@ -492,9 +492,9 @@ all_data_clean <- all_data_with_bins %>%
   filter(!AreaShape_Area<1000) 
 
 clean_features <- names(all_data_clean[,-c(1:13)])
-write.csv(all_data_clean, here::here(paste0("output/",patient,"/all_data_clean.csv")))
+#write.csv(all_data_clean, here::here(paste0("output/",patient,"/all_data_clean.csv")))
 
-write.csv(all_data_clean, here::here(paste0("output/",patient,"/Feature_reduced_raw_data.csv")))
+#write.csv(all_data_clean, here::here(paste0("output/",patient,"/Feature_reduced_raw_data.csv")))
 ```
 
 Of the total feature count of `r ncol(all_data_with_bins)` there were `r length(to_remove)` removed during feature clean-up 
@@ -538,7 +538,7 @@ data_all_short <- CleanedAn
 control_short <- data_all_short%>% 
   filter(!Bin =="Sample") 
 
-write.csv(data_all_short, here::here(paste0("output/",patient,"/data_all_short.csv")))
+#write.csv(data_all_short, here::here(paste0("output/",patient,"/data_all_short.csv")))
 
 ```
 
@@ -687,7 +687,9 @@ pred <- predict(svmfit2,trainTransformed, probability  = TRUE)
 system.time(pred <- predict(svmfit2,trainTransformed))
 
 ### Evaluate performance 
-confusionMatrix(pred,trainTransformed$Bin)
+cf <- confusionMatrix(pred,trainTransformed$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("red3","skyblue2"),main = "Confusion Matrix")
 ```
 
 
@@ -714,7 +716,7 @@ confusionMatrix(pred_scr,trainTransformed_scr$Bin)
 The kernel argument has a variety of possible types including linear, polynomial, radial, and sigmoid. We use kernel=”radial” for this classification problem.
 You can tune the operation of svm() with two additional arguments: gamma and cost, where gamma is the argument for use by the kernel function, and cost allows us to specify the cost of a violation to the margin. When cost is small, the margins will be wide, resulting in many support vectors. You can experiment with different values of gamma and cost to find the best classification accuracy.
 
-**Here, changing cost from 1 to 3 and changing gamma from 0.01 to 0.05 improved the model performance from 98% to 99% accuracy.**
+**Here, changing cost from 1 to 3 and keeping default gamma improved the model performance from 98% to 99% accuracy.**
 
 ```{r}
 # Define new values for gamma and cost
@@ -769,7 +771,9 @@ load(here::here(paste0("output/",patient,"/svm_model_after_tune.RData")))
 ```{r}
 pred2 <- predict(svm_model_after_tune,trainTransformed, probability = TRUE)
 
-confusionMatrix(pred2,trainTransformed$Bin)
+cf <-confusionMatrix(pred2,trainTransformed$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 
@@ -922,7 +926,9 @@ Testing the SVM model on the last 20% of data gives a 95% accuracy in prediction
 ```{r}
 prediction <- predict(svm_model_after_tune, testTransformed, probability = TRUE)
 
-confusionMatrix(prediction,testTransformed$Bin)
+cf <- confusionMatrix(prediction,testTransformed$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 ## Testing with scrambled labels
@@ -1015,7 +1021,7 @@ pred_all_data_mean<- pred_all_data %>% ungroup() %>% dplyr::select(-AreaShape_Ar
    mutate(across(where(is.numeric), ~ round(.x, 2))) %>% 
   ungroup()
 
-write.csv(pred_all_data, here::here(paste0("output/", patient,"/pred_all_data_ORG70BR2.csv")))
+#write.csv(pred_all_data, here::here(paste0("output/", patient,"/pred_all_data_ORG70BR2.csv")))
 
 
 

@@ -772,8 +772,26 @@ load(here::here(paste0("output/",patient,"/svm_model_after_tune.RData")))
  
 ```{r}
 pred2 <- predict(svm_model_after_tune,trainTransformed, probability = TRUE)
+```
 
-confusionMatrix(pred2,trainTransformed$Bin)
+```{r}
+cf <- confusionMatrix(pred2,trainTransformed$Bin)
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
+```
+
+```{r, fig.height=4, fig.width=4}
+conf_matrix <- table(trainTransformed$Bin, pred2)
+
+# Visualize the confusion matrix using heatmap
+heatmap(conf_matrix, 
+        #main = "Confusion Matrix",
+        xlab = "Predicted",
+        ylab = "Actual",
+        col = heat.colors(10),
+        scale = "column",
+        #margins = c(5, 5),
+        cexRow = 0.5,
+        cexCol = 0.5        )
 ```
 
 
@@ -1283,7 +1301,64 @@ print(p1)
 
 ```
 
+```{r}
+### Tetsing AUC dose response curves 
+pred_data <- read.csv('../output/ORG73BR1/pred_all_data.csv')
+colnames(pred_data)
+df <- pred_data[,c(5,6,7,8,9,10,12,3)] 
+df$conddition <- paste0(df$Compound_ID,'_', df$Concentration)
+datatable(df)
 
+compounds <- levels(as.factor(df$Compound_ID))
+
+for (compound in compounds) {
+  plot_data <- df[df$Compound_ID == compound,]
+  plot <- ggplot(data=plot_data, aes(x=Concentration, y=negative_control)) +
+    geom_line()+
+    geom_point() +
+    ggtitle(`compound`)
+  print(plot)
+}
+
+```
+
+```{r}
+### Tetsing AUC dose response curves 
+df <- read.csv('../output/ORG70BR2/pred_all_data_mean_ORG70BR2.csv')
+colnames(df)
+df$condition <- paste0(df$Compound_ID,'_', df$Concentration) 
+df$log_conc <- log10(as.numeric(df$Concentration))
+datatable(df)
+
+
+compounds <- levels(as.factor(df$Compound_ID))
+
+
+plot <- ggplot(data=df, aes(x=log_conc, y=prob_alive)) +
+  facet_wrap(~Compound_ID, scales = "fixed") +
+  geom_smooth(method = 'loess')+
+  geom_point() 
+
+plot
+
+### Tetsing AUC dose response curves 
+df <- read.csv('../output/ORG70BR2/pred_all_data_ORG70BR2.csv')
+colnames(df)
+df$condition <- paste0(df$Compound_ID,'_', df$Concentration) 
+df$log_conc <- log10(as.numeric(df$Concentration))
+datatable(df)
+
+compounds <- levels(as.factor(df$Compound_ID))
+
+
+plot <- ggplot(data=df, aes(x=log_conc, y=negative_control)) +
+  facet_wrap(~Compound_ID, scales = "fixed") +
+  geom_smooth(method = 'loess') +
+  geom_point() 
+
+plot
+
+```
 
 <br>
 

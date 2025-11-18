@@ -45,135 +45,135 @@ library(tidyr)
 library(stringr)
 ```
 
-<!-- ## Per Image Approach -->
-<!-- ```{r} -->
-<!-- ### list of DMSO/Media wells -->
-<!-- neg_control_wells <- c('B2','B13','C2','C13','D2','D13','E2','E13','F2','F13','G2','G13','H2','H13','I2','I13','J2','J13','K2','K13','L2','L13','M2','M13','N2','N13','O2','O13') -->
+## Per Image Approach
+```{r}
+### list of DMSO/Media wells
+neg_control_wells <- c('B2','B13','C2','C13','D2','D13','E2','E13','F2','F13','G2','G13','H2','H13','I2','I13','J2','J13','K2','K13','L2','L13','M2','M13','N2','N13','O2','O13')
 
-<!-- # per-image data -->
-<!-- all_data_raw <-  -->
-<!--   list.files(gsub(" ", "", paste(here::here("data/raw_data/staining/"))),  -->
-<!--              pattern = "*.csv",  -->
-<!--              full.names = TRUE) %>%  -->
-<!--   map_df(~ { -->
-<!--     #read all per-image data files -->
-<!--     data <- fread(.)   -->
-<!--     #add a column to each file for ORG line -->
-<!--     fname <- basename(.)            -->
-<!--     subset_name <- substr(fname, 10, 17) -->
-<!--     data[, patient := subset_name] -->
-<!--     #add a column to each file for WELL_ID based on FileName_BF -->
-<!--     well <- data$FileName_BF -->
-<!--     well_subset <- substr(well, 1,3) -->
-<!--     data[, Well_ID := well_subset] -->
-<!--     # reformat well id -->
-<!--     data$Well_ID<- gsub("_","",data$Well_ID) -->
-<!--     return(data) -->
-<!--   }) %>%  -->
-<!--   # add unique identifier for each patient image -->
-<!--   mutate(sample = paste0(patient,'.',ImageNumber)) %>% -->
-<!--   #dplyr::select(sample,patient, Well_ID, ImageNumber, contains(c("AreaShape", "Intensity", "Texture", "Neighbors", "Spheroids", "RadialDistribution","ObjectNumber"))) %>% -->
-<!--   dplyr::select(sample,patient, Well_ID, ImageNumber, contains(c("Median"))) %>% -->
-<!--   filter(Well_ID %in% neg_control_wells) %>% -->
-<!--   filter(!patient %in% c('ORG71BR1', 'ORG71BR2')) %>% -->
-<!--   mutate(patient = as.factor(patient)) -->
+# per-image data
+all_data_raw <-
+  list.files(gsub(" ", "", paste(here::here("data/raw_data/staining/"))),
+             pattern = "*.csv",
+             full.names = TRUE) %>%
+  map_df(~ {
+    #read all per-image data files
+    data <- fread(.)
+    #add a column to each file for ORG line
+    fname <- basename(.)
+    subset_name <- substr(fname, 10, 17)
+    data[, patient := subset_name]
+    #add a column to each file for WELL_ID based on FileName_BF
+    well <- data$FileName_BF
+    well_subset <- substr(well, 1,3)
+    data[, Well_ID := well_subset]
+    # reformat well id
+    data$Well_ID<- gsub("_","",data$Well_ID)
+    return(data)
+  }) %>%
+  # add unique identifier for each patient image
+  mutate(sample = paste0(patient,'.',ImageNumber)) %>%
+  #dplyr::select(sample,patient, Well_ID, ImageNumber, contains(c("AreaShape", "Intensity", "Texture", "Neighbors", "Spheroids", "RadialDistribution","ObjectNumber"))) %>%
+  dplyr::select(sample,patient, Well_ID, ImageNumber, contains(c("Median"))) %>%
+  filter(Well_ID %in% neg_control_wells) %>%
+  filter(!patient %in% c('ORG71BR1', 'ORG71BR2')) %>%
+  mutate(patient = as.factor(patient))
 
 
 
-<!-- ### Assigning morphologies -->
-<!-- all_data_raw$"Morphology" <- "" -->
-<!-- all_data_raw$Morphology[all_data_raw$patient %in% c("ORG55BR1","ORG55BR2","ORG60BR3","ORG76BR1")] <- "DENSE" -->
+### Assigning morphologies
+all_data_raw$"Morphology" <- ""
+all_data_raw$Morphology[all_data_raw$patient %in% c("ORG55BR1","ORG55BR2","ORG60BR3","ORG76BR1")] <- "DENSE"
 
-<!-- all_data_raw$Morphology[all_data_raw$patient %in% c("ORG38BR2","ORG41BR1","ORG41BR2","ORG46BR1","ORG49BR2")] <- "MIXED" -->
+all_data_raw$Morphology[all_data_raw$patient %in% c("ORG38BR2","ORG41BR1","ORG41BR2","ORG46BR1","ORG49BR2")] <- "MIXED"
 
-<!-- all_data_raw$Morphology[all_data_raw$patient %in% c("ORG64BR3","ORG66BR2","ORG66BR3","ORG70BR1", "ORG70BR2","ORG73BR1")] <- "CYSTIC" -->
+all_data_raw$Morphology[all_data_raw$patient %in% c("ORG64BR3","ORG66BR2","ORG66BR3","ORG70BR1", "ORG70BR2","ORG73BR1")] <- "CYSTIC"
 
-<!-- all_data_raw$Morphology[all_data_raw$patient %in% c("ORG61BR1","ORG61BR2","ORG65BR1","ORG65BR2")] <- "BUBBLY" -->
+all_data_raw$Morphology[all_data_raw$patient %in% c("ORG61BR1","ORG61BR2","ORG65BR1","ORG65BR2")] <- "BUBBLY"
 
-<!-- all_data_raw$Morphology <- as.factor(all_data_raw$Morphology) -->
-<!-- ``` -->
+all_data_raw$Morphology <- as.factor(all_data_raw$Morphology)
+```
 
-<!-- ```{r} -->
-<!-- ### Set grid  -->
-<!-- par(mar = c(3, 3, 3, 8), xpd = TRUE) -->
+```{r}
+### Set grid
+par(mar = c(3, 3, 3, 8), xpd = TRUE)
 
-<!-- ### Set colours for raw data df -->
-<!-- mypalette<-c(brewer.pal(name="Set3", n=12), brewer.pal(name="Set2", n=7),"steelblue", "hotpink") -->
-<!-- col.patient <- mypalette[all_data_raw$patient] -->
+### Set colours for raw data df
+mypalette<-c(brewer.pal(name="Set3", n=12), brewer.pal(name="Set2", n=7),"steelblue", "hotpink")
+col.patient <- mypalette[all_data_raw$patient]
 
-<!-- ### set shapes -->
-<!-- pch_values <- c(21, 22, 23,24) -->
+### set shapes
+pch_values <- c(21, 22, 23,24)
 
-<!-- ### Perform classical MDS -->
-<!-- ### Of all ORG samples in all_data_raw df -->
-<!-- mds_cpFeatures <- cmdscale(dist(all_data_raw),k=6) -->
+### Perform classical MDS
+### Of all ORG samples in all_data_raw df
+mds_cpFeatures <- cmdscale(dist(all_data_raw),k=6)
 
-<!-- ### -------------------------MDS PLOTS OF DIM1 x DIM2---------------------------- -->
-<!-- ### Plot the results -->
-<!-- plot(mds_cpFeatures[, 1],  -->
-<!--      mds_cpFeatures[, 2],  -->
-<!--      type = "n",  -->
-<!--      xlab = "MDS Dimension 1",  -->
-<!--      ylab = "MDS Dimension 2",  -->
-<!--      pch=21) -->
-<!-- points(mds_cpFeatures[, 1],  -->
-<!--        mds_cpFeatures[, 2],  -->
-<!--        pch = 21,  -->
-<!--        bg = col.patient) -->
-<!-- # text(mds_cpFeatures[, 1], -->
-<!-- #      mds_cpFeatures[, 2], -->
-<!-- #      labels=substr(all_data_raw$patient,4,9), -->
-<!-- #      cex = 0.5, pos=3) -->
-<!-- legend("right",legend=levels(all_data_raw$patient),  -->
-<!--        fill=c((unique(col.patient))), -->
-<!-- inset = c(-0.3, 0.1), -->
-<!-- cex=0.8) -->
-<!-- title('MDS plot of dims(1,2)') -->
+### -------------------------MDS PLOTS OF DIM1 x DIM2----------------------------
+### Plot the results
+plot(mds_cpFeatures[, 1],
+     mds_cpFeatures[, 2],
+     type = "n",
+     xlab = "MDS Dimension 1",
+     ylab = "MDS Dimension 2",
+     pch=21)
+points(mds_cpFeatures[, 1],
+       mds_cpFeatures[, 2],
+       pch = 21,
+       bg = col.patient)
+# text(mds_cpFeatures[, 1],
+#      mds_cpFeatures[, 2],
+#      labels=substr(all_data_raw$patient,4,9),
+#      cex = 0.5, pos=3)
+legend("right",legend=levels(all_data_raw$patient),
+       fill=c((unique(col.patient))),
+inset = c(-0.3, 0.1),
+cex=0.8)
+title('MDS plot of dims(1,2)')
 
-<!-- ### -------------------------MDS PLOTS OF DIM 3 x DIM 4 ---------------------------- -->
-<!-- ### Plot the results -->
-<!-- plot(mds_cpFeatures[, 3],  -->
-<!--      mds_cpFeatures[, 4],  -->
-<!--      type = "n",  -->
-<!--      xlab = "MDS Dimension 3",  -->
-<!--      ylab = "MDS Dimension 4",  -->
-<!--      pch=21) -->
-<!-- points(mds_cpFeatures[, 3],  -->
-<!--        mds_cpFeatures[, 4],  -->
-<!--        pch = 21,  -->
-<!--        bg = col.patient) -->
-<!-- # text(mds_cpFeatures[, 1], -->
-<!-- #      mds_cpFeatures[, 2], -->
-<!-- #      labels=substr(all_data_raw$patient,4,9), -->
-<!-- #      cex = 0.5, pos=3) -->
-<!-- legend("right",legend=levels(all_data_raw$patient),  -->
-<!--        fill=c((unique(col.patient))), -->
-<!-- inset = c(-0.3, 0.1), -->
-<!-- cex=0.8) -->
-<!-- title('MDS plot of dims(3,4)') -->
+### -------------------------MDS PLOTS OF DIM 3 x DIM 4 ----------------------------
+### Plot the results
+plot(mds_cpFeatures[, 3],
+     mds_cpFeatures[, 4],
+     type = "n",
+     xlab = "MDS Dimension 3",
+     ylab = "MDS Dimension 4",
+     pch=21)
+points(mds_cpFeatures[, 3],
+       mds_cpFeatures[, 4],
+       pch = 21,
+       bg = col.patient)
+# text(mds_cpFeatures[, 1],
+#      mds_cpFeatures[, 2],
+#      labels=substr(all_data_raw$patient,4,9),
+#      cex = 0.5, pos=3)
+legend("right",legend=levels(all_data_raw$patient),
+       fill=c((unique(col.patient))),
+inset = c(-0.3, 0.1),
+cex=0.8)
+title('MDS plot of dims(3,4)')
 
-<!-- ### -------------------------MDS PLOTS OF DIM 5 x DIM 6 ---------------------------- -->
-<!-- ### Plot the results -->
-<!-- plot(mds_cpFeatures[, 5],  -->
-<!--      mds_cpFeatures[, 6],  -->
-<!--      type = "n",  -->
-<!--      xlab = "MDS Dimension 5",  -->
-<!--      ylab = "MDS Dimension 6",  -->
-<!--      pch=19) -->
-<!-- points(mds_cpFeatures[, 5],  -->
-<!--        mds_cpFeatures[, 6],  -->
-<!--        pch = 21,  -->
-<!--        bg = col.patient) -->
-<!-- # text(mds_cpFeatures[, 1], -->
-<!-- #      mds_cpFeatures[, 2], -->
-<!-- #      labels=substr(all_data_raw$patient,4,9), -->
-<!-- #      cex = 0.5, pos=3) -->
-<!-- legend("right",legend=levels(all_data_raw$patient),  -->
-<!--        fill=c((unique(col.patient))), -->
-<!-- inset = c(-0.3, 0.1), -->
-<!-- cex=0.8) -->
-<!-- title('MDS plot of dims(5,6)') -->
-<!-- ``` -->
+### -------------------------MDS PLOTS OF DIM 5 x DIM 6 ----------------------------
+### Plot the results
+plot(mds_cpFeatures[, 5],
+     mds_cpFeatures[, 6],
+     type = "n",
+     xlab = "MDS Dimension 5",
+     ylab = "MDS Dimension 6",
+     pch=19)
+points(mds_cpFeatures[, 5],
+       mds_cpFeatures[, 6],
+       pch = 21,
+       bg = col.patient)
+# text(mds_cpFeatures[, 1],
+#      mds_cpFeatures[, 2],
+#      labels=substr(all_data_raw$patient,4,9),
+#      cex = 0.5, pos=3)
+legend("right",legend=levels(all_data_raw$patient),
+       fill=c((unique(col.patient))),
+inset = c(-0.3, 0.1),
+cex=0.8)
+title('MDS plot of dims(5,6)')
+```
 
 <!-- ```{r} -->
 <!-- ### Set grid  -->
