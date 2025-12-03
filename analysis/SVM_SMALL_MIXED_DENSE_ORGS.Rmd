@@ -338,7 +338,7 @@ plot3
 
 
 ### interactive plot
-plotly::ggplotly(plot, tooltip = c("Cell_Line", "Count_Spheroids"))
+#plotly::ggplotly(plot, tooltip = c("Cell_Line", "Count_Spheroids"))
 
 ### remove plot variables from environment to clear up space
 rm(plot,plot2, plot3)
@@ -674,20 +674,11 @@ You can tune the operation of svm() with two additional arguments: gamma and cos
 
 **Here, changing cost from 1 to 2 and changing gamma from a default of 0.01 to 0.5 improved the model performance from 89% to 100% accuracy.**
 
-```{r}
-obj <- tune(svm,
-            Bin ~ .,
-            data = trainTransformed, 
-            kernel = "radial",
-            ranges = list(gamma = c((1/num_features),(3/num_features),(5/num_features)), cost = c(1,2,3,4,5))
-            )
-```
-
 
 ```{r}
 # Define new values for gamma and cost
-new_gamma <- 0.4
-new_cost <- 4
+new_gamma <- 6/num_features
+new_cost <- 2
 
 # Create the SVM model with the new gamma and cost values
 svm_model_after_tune = svm(Bin ~ ., 

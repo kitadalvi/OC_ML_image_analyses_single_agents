@@ -367,7 +367,7 @@ plot3
 
 
 ### interactive plot
-plotly::ggplotly(plot, tooltip = c("Cell_Line", "Count_Spheroids"))
+#plotly::ggplotly(plot, tooltip = c("Cell_Line", "Count_Spheroids"))
 
 ### remove plot variables from environment to clear up space
 rm(plot,plot2, plot3)
@@ -666,7 +666,9 @@ pred <- predict(svmfit2,trainTransformed, probability  = TRUE)
 system.time(pred <- predict(svmfit2,trainTransformed))
 
 ### Evaluate performance 
-confusionMatrix(pred,trainTransformed$Bin)
+cf <- confusionMatrix(pred,trainTransformed$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 
@@ -684,8 +686,9 @@ By randomising/scrambling the category labels, we create a data set that should 
 ```{r}
 pred_scr <- predict(svmfit2,trainTransformed_scr, probability = TRUE) 
 
-confusionMatrix(pred_scr,trainTransformed_scr$Bin)
-
+cf <- confusionMatrix(pred_scr,trainTransformed_scr$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 # Tuning SVM 
@@ -748,7 +751,9 @@ load(here::here(paste0("output/",patient,"/svm_model_after_tune.RData")))
 ```{r}
 pred2 <- predict(svm_model_after_tune,trainTransformed, probability = TRUE)
 
-confusionMatrix(pred2,trainTransformed$Bin)
+cf <- confusionMatrix(pred2,trainTransformed$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 
@@ -848,7 +853,7 @@ plot2 <- trainTransformed_prob %>%
       
 
 plot2
-plotly::ggplotly(plot2, tooltip = c("prob_alive", "scrambled_labels"))
+#plotly::ggplotly(plot2, tooltip = c("prob_alive", "scrambled_labels"))
 
 
 
@@ -901,7 +906,9 @@ Testing the SVM model on the last 20% of data gives a 97% accuracy in prediction
 ```{r}
 prediction <- predict(svm_model_after_tune, testTransformed, probability = TRUE)
 
-confusionMatrix(prediction,testTransformed$Bin)
+cf <- confusionMatrix(prediction,testTransformed$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 ## Testing with scrambled labels
@@ -913,7 +920,9 @@ test_dat2_scr <- transform(testTransformed, Bin = sample(Bin) )
 
 prediction_scr <- predict(svm_model_after_tune, test_dat2_scr, probability = TRUE)
 
-confusionMatrix(prediction_scr,test_dat2_scr$Bin)
+cf <- confusionMatrix(prediction_scr,test_dat2_scr$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 # View how all organoids are categorised 
@@ -1140,7 +1149,7 @@ normplot1 <- pred_all_data_mean %>%
         legend.position = "none")
 
 print(normplot1)
-plotly::ggplotly(normplot1, tooltip = c("text"))
+#plotly::ggplotly(normplot1, tooltip = c("text"))
 
 ```
 
@@ -1203,7 +1212,6 @@ normplot
 # avoid the use of scientific notation 
 options(scipen=999)
 
-p1(print )
 p1 <- pred_all_data %>% 
   filter(!Concentration ==0) %>% 
   ggplot(., aes(x = as.factor(Concentration), y = negative_control, fill = Compound_ID)) +  # Converted Concentration to factor for discrete x-axis

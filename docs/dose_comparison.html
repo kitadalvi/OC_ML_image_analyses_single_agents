@@ -37,6 +37,23 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.33/datatables.js"></script>
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="site_libs/jszip-1.13.6/jszip.min.js"></script>
+<script src="site_libs/pdfmake-1.13.6/pdfmake.js"></script>
+<script src="site_libs/pdfmake-1.13.6/vfs_fonts.js"></script>
+<link href="site_libs/dt-ext-buttons-1.13.6/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="site_libs/dt-ext-buttons-1.13.6/js/dataTables.buttons.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.html5.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.colVis.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.print.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -398,7 +415,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-11-18
+<strong>Last updated:</strong> 2025-12-01
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -719,15 +736,15 @@ output/mean_average_prob_across_organoids.csv
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkitadalviOCMLimageanalysessingleagentstree6f7dc2988de046c325c066cccca3949a1be942bftargetblank6f7dc29a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkitadalviOCMLimageanalysessingleagentstree0f382c06af19c95f9f28fec402b99f4717ec6e5dtargetblank0f382c0a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/tree/6f7dc2988de046c325c066cccca3949a1be942bf" target="_blank">6f7dc29</a>
+<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/tree/0f382c06af19c95f9f28fec402b99f4717ec6e5d" target="_blank">0f382c0</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomkitadalviOCMLimageanalysessingleagentstree6f7dc2988de046c325c066cccca3949a1be942bftargetblank6f7dc29a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomkitadalviOCMLimageanalysessingleagentstree0f382c06af19c95f9f28fec402b99f4717ec6e5dtargetblank0f382c0a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -737,7 +754,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/tree/6f7dc2988de046c325c066cccca3949a1be942bf" target="_blank">6f7dc29</a>.
+<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/tree/0f382c06af19c95f9f28fec402b99f4717ec6e5d" target="_blank">0f382c0</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -758,8 +775,6 @@ Ignored files:
     Ignored:    analysis/.DS_Store
     Ignored:    analysis/.RData
     Ignored:    analysis/.Rhistory
-    Ignored:    analysis/SVM_1_ORG38BR2_Dox.html
-    Ignored:    analysis/figure/
     Ignored:    data/.DS_Store
     Ignored:    data/images/.DS_Store
     Ignored:    data/raw_data/
@@ -786,18 +801,29 @@ Ignored files:
     Ignored:    output/ORG76BR1/
     Ignored:    output/SMALL_MIXED_DENSE/
 
-Untracked files:
-    Untracked:  analysis/SVM_CYSTIC_ORGS.Rmd
-    Untracked:  analysis/SVM_SMALL_MIXED_DENSE_ORGS.Rmd
-    Untracked:  code/zscore_heatmaps.R
-
 Unstaged changes:
-    Modified:   analysis/Phenotype_Visualisation.Rmd
     Modified:   analysis/SVM_1_ORG38BR2_Dox.Rmd
+    Deleted:    analysis/SVM_1_ORG38BR2_Dox.knit.md
+    Modified:   analysis/SVM_1_ORG41BR1_Dox.Rmd
+    Modified:   analysis/SVM_1_ORG41BR2.Rmd
+    Modified:   analysis/SVM_1_ORG46BR1.Rmd
+    Modified:   analysis/SVM_1_ORG49BR2.Rmd
+    Modified:   analysis/SVM_1_ORG55BR1.Rmd
+    Modified:   analysis/SVM_1_ORG55BR2.Rmd
+    Modified:   analysis/SVM_1_ORG60BR3.Rmd
+    Modified:   analysis/SVM_1_ORG61BR1.Rmd
+    Modified:   analysis/SVM_1_ORG61BR2.Rmd
+    Modified:   analysis/SVM_1_ORG64BR3.Rmd
+    Modified:   analysis/SVM_1_ORG65BR1.Rmd
+    Modified:   analysis/SVM_1_ORG65BR2.Rmd
+    Modified:   analysis/SVM_1_ORG66BR2_Dox.Rmd
     Modified:   analysis/SVM_1_ORG66BR3_Dox.Rmd
+    Modified:   analysis/SVM_1_ORG70BR1.Rmd
     Modified:   analysis/SVM_1_ORG70BR2.Rmd
     Modified:   analysis/SVM_1_ORG73BR1.Rmd
+    Modified:   analysis/SVM_SMALL_MIXED_DENSE_ORGS.Rmd
     Modified:   analysis/dose_comparison.Rmd
+    Modified:   code/zscore_heatmaps.R
 
 </code></pre>
 <p>
@@ -843,6 +869,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/0f382c06af19c95f9f28fec402b99f4717ec6e5d/analysis/dose_comparison.Rmd" target="_blank">0f382c0</a>
+</td>
+<td>
+kitadalvi
+</td>
+<td>
+2025-11-18
+</td>
+<td>
+relative AUCs added
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/kitadalvi/OC_ML_image_analyses_single_agents/0f382c06af19c95f9f28fec402b99f4717ec6e5d/docs/dose_comparison.html" target="_blank">0f382c0</a>
+</td>
+<td>
+kitadalvi
+</td>
+<td>
+2025-11-18
+</td>
+<td>
+relative AUCs added
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -895,811 +955,108 @@ Attaching package: &#39;dplyr&#39;</code></pre>
     intersect, setdiff, setequal, union</code></pre>
 <pre><code>`summarise()` has grouped output by &#39;Plate_ID&#39;. You can override using the
 `.groups` argument.</code></pre>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
-Past versions of unnamed-chunk-3-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-1.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
-Past versions of unnamed-chunk-3-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-2.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-3">
-Past versions of unnamed-chunk-3-3.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-3.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-4.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-4">
-Past versions of unnamed-chunk-3-4.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-4" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-4.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-5.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-5">
-Past versions of unnamed-chunk-3-5.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-5" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-5.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-6.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-6">
-Past versions of unnamed-chunk-3-6.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-6" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-6.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-7.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-7">
-Past versions of unnamed-chunk-3-7.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-7" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-7.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-8.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-8">
-Past versions of unnamed-chunk-3-8.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-8" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-8.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-9.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-9">
-Past versions of unnamed-chunk-3-9.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-9" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-9.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-10.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-10">
-Past versions of unnamed-chunk-3-10.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-10" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-10.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-11.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-11">
-Past versions of unnamed-chunk-3-11.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-11" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-11.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-3-12.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-12">
-Past versions of unnamed-chunk-3-12.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-12" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/docs/figure/dose_comparison.Rmd/unnamed-chunk-3-12.png" target="_blank">6f7dc29</a>
-</td>
-<td>
-kitadalvi
-</td>
-<td>
-2025-11-10
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="relative-auc-of-pred_probs" class="section level2">
-<h2>Relative AUC of pred_probs</h2>
-<pre><code>[1] &quot;result forORG38BR2: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG38BR2  5-Fluouracil      19.900 13.605750  0.683706030150754
-2  ORG38BR2   Carboplatin      19.900 16.166125  0.812368090452261
-3  ORG38BR2     Cisplatin       9.900  6.621625   0.66885101010101
-4  ORG38BR2          DMSO       0.000        NA                 NA
-5  ORG38BR2     Docetaxel      19.900  6.036625  0.303347989949749
-6  ORG38BR2   Doxorubicin      19.990  0.634250  0.031728364182091
-7  ORG38BR2   Gemcitabine      19.900  5.298875  0.266275125628141
-8  ORG38BR2    Irinotecan      19.900 15.053875  0.756476130653266
-9  ORG38BR2    Leucovorin      19.900 17.570875  0.882958542713568
-10 ORG38BR2         Media       0.000        NA                 NA
-11 ORG38BR2   Mitomycin C       7.460  1.415625  0.189762064343164
-12 ORG38BR2   Oxaliplatin       9.900  8.594000  0.868080808080808
-13 ORG38BR2    Paclitaxel      19.900  6.151000  0.309095477386935
-14 ORG38BR2 Staurosporine      19.980  0.924750 0.0462837837837838
-15 ORG38BR2     Topotecan      19.955  1.338875 0.0670947131044851
-16 ORG38BR2       TritonX       0.000        NA                 NA
-[1] &quot;result forORG41BR1: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG41BR1  5-Fluouracil      19.900 18.529875  0.931149497487437
-2  ORG41BR1   Carboplatin      19.900 18.809500  0.945201005025126
-3  ORG41BR1     Cisplatin       9.900  9.323750  0.941792929292929
-4  ORG41BR1          DMSO       0.000        NA                 NA
-5  ORG41BR1     Docetaxel      19.900 11.582875  0.582054020100502
-6  ORG41BR1   Doxorubicin      19.985  2.833875  0.141800100075056
-7  ORG41BR1   Gemcitabine      19.900  6.449375    0.3240891959799
-8  ORG41BR1    Irinotecan      19.900 15.986375  0.803335427135678
-9  ORG41BR1    Leucovorin      19.900 18.995250  0.954535175879397
-10 ORG41BR1         Media       0.000        NA                 NA
-11 ORG41BR1   Mitomycin C       7.465  1.617625  0.216694574681849
-12 ORG41BR1   Oxaliplatin       9.900  9.490500  0.958636363636364
-13 ORG41BR1    Paclitaxel      19.900 12.034250  0.604736180904523
-14 ORG41BR1 Staurosporine      19.975  1.128875  0.056514392991239
-15 ORG41BR1     Topotecan      19.970  1.308125 0.0655045067601402
-16 ORG41BR1       TritonX       0.000        NA                 NA
-[1] &quot;result forORG41BR2: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG41BR2  5-Fluouracil      19.900 16.495500   0.82891959798995
-2  ORG41BR2   Carboplatin      19.900 16.448750  0.826570351758794
-3  ORG41BR2     Cisplatin       9.900  7.969625  0.805012626262626
-4  ORG41BR2          DMSO       0.000        NA                 NA
-5  ORG41BR2     Docetaxel      19.900 14.470875  0.727179648241206
-6  ORG41BR2   Doxorubicin      19.965  2.843375  0.142417981467568
-7  ORG41BR2   Gemcitabine      19.900  8.315125  0.417845477386935
-8  ORG41BR2    Irinotecan      19.900 12.544125  0.630358040201005
-9  ORG41BR2    Leucovorin      19.900 16.938875  0.851199748743719
-10 ORG41BR2         Media       0.000        NA                 NA
-11 ORG41BR2   Mitomycin C       7.405  2.075500  0.280283592167454
-12 ORG41BR2   Oxaliplatin       9.900  8.288625  0.837234848484848
-13 ORG41BR2    Paclitaxel      19.900 15.043125  0.755935929648241
-14 ORG41BR2 Staurosporine      19.970  1.223125 0.0612481221832749
-15 ORG41BR2     Topotecan      19.960  2.459375  0.123215180360721
-16 ORG41BR2       TritonX       0.000        NA                 NA
-[1] &quot;result forORG46BR1: &quot;
-    patient          drug neutral_auc   auc_val      relative_auc
-1  ORG46BR1  5-Fluouracil        19.9 13.415375 0.674139447236181
-2  ORG46BR1   Carboplatin        19.9 13.171250 0.661871859296483
-3  ORG46BR1     Cisplatin         9.9  6.854000 0.692323232323232
-4  ORG46BR1          DMSO         0.0        NA                NA
-5  ORG46BR1     Docetaxel        19.9 13.522500 0.679522613065327
-6  ORG46BR1   Doxorubicin        19.9  5.264375 0.264541457286432
-7  ORG46BR1   Gemcitabine        19.9  8.995500 0.452035175879397
-8  ORG46BR1    Irinotecan        19.9 11.572875 0.581551507537688
-9  ORG46BR1    Leucovorin        19.9 15.132750 0.760439698492462
-10 ORG46BR1         Media         0.0        NA                NA
-11 ORG46BR1   Mitomycin C         7.4  2.465500 0.333175675675676
-12 ORG46BR1   Oxaliplatin         9.9  7.314875 0.738876262626263
-13 ORG46BR1    Paclitaxel        19.9 12.070000 0.606532663316583
-14 ORG46BR1 Staurosporine        19.9  3.736250 0.187751256281407
-15 ORG46BR1     Topotecan        19.9  4.467625 0.224503768844221
-16 ORG46BR1       TritonX         0.0        NA                NA
-[1] &quot;result forORG49BR2: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG49BR2  5-Fluouracil      19.900 13.036875  0.655119346733668
-2  ORG49BR2   Carboplatin      19.900 10.759500  0.540678391959799
-3  ORG49BR2     Cisplatin       9.900  3.897625  0.393699494949495
-4  ORG49BR2          DMSO       0.000        NA                 NA
-5  ORG49BR2     Docetaxel      19.915  6.372000  0.319959829274416
-6  ORG49BR2   Doxorubicin      19.980  1.637125 0.0819381881881882
-7  ORG49BR2   Gemcitabine      19.920  4.108000  0.206224899598394
-8  ORG49BR2    Irinotecan      19.900 12.033625  0.604704773869347
-9  ORG49BR2    Leucovorin      19.900 16.972375  0.852883165829146
-10 ORG49BR2         Media       0.000        NA                 NA
-11 ORG49BR2   Mitomycin C       7.450  0.749250  0.100570469798658
-12 ORG49BR2   Oxaliplatin       9.900  6.938250  0.700833333333333
-13 ORG49BR2    Paclitaxel      19.900  4.538875  0.228084170854271
-14 ORG49BR2 Staurosporine      19.980  0.453375 0.0226914414414414
-15 ORG49BR2     Topotecan      19.980  1.457250 0.0729354354354355
-16 ORG49BR2       TritonX       0.000        NA                 NA
-[1] &quot;result forORG55BR1: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG55BR1  5-Fluouracil       19.90 18.914000  0.950452261306533
-2  ORG55BR1   Carboplatin       19.90 18.825750  0.946017587939698
-3  ORG55BR1     Cisplatin        9.90  9.072500  0.916414141414142
-4  ORG55BR1          DMSO        0.00        NA                 NA
-5  ORG55BR1     Docetaxel       19.90 16.641250  0.836243718592965
-6  ORG55BR1   Doxorubicin       19.99  1.784250 0.0892571285642822
-7  ORG55BR1   Gemcitabine       19.92  3.344375   0.16789031124498
-8  ORG55BR1    Irinotecan       19.90 13.906375  0.698812814070352
-9  ORG55BR1    Leucovorin       19.90 18.840000  0.946733668341708
-10 ORG55BR1         Media        0.00        NA                 NA
-11 ORG55BR1   Mitomycin C        7.45  1.262125  0.169412751677852
-12 ORG55BR1   Oxaliplatin        9.90  9.391000  0.948585858585859
-13 ORG55BR1    Paclitaxel       19.90 16.207750  0.814459798994975
-14 ORG55BR1 Staurosporine       19.99  0.891250 0.0445847923961981
-15 ORG55BR1     Topotecan       19.98  0.869375 0.0435122622622623
-16 ORG55BR1       TritonX        0.00        NA                 NA
-[1] &quot;result forORG55BR2: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG55BR2  5-Fluouracil      19.900 18.055375   0.90730527638191
-2  ORG55BR2   Carboplatin      19.900 18.367500  0.922989949748744
-3  ORG55BR2     Cisplatin       9.900  8.822625  0.891174242424242
-4  ORG55BR2          DMSO       0.000        NA                 NA
-5  ORG55BR2     Docetaxel      19.900 17.253625  0.867016331658292
-6  ORG55BR2   Doxorubicin      19.990  1.542625 0.0771698349174587
-7  ORG55BR2   Gemcitabine      19.940  2.397750  0.120248244734203
-8  ORG55BR2    Irinotecan      19.900  9.500625  0.477418341708543
-9  ORG55BR2    Leucovorin      19.900 18.400500   0.92464824120603
-10 ORG55BR2         Media       0.000        NA                 NA
-11 ORG55BR2   Mitomycin C       7.475  0.936500  0.125284280936455
-12 ORG55BR2   Oxaliplatin       9.900  9.243125   0.93364898989899
-13 ORG55BR2    Paclitaxel      19.900 14.892625   0.74837311557789
-14 ORG55BR2 Staurosporine      19.975  0.758000 0.0379474342928661
-15 ORG55BR2     Topotecan      19.990  0.415750 0.0207978989494747
-16 ORG55BR2       TritonX       0.000        NA                 NA
-[1] &quot;result forORG60BR3: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG60BR3  5-Fluouracil      19.900 16.695750  0.838982412060302
-2  ORG60BR3   Carboplatin      19.900 17.452875  0.877028894472362
-3  ORG60BR3     Cisplatin       9.900  8.460250  0.854570707070707
-4  ORG60BR3          DMSO       0.000        NA                 NA
-5  ORG60BR3     Docetaxel      19.900 10.204250  0.512776381909548
-6  ORG60BR3   Doxorubicin      19.965  3.991250  0.199912346606562
-7  ORG60BR3   Gemcitabine      19.900 11.003625  0.552945979899497
-8  ORG60BR3    Irinotecan      19.900 11.884875  0.597229899497487
-9  ORG60BR3    Leucovorin      19.900 17.190000  0.863819095477387
-10 ORG60BR3         Media       0.000        NA                 NA
-11 ORG60BR3   Mitomycin C       7.400  3.259375  0.440456081081081
-12 ORG60BR3   Oxaliplatin       9.900  8.739625  0.882790404040404
-13 ORG60BR3    Paclitaxel      19.900  9.014000  0.452964824120603
-14 ORG60BR3 Staurosporine      19.960  0.965125 0.0483529559118236
-15 ORG60BR3     Topotecan      19.950  1.752750 0.0878571428571429
-16 ORG60BR3       TritonX       0.000        NA                 NA
-[1] &quot;result forORG61BR1: &quot;
-    patient          drug neutral_auc   auc_val      relative_auc
-1  ORG61BR1  5-Fluouracil       19.90 17.934125 0.901212311557789
-2  ORG61BR1   Carboplatin       19.90 17.996000 0.904321608040201
-3  ORG61BR1     Cisplatin        9.90  9.222375  0.93155303030303
-4  ORG61BR1          DMSO        0.00        NA                NA
-5  ORG61BR1     Docetaxel       19.90 17.568000 0.882814070351759
-6  ORG61BR1   Doxorubicin       19.90 17.014875 0.855018844221106
-7  ORG61BR1   Gemcitabine       19.90 16.609875 0.834667085427136
-8  ORG61BR1    Irinotecan       19.90 10.529375  0.52911432160804
-9  ORG61BR1    Leucovorin       19.90 18.361500 0.922688442211055
-10 ORG61BR1         Media        0.00        NA                NA
-11 ORG61BR1   Mitomycin C        7.40  6.679125 0.902584459459459
-12 ORG61BR1   Oxaliplatin        9.90  8.950250 0.904065656565657
-13 ORG61BR1    Paclitaxel       19.90 18.094625 0.909277638190955
-14 ORG61BR1 Staurosporine       19.97  1.189375 0.059558087130696
-15 ORG61BR1     Topotecan       19.90  7.245250 0.364082914572864
-16 ORG61BR1       TritonX        0.00        NA                NA
-[1] &quot;result forORG61BR2: &quot;
-    patient          drug neutral_auc   auc_val      relative_auc
-1  ORG61BR2  5-Fluouracil        19.9 16.675250 0.837952261306533
-2  ORG61BR2   Carboplatin        19.9 17.023375 0.855445979899498
-3  ORG61BR2     Cisplatin         9.9  8.423875 0.850896464646465
-4  ORG61BR2          DMSO         0.0        NA                NA
-5  ORG61BR2     Docetaxel        19.9 17.679875 0.888435929648241
-6  ORG61BR2   Doxorubicin        19.9 17.875625 0.898272613065327
-7  ORG61BR2   Gemcitabine        19.9 17.364625 0.872594221105528
-8  ORG61BR2    Irinotecan        19.9 16.666125 0.837493718592965
-9  ORG61BR2    Leucovorin        19.9 17.477000 0.878241206030151
-10 ORG61BR2         Media         0.0        NA                NA
-11 ORG61BR2   Mitomycin C         7.4  6.403750 0.865371621621622
-12 ORG61BR2   Oxaliplatin         9.9  8.597375 0.868421717171717
-13 ORG61BR2    Paclitaxel        19.9 16.453875 0.826827889447236
-14 ORG61BR2 Staurosporine        19.9  3.217750 0.161695979899497
-15 ORG61BR2     Topotecan        19.9 13.521000 0.679447236180905
-16 ORG61BR2       TritonX         0.0        NA                NA
-[1] &quot;result forORG64BR3: &quot;
-    patient          drug neutral_auc   auc_val      relative_auc
-1  ORG64BR3  5-Fluouracil      19.900 19.360125 0.972870603015075
-2  ORG64BR3   Carboplatin      19.900 19.603000 0.985075376884422
-3  ORG64BR3     Cisplatin       9.900  9.719875 0.981805555555555
-4  ORG64BR3          DMSO       0.000        NA                NA
-5  ORG64BR3     Docetaxel      19.900 16.266875 0.817430904522613
-6  ORG64BR3   Doxorubicin      19.900 10.602625 0.532795226130653
-7  ORG64BR3   Gemcitabine      19.900 15.978250 0.802927135678392
-8  ORG64BR3    Irinotecan      19.900 14.618625 0.734604271356784
-9  ORG64BR3    Leucovorin      19.900 19.328375 0.971275125628141
-10 ORG64BR3         Media       0.000        NA                NA
-11 ORG64BR3   Mitomycin C       7.400  4.111500 0.555608108108108
-12 ORG64BR3   Oxaliplatin       9.900  9.706875 0.980492424242424
-13 ORG64BR3    Paclitaxel      19.900 15.498250 0.778806532663317
-14 ORG64BR3 Staurosporine      20.000  0.079500          0.003975
-15 ORG64BR3     Topotecan      19.955  2.896875 0.145170383362566
-16 ORG64BR3       TritonX       0.000        NA                NA
-[1] &quot;result forORG65BR1: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG65BR1  5-Fluouracil       19.90 16.453250   0.82679648241206
-2  ORG65BR1   Carboplatin       19.90 16.493250  0.828806532663317
-3  ORG65BR1     Cisplatin        9.90  8.381125  0.846578282828283
-4  ORG65BR1          DMSO        0.00        NA                 NA
-5  ORG65BR1     Docetaxel       19.90 14.560250  0.731670854271357
-6  ORG65BR1   Doxorubicin       19.90 13.496625  0.678222361809045
-7  ORG65BR1   Gemcitabine       19.90 13.791375   0.69303391959799
-8  ORG65BR1    Irinotecan       19.90 11.485500  0.577160804020101
-9  ORG65BR1    Leucovorin       19.90 17.019625  0.855257537688442
-10 ORG65BR1         Media        0.00        NA                 NA
-11 ORG65BR1   Mitomycin C        7.40  3.181500  0.429932432432432
-12 ORG65BR1   Oxaliplatin        9.90  8.351500  0.843585858585859
-13 ORG65BR1    Paclitaxel       19.90 14.499125  0.728599246231156
-14 ORG65BR1 Staurosporine       19.95  1.605750 0.0804887218045113
-15 ORG65BR1     Topotecan       19.90  9.211250  0.462876884422111
-16 ORG65BR1       TritonX        0.00        NA                 NA
-[1] &quot;result forORG65BR2: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG65BR2  5-Fluouracil       19.90 18.802875  0.944868090452261
-2  ORG65BR2   Carboplatin       19.90 18.835500  0.946507537688442
-3  ORG65BR2     Cisplatin        9.90  9.461000  0.955656565656565
-4  ORG65BR2          DMSO        0.00        NA                 NA
-5  ORG65BR2     Docetaxel       19.90  8.550750  0.429685929648241
-6  ORG65BR2   Doxorubicin       19.99  1.668625 0.0834729864932466
-7  ORG65BR2   Gemcitabine       19.90  8.091625   0.40661432160804
-8  ORG65BR2    Irinotecan       19.90 16.132750  0.810690954773869
-9  ORG65BR2    Leucovorin       19.90 19.383625  0.974051507537689
-10 ORG65BR2         Media        0.00        NA                 NA
-11 ORG65BR2   Mitomycin C        7.49  1.691250  0.225801068090788
-12 ORG65BR2   Oxaliplatin        9.90  9.616875  0.971401515151515
-13 ORG65BR2    Paclitaxel       19.90  8.277625  0.415961055276382
-14 ORG65BR2 Staurosporine       19.99  0.366000 0.0183091545772886
-15 ORG65BR2     Topotecan       19.97  1.743875 0.0873247371056585
-16 ORG65BR2       TritonX        0.00        NA                 NA</code></pre>
+<p><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/dose_comparison.Rmd/unnamed-chunk-4-12.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="relative-auc-of-pred_probs" class="section level2 tabset">
+<h2 class="tabset">Relative AUC of pred_probs</h2>
 <pre><code>Warning in max(auc_df_mean$Concentration): no non-missing arguments to max;
 returning -Inf</code></pre>
 <pre><code>Warning in min(structure(logical(0), dim = c(0L, 2L), dimnames = list(NULL, :
 no non-missing arguments to min; returning Inf</code></pre>
 <pre><code>Warning in min(x, na.rm = TRUE): no non-missing arguments to min; returning Inf</code></pre>
-<pre><code>[1] &quot;result forORG66BR2: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG66BR2  5-Fluouracil      19.900 17.561125  0.882468592964824
-2  ORG66BR2   Carboplatin      19.900 19.113500  0.960477386934674
-3  ORG66BR2     Cisplatin       9.900  9.244875  0.933825757575757
-4  ORG66BR2          DMSO       0.000        NA                 NA
-5  ORG66BR2     Docetaxel      19.900  8.082250  0.406143216080402
-6  ORG66BR2   Doxorubicin      19.975  3.184000  0.159399249061327
-7  ORG66BR2   Gemcitabine      19.900  7.056125  0.354579145728643
-8  ORG66BR2    Irinotecan      19.900 10.885500  0.547010050251256
-9  ORG66BR2    Leucovorin      19.900 18.759875  0.942707286432161
-10 ORG66BR2         Media       0.000        NA                 NA
-11 ORG66BR2   Mitomycin C       7.400  1.945250  0.262871621621622
-12 ORG66BR2   Oxaliplatin       9.900  9.443125   0.95385101010101
-13 ORG66BR2    Paclitaxel      19.900  6.824000  0.342914572864322
-14 ORG66BR2 Staurosporine      19.950  1.196750 0.0599874686716792
-15 ORG66BR2     Topotecan      19.900  2.534750  0.127374371859296
-16 ORG66BR2       TritonX        -Inf        NA                 NA
-[1] &quot;result forORG66BR3: &quot;
-    patient          drug neutral_auc   auc_val      relative_auc
-1  ORG66BR3  5-Fluouracil      19.900  9.659500 0.485402010050251
-2  ORG66BR3   Carboplatin      19.900 10.802000 0.542814070351759
-3  ORG66BR3     Cisplatin       9.900  4.945000  0.49949494949495
-4  ORG66BR3          DMSO       0.000        NA                NA
-5  ORG66BR3     Docetaxel      19.900  3.956250 0.198806532663317
-6  ORG66BR3   Doxorubicin      19.905  2.216625 0.111360211002261
-7  ORG66BR3   Gemcitabine      19.900  4.010500 0.201532663316583
-8  ORG66BR3    Irinotecan      19.900  8.092625 0.406664572864322
-9  ORG66BR3    Leucovorin      19.900 10.334375 0.519315326633166
-10 ORG66BR3         Media       0.000        NA                NA
-11 ORG66BR3   Mitomycin C       7.400  0.960000  0.12972972972973
-12 ORG66BR3   Oxaliplatin       9.900  5.286500 0.533989898989899
-13 ORG66BR3    Paclitaxel      19.900  4.437250 0.222977386934673
-14 ORG66BR3 Staurosporine      19.905  2.103250 0.105664405928159
-15 ORG66BR3     Topotecan      19.900  2.961250 0.148806532663317
-16 ORG66BR3       TritonX       0.000        NA                NA
-[1] &quot;result forORG70BR1: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG70BR1  5-Fluouracil      19.900 18.670500   0.93821608040201
-2  ORG70BR1   Carboplatin      19.900 18.908750  0.950188442211055
-3  ORG70BR1     Cisplatin       9.900  9.359875  0.945441919191919
-4  ORG70BR1          DMSO       0.000        NA                 NA
-5  ORG70BR1     Docetaxel      19.900 12.550625  0.630684673366834
-6  ORG70BR1   Doxorubicin      19.980  4.631625  0.231813063063063
-7  ORG70BR1   Gemcitabine      19.900  8.170250  0.410565326633166
-8  ORG70BR1    Irinotecan      19.900 14.908750  0.749183417085427
-9  ORG70BR1    Leucovorin      19.900 19.080500  0.958819095477387
-10 ORG70BR1         Media       0.000        NA                 NA
-11 ORG70BR1   Mitomycin C       7.475  2.512625  0.336137123745819
-12 ORG70BR1   Oxaliplatin       9.900  9.481875  0.957765151515151
-13 ORG70BR1    Paclitaxel      19.900 12.198375  0.612983668341708
-14 ORG70BR1 Staurosporine      19.985  0.433625 0.0216975231423568
-15 ORG70BR1     Topotecan      19.980  1.487500 0.0744494494494494
-16 ORG70BR1       TritonX       0.000        NA                 NA
-[1] &quot;result forORG70BR2: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG70BR2  5-Fluouracil      19.900 18.287750  0.918982412060302
-2  ORG70BR2   Carboplatin      19.900 18.999000  0.954723618090452
-3  ORG70BR2     Cisplatin       9.900  9.496625   0.95925505050505
-4  ORG70BR2          DMSO       0.000        NA                 NA
-5  ORG70BR2     Docetaxel      19.900 14.240750  0.715615577889447
-6  ORG70BR2   Doxorubicin      19.980  2.964500  0.148373373373373
-7  ORG70BR2   Gemcitabine      19.900 10.776500  0.541532663316583
-8  ORG70BR2    Irinotecan      19.900 14.266875  0.716928391959799
-9  ORG70BR2    Leucovorin      19.900 19.024000  0.955979899497488
-10 ORG70BR2         Media       0.000        NA                 NA
-11 ORG70BR2   Mitomycin C       7.475  2.445125  0.327107023411371
-12 ORG70BR2   Oxaliplatin       9.900  9.046250  0.913762626262626
-13 ORG70BR2    Paclitaxel      19.900 13.521750  0.679484924623116
-14 ORG70BR2 Staurosporine      19.990  0.306500 0.0153326663331666
-15 ORG70BR2     Topotecan      19.975  1.854125 0.0928222778473091
-16 ORG70BR2       TritonX       0.000        NA                 NA
-[1] &quot;result forORG73BR1: &quot;
-    patient          drug neutral_auc   auc_val        relative_auc
-1  ORG73BR1  5-Fluouracil      19.900 15.050000   0.756281407035176
-2  ORG73BR1   Carboplatin      19.900 18.741750    0.94179648241206
-3  ORG73BR1     Cisplatin       9.900  7.949125   0.802941919191919
-4  ORG73BR1          DMSO       0.000        NA                  NA
-5  ORG73BR1     Docetaxel      19.900  7.720500   0.387964824120603
-6  ORG73BR1   Doxorubicin      19.995  1.229500  0.0614903725931483
-7  ORG73BR1   Gemcitabine      19.930  3.122875   0.156692172604114
-8  ORG73BR1    Irinotecan      19.900  7.951375   0.399566582914573
-9  ORG73BR1    Leucovorin      19.900 19.466625   0.978222361809045
-10 ORG73BR1         Media       0.000        NA                  NA
-11 ORG73BR1   Mitomycin C       7.490  0.445750  0.0595126835781041
-12 ORG73BR1   Oxaliplatin       9.900  9.602750   0.969974747474747
-13 ORG73BR1    Paclitaxel      19.900  5.813250   0.292123115577889
-14 ORG73BR1 Staurosporine      19.995  0.167125 0.00835833958489622
-15 ORG73BR1     Topotecan      20.000  0.296000              0.0148
-16 ORG73BR1       TritonX       0.000        NA                  NA
-[1] &quot;result forORG76BR1: &quot;
-    patient          drug neutral_auc   auc_val       relative_auc
-1  ORG76BR1  5-Fluouracil      19.900 14.131375  0.710119346733668
-2  ORG76BR1   Carboplatin      19.900 14.130750  0.710087939698493
-3  ORG76BR1     Cisplatin       9.900  6.769625  0.683800505050505
-4  ORG76BR1          DMSO       0.000        NA                 NA
-5  ORG76BR1     Docetaxel      19.900  9.256625  0.465157035175879
-6  ORG76BR1   Doxorubicin      19.975  1.335250  0.066846057571965
-7  ORG76BR1   Gemcitabine      19.900  7.333625  0.368523869346734
-8  ORG76BR1    Irinotecan      19.900 10.198125  0.512468592964824
-9  ORG76BR1    Leucovorin      19.900 14.749250  0.741168341708543
-10 ORG76BR1         Media       0.000        NA                 NA
-11 ORG76BR1   Mitomycin C       7.400  1.921875  0.259712837837838
-12 ORG76BR1   Oxaliplatin       9.900  7.116750  0.718863636363636
-13 ORG76BR1    Paclitaxel      19.900  9.927750  0.498881909547739
-14 ORG76BR1 Staurosporine      19.935  1.834250 0.0920115374968648
-15 ORG76BR1     Topotecan      19.945  2.172625  0.108930809726749
-16 ORG76BR1       TritonX       0.000        NA                 NA</code></pre>
+<div id="org38br2" class="section level3">
+<h3>ORG38BR2</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-b6d6b3e880efdc4413a7" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-b6d6b3e880efdc4413a7">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2","ORG38BR2"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.99,19.9,19.9,19.9,0,7.46,9.9,19.9,19.98,19.955,0],[13.60575,16.166125,6.621625,null,6.036625,0.6342500000000001,5.298875,15.053875,17.570875,null,1.415625,8.593999999999999,6.151000000000001,0.9247500000000001,1.338875,null],["0.684","0.812","0.669","   NA","0.303","0.032","0.266","0.756","0.883","   NA","0.190","0.868","0.309","0.046","0.067","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org41br1" class="section level3">
+<h3>ORG41BR1</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-0eb03c6030bb99b774ef" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-0eb03c6030bb99b774ef">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1","ORG41BR1"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.985,19.9,19.9,19.9,0,7.465,9.9,19.9,19.975,19.97,0],[18.529875,18.8095,9.32375,null,11.582875,2.833875,6.449375,15.986375,18.99525,null,1.617625,9.490500000000001,12.03425,1.128875,1.308125,null],["0.931","0.945","0.942","   NA","0.582","0.142","0.324","0.803","0.955","   NA","0.217","0.959","0.605","0.057","0.066","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org41br2" class="section level3">
+<h3>ORG41BR2</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-b10fcd9682ad01e8786f" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-b10fcd9682ad01e8786f">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2","ORG41BR2"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.965,19.9,19.9,19.9,0,7.405,9.9,19.9,19.97,19.96,0],[16.4955,16.44875,7.969625000000001,null,14.470875,2.843375,8.315125,12.544125,16.938875,null,2.0755,8.288625,15.043125,1.223125,2.459375,null],["0.829","0.827","0.805","   NA","0.727","0.142","0.418","0.630","0.851","   NA","0.280","0.837","0.756","0.061","0.123","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org46br1" class="section level3">
+<h3>ORG46BR1</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-d09ba54a79285f0b02e9" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-d09ba54a79285f0b02e9">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.9,19.9,19.9,19.9,0,7.4,9.9,19.9,19.9,19.9,0],[13.401375,13.1475,6.853999999999999,null,13.520875,5.263125,8.969374999999999,11.5275,15.072125,null,2.464125,7.2995,12.058625,3.71,4.441125,null],["0.67","0.66","0.69","  NA","0.68","0.26","0.45","0.58","0.76","  NA","0.33","0.74","0.61","0.19","0.22","  NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org49br2" class="section level3">
+<h3>ORG49BR2</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-63eb0448af2c644cf631" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-63eb0448af2c644cf631">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2","ORG49BR2"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.915,19.98,19.92,19.9,19.9,0,7.45,9.9,19.9,19.98,19.98,0],[13.036875,10.7595,3.897625,null,6.372,1.637125,4.108000000000001,12.033625,16.972375,null,0.74925,6.93825,4.538874999999999,0.453375,1.45725,null],["0.655","0.541","0.394","   NA","0.320","0.082","0.206","0.605","0.853","   NA","0.101","0.701","0.228","0.023","0.073","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org55br1" class="section level3">
+<h3>ORG55BR1</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-a9531a5ef1cf4597a822" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-a9531a5ef1cf4597a822">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1","ORG55BR1"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.99,19.92,19.9,19.9,0,7.45,9.9,19.9,19.99,19.98,0],[18.914,18.82575,9.072500000000002,null,16.64125,1.78425,3.344375,13.906375,18.84,null,1.262125,9.391000000000002,16.20775,0.89125,0.869375,null],["0.950","0.946","0.916","   NA","0.836","0.089","0.168","0.699","0.947","   NA","0.169","0.949","0.814","0.045","0.044","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org55br2" class="section level3">
+<h3>ORG55BR2</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-4bfab19696c65db4e12e" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-4bfab19696c65db4e12e">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2","ORG55BR2"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.99,19.94,19.9,19.9,0,7.475,9.9,19.9,19.975,19.99,0],[18.055375,18.3675,8.822624999999999,null,17.253625,1.542625,2.39775,9.500624999999999,18.4005,null,0.9365,9.243124999999999,14.892625,0.758,0.41575,null],["0.907","0.923","0.891","   NA","0.867","0.077","0.120","0.477","0.925","   NA","0.125","0.934","0.748","0.038","0.021","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org60br3" class="section level3">
+<h3>ORG60BR3</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-88e4c7c08df79fcb0b3d" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-88e4c7c08df79fcb0b3d">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3","ORG60BR3"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.965,19.9,19.9,19.9,0,7.4,9.9,19.9,19.96,19.95,0],[16.69575,17.452875,8.46025,null,10.20425,3.99125,11.003625,11.884875,17.19,null,3.259375,8.739625,9.013999999999999,0.965125,1.75275,null],["0.839","0.877","0.855","   NA","0.513","0.200","0.553","0.597","0.864","   NA","0.440","0.883","0.453","0.048","0.088","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org61br1" class="section level3">
+<h3>ORG61BR1</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-723b0d4a3d60f6f4961d" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-723b0d4a3d60f6f4961d">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1","ORG61BR1"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.9,19.9,19.9,19.9,0,7.4,9.9,19.9,19.97,19.9,0],[17.934125,17.996,9.222375,null,17.568,17.014875,16.609875,10.529375,18.3615,null,6.679125,8.95025,18.094625,1.189375,7.24525,null],["0.90","0.90","0.93","  NA","0.88","0.86","0.83","0.53","0.92","  NA","0.90","0.90","0.91","0.06","0.36","  NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org61br2" class="section level3">
+<h3>ORG61BR2</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-4008c5d8bc64d922b2ea" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-4008c5d8bc64d922b2ea">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2","ORG61BR2"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.9,19.9,19.9,19.9,0,7.4,9.9,19.9,19.9,19.9,0],[16.67525,17.023375,8.423874999999999,null,17.679875,17.875625,17.364625,16.666125,17.477,null,6.40375,8.597375,16.453875,3.21775,13.521,null],["0.84","0.86","0.85","  NA","0.89","0.90","0.87","0.84","0.88","  NA","0.87","0.87","0.83","0.16","0.68","  NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org64br3" class="section level3">
+<h3>ORG64BR3</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-a6da6578ea98a3f75ce9" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-a6da6578ea98a3f75ce9">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3","ORG64BR3"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.9,19.9,19.9,19.9,0,7.4,9.9,19.9,20,19.955,0],[19.360125,19.603,9.719875,null,16.266875,10.602625,15.97825,14.618625,19.328375,null,4.1115,9.706875,15.49825,0.0795,2.896875,null],["0.973","0.985","0.982","   NA","0.817","0.533","0.803","0.735","0.971","   NA","0.556","0.980","0.779","0.004","0.145","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org65br1" class="section level3">
+<h3>ORG65BR1</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-e73987bfcb7c0142d184" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-e73987bfcb7c0142d184">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1","ORG65BR1"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.9,19.9,19.9,19.9,0,7.4,9.9,19.9,19.96,19.9,0],[16.50925,16.561125,8.400500000000001,null,14.557625,13.381625,13.740875,11.1865,17.078375,null,3.090375,8.354625,14.440125,1.366125,9.021000000000001,null],["0.830","0.832","0.849","   NA","0.732","0.672","0.690","0.562","0.858","   NA","0.418","0.844","0.726","0.068","0.453","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org65br2" class="section level3">
+<h3>ORG65BR2</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-cb34a8b4fe76ea12e4c2" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-cb34a8b4fe76ea12e4c2">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2","ORG65BR2"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.99,19.9,19.9,19.9,0,7.49,9.9,19.9,19.99,19.975,0],[18.81025,18.83225,9.44225,null,8.541625,1.629125,8.108250000000002,15.63675,19.383625,null,1.69725,9.612499999999999,8.361875000000001,0.326875,1.5405,null],["0.945","0.946","0.954","   NA","0.429","0.081","0.407","0.786","0.974","   NA","0.227","0.971","0.420","0.016","0.077","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org66br2" class="section level3">
+<h3>ORG66BR2</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-8279b616eb426ec8269c" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-8279b616eb426ec8269c">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2","ORG66BR2"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.975,19.9,19.9,19.9,0,7.4,9.9,19.9,19.95,19.9,null],[17.561125,19.1135,9.244874999999999,null,8.08225,3.184,7.056125,10.8855,18.759875,null,1.94525,9.443124999999998,6.824,1.19675,2.53475,null],["0.88","0.96","0.93","  NA","0.41","0.16","0.35","0.55","0.94","  NA","0.26","0.95","0.34","0.06","0.13","  NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org66br3" class="section level3">
+<h3>ORG66BR3</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-e9577a6965b15acb99bb" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-e9577a6965b15acb99bb">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3","ORG66BR3"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.905,19.9,19.9,19.9,0,7.4,9.9,19.9,19.905,19.9,0],[9.6595,10.802,4.945,null,3.95625,2.216625000000001,4.0105,8.092625,10.334375,null,0.96,5.2865,4.43725,2.10325,2.961250000000001,null],["0.49","0.54","0.50","  NA","0.20","0.11","0.20","0.41","0.52","  NA","0.13","0.53","0.22","0.11","0.15","  NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org70br1" class="section level3">
+<h3>ORG70BR1</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-7b392a375422c997556b" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-7b392a375422c997556b">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1","ORG70BR1"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.98,19.9,19.9,19.9,0,7.475,9.9,19.9,19.985,19.98,0],[18.6705,18.90875,9.359874999999999,null,12.550625,4.631625,8.170249999999999,14.90875,19.0805,null,2.512625,9.481874999999999,12.198375,0.433625,1.4875,null],["0.938","0.950","0.945","   NA","0.631","0.232","0.411","0.749","0.959","   NA","0.336","0.958","0.613","0.022","0.074","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org70br2" class="section level3">
+<h3>ORG70BR2</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-d4f453f588ac5dca6451" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-d4f453f588ac5dca6451">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2","ORG70BR2"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.98,19.9,19.9,19.9,0,7.475,9.9,19.9,19.99,19.975,0],[18.28775,18.999,9.496625,null,14.24075,2.964500000000001,10.7765,14.266875,19.024,null,2.445125,9.046250000000001,13.52175,0.3065,1.854125,null],["0.919","0.955","0.959","   NA","0.716","0.148","0.542","0.717","0.956","   NA","0.327","0.914","0.679","0.015","0.093","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org73br1" class="section level3">
+<h3>ORG73BR1</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-77cd0552032760864b12" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-77cd0552032760864b12">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1","ORG73BR1"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.995,19.93,19.9,19.9,0,7.49,9.9,19.9,19.995,20,0],[15.05,18.74175,7.949125,null,7.720499999999999,1.2295,3.122875,7.951375000000001,19.466625,null,0.44575,9.60275,5.81325,0.167125,0.296,null],["0.7563","0.9418","0.8029","    NA","0.3880","0.0615","0.1567","0.3996","0.9782","    NA","0.0595","0.9700","0.2921","0.0084","0.0148","    NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="org76br1" class="section level3">
+<h3>ORG76BR1</h3>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-d737c8e62ec5b26115d7" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-d737c8e62ec5b26115d7">{"x":{"filter":"none","vertical":false,"extensions":["Buttons"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"],["ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1","ORG76BR1"],["5-Fluouracil","Carboplatin","Cisplatin","DMSO","Docetaxel","Doxorubicin","Gemcitabine","Irinotecan","Leucovorin","Media","Mitomycin C","Oxaliplatin","Paclitaxel","Staurosporine","Topotecan","TritonX"],[19.9,19.9,9.9,0,19.9,19.975,19.9,19.9,19.9,0,7.4,9.9,19.9,19.935,19.945,0],[14.131375,14.13075,6.769625,null,9.256625,1.33525,7.333625,10.198125,14.74925,null,1.921875,7.11675,9.92775,1.83425,2.172625,null],["0.710","0.710","0.684","   NA","0.465","0.067","0.369","0.512","0.741","   NA","0.260","0.719","0.499","0.092","0.109","   NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>patient<\/th>\n      <th>drug<\/th>\n      <th>neutral_auc<\/th>\n      <th>auc_val<\/th>\n      <th>relative_auc<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blfrtip","buttons":["copy","csv","excel","pdf","print"],"lengthMenu":[[10,25,50,-1],["10","25","50","All"]],"columnDefs":[{"className":"dt-right","targets":[3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"patient","targets":1},{"name":"drug","targets":2},{"name":"neutral_auc","targets":3},{"name":"auc_val","targets":4},{"name":"relative_auc","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1726,35 +1083,35 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] DT_0.33         dplyr_1.1.4     ggplot2_4.0.0   workflowr_1.7.1
+[1] DT_0.33       dplyr_1.1.4   ggplot2_4.0.0
 
 loaded via a namespace (and not attached):
  [1] gtable_0.3.6            xfun_0.52               bslib_0.9.0            
- [4] htmlwidgets_1.6.4       processx_3.8.6          lattice_0.22-7         
- [7] callr_3.7.6             vctrs_0.6.5             tools_4.4.0            
-[10] ps_1.9.1                generics_0.1.3          tibble_3.2.1           
-[13] pkgconfig_2.0.3         Matrix_1.7-3            RColorBrewer_1.1-3     
-[16] S7_0.2.0                ggridges_0.5.6          lifecycle_1.0.4        
-[19] compiler_4.4.0          farver_2.1.2            stringr_1.5.1          
-[22] git2r_0.36.2            getPass_0.2-4           httpuv_1.6.15          
-[25] fontquiver_0.2.1        fontLiberation_0.1.0    htmltools_0.5.8.1      
-[28] sass_0.4.10             yaml_2.3.10             later_1.4.2            
-[31] pillar_1.10.2           jquerylib_0.1.4         whisker_0.4.1          
-[34] tidyr_1.3.1             MASS_7.3-65             cachem_1.1.0           
-[37] mosaicCore_0.9.5        fontBitstreamVera_0.1.1 tidyselect_1.2.1       
-[40] digest_0.6.37           stringi_1.8.7           purrr_1.0.4            
-[43] forcats_1.0.0           geepack_1.3.13          labelled_2.16.0        
-[46] rprojroot_2.0.4         fastmap_1.2.0           grid_4.4.0             
-[49] cli_3.6.4               magrittr_2.0.3          dichromat_2.0-0.1      
-[52] geeM_0.10.1             broom_1.0.8             ggformula_1.0.0        
-[55] clipr_0.8.0             withr_3.0.2             gdtools_0.4.4          
-[58] scales_1.4.0            promises_1.3.2          backports_1.5.0        
-[61] rmarkdown_2.29          httr_1.4.7              hms_1.1.3              
-[64] evaluate_1.0.3          knitr_1.50              haven_2.5.4            
-[67] rlang_1.1.6             MESS_0.6.0              ggiraph_0.9.2          
-[70] Rcpp_1.1.0              glue_1.8.0              rstudioapi_0.17.1      
-[73] jsonlite_2.0.0          R6_2.6.1                systemfonts_1.3.1      
-[76] fs_1.6.6               </code></pre>
+ [4] htmlwidgets_1.6.4       lattice_0.22-7          crosstalk_1.2.1        
+ [7] vctrs_0.6.5             tools_4.4.0             generics_0.1.3         
+[10] tibble_3.2.1            pkgconfig_2.0.3         Matrix_1.7-3           
+[13] RColorBrewer_1.1-3      S7_0.2.0                ggridges_0.5.6         
+[16] lifecycle_1.0.4         compiler_4.4.0          farver_2.1.2           
+[19] stringr_1.5.1           git2r_0.36.2            httpuv_1.6.15          
+[22] fontquiver_0.2.1        fontLiberation_0.1.0    htmltools_0.5.8.1      
+[25] sass_0.4.10             yaml_2.3.10             later_1.4.2            
+[28] pillar_1.10.2           jquerylib_0.1.4         whisker_0.4.1          
+[31] tidyr_1.3.1             MASS_7.3-65             cachem_1.1.0           
+[34] mosaicCore_0.9.5        fontBitstreamVera_0.1.1 tidyselect_1.2.1       
+[37] digest_0.6.37           stringi_1.8.7           purrr_1.0.4            
+[40] forcats_1.0.0           geepack_1.3.13          labelled_2.16.0        
+[43] rprojroot_2.0.4         fastmap_1.2.0           grid_4.4.0             
+[46] cli_3.6.4               magrittr_2.0.3          dichromat_2.0-0.1      
+[49] geeM_0.10.1             broom_1.0.8             ggformula_1.0.0        
+[52] clipr_0.8.0             withr_3.0.2             gdtools_0.4.4          
+[55] scales_1.4.0            promises_1.3.2          backports_1.5.0        
+[58] rmarkdown_2.29          workflowr_1.7.1         hms_1.1.3              
+[61] evaluate_1.0.3          knitr_1.50              haven_2.5.4            
+[64] rlang_1.1.6             MESS_0.6.0              ggiraph_0.9.2          
+[67] Rcpp_1.1.0              glue_1.8.0              rstudioapi_0.17.1      
+[70] jsonlite_2.0.0          R6_2.6.1                systemfonts_1.3.1      
+[73] fs_1.6.6               </code></pre>
+</div>
 </div>
 </div>
 

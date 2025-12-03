@@ -1223,7 +1223,32 @@ normplot
 
 ```
 
+```{r, fig.height=10, fig.width=10}
+plot_data <- data_norm_plot[data_norm_plot$variable == 'CTG' | data_norm_plot$variable == 'prob_alive',]
+normplot <- plot_data %>%
+  unite("Identifyer", c(Plate_ID, Patient), sep = "_", remove = FALSE) %>% 
+  ggplot(., aes(x = Concentration, 
+                y = mean,
+                group = variable,
+                colour = variable)) +
+  facet_wrap(~Compound_ID, ncol = 3, scales = 'fixed')  +
+  scale_x_continuous(trans = "log10", labels = scales::number_format(accuracy = 0.1)) + 
+  geom_smooth(method = 'loess') +
+  scale_colour_manual(values = c("CTG"="red", "prob_alive"="blue")) +
+  labs(title = "SVM results ORG66BR3\n",
+       x = "Log10 Concentration (uM)",
+       y = "Probability of being alive") +
+  theme_light()+
+  theme(axis.title.x = element_text(margin = margin(t = 10, r = 10, b = 20, l = 20)), 
+        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 20)),
+        axis.text.x = element_text(angle = 25, colour = "black", size = 10, hjust = 1),
+        axis.text.y = element_text(colour = "black", size = 10),
+        strip.text = element_text(size = 12),
+        plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
+        plot.margin = margin(t = 0, r = 30, b = 0, l = 30))
+normplot
 
+```
 
 
 ## Single organoid results

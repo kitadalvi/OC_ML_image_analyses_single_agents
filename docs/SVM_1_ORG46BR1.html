@@ -1,0 +1,2202 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>ORG46BR1 3D Image-based Classification   SVM analyses </title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.33/datatables.js"></script>
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="site_libs/jszip-1.13.6/jszip.min.js"></script>
+<link href="site_libs/dt-ext-buttons-1.13.6/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="site_libs/dt-ext-buttons-1.13.6/js/dataTables.buttons.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.html5.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.colVis.min.js"></script>
+<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.print.min.js"></script>
+<link href="site_libs/dt-ext-scroller-1.13.6/css/scroller.dataTables.min.css" rel="stylesheet" />
+<script src="site_libs/dt-ext-scroller-1.13.6/js/dataTables.scroller.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SVM Based Image Analysis of Organoids - Single Agent</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    SVM analyses of Single Organoids
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="SVM_1_ORG66BR2_Dox.html">Brightfield and Hoechst</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore"><img src="Cropped_VCFG_Logo2019.png" style="float:right;height:77.1429px;width:152px"/>ORG46BR1<br>3D
+Image-based Classification <br> SVM analyses<br></h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-11-30
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong>
+<code>20241205_OC_ML_image_analyses_single_agents/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20241205code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20241205)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20241205code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20241205)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomkitadalviOCMLimageanalysessingleagentstree0f382c06af19c95f9f28fec402b99f4717ec6e5dtargetblank0f382c0a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/tree/0f382c06af19c95f9f28fec402b99f4717ec6e5d" target="_blank">0f382c0</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomkitadalviOCMLimageanalysessingleagentstree0f382c06af19c95f9f28fec402b99f4717ec6e5dtargetblank0f382c0a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/tree/0f382c06af19c95f9f28fec402b99f4717ec6e5d" target="_blank">0f382c0</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/.DS_Store
+    Ignored:    analysis/.RData
+    Ignored:    analysis/.Rhistory
+    Ignored:    data/.DS_Store
+    Ignored:    data/images/.DS_Store
+    Ignored:    data/raw_data/
+    Ignored:    output/CYSTIC/
+    Ignored:    output/ORG38BR2/
+    Ignored:    output/ORG41BR1/
+    Ignored:    output/ORG41BR2/
+    Ignored:    output/ORG46BR1/
+    Ignored:    output/ORG49BR2/
+    Ignored:    output/ORG55BR1/
+    Ignored:    output/ORG55BR2/
+    Ignored:    output/ORG60BR3/
+    Ignored:    output/ORG61BR1/
+    Ignored:    output/ORG61BR2/
+    Ignored:    output/ORG64BR3/
+    Ignored:    output/ORG65BR1/
+    Ignored:    output/ORG65BR2/
+    Ignored:    output/ORG66BR2/
+    Ignored:    output/ORG66BR3/
+    Ignored:    output/ORG70BR1/
+    Ignored:    output/ORG70BR2/
+    Ignored:    output/ORG73BR1/
+    Ignored:    output/ORG73BR2/
+    Ignored:    output/ORG76BR1/
+    Ignored:    output/SMALL_MIXED_DENSE/
+
+Unstaged changes:
+    Modified:   analysis/SVM_1_ORG38BR2_Dox.Rmd
+    Deleted:    analysis/SVM_1_ORG38BR2_Dox.knit.md
+    Modified:   analysis/SVM_1_ORG41BR1_Dox.Rmd
+    Modified:   analysis/SVM_1_ORG41BR2.Rmd
+    Modified:   analysis/SVM_1_ORG46BR1.Rmd
+    Modified:   analysis/SVM_1_ORG66BR2_Dox.Rmd
+    Modified:   analysis/SVM_1_ORG66BR3_Dox.Rmd
+    Modified:   analysis/SVM_1_ORG70BR2.Rmd
+    Modified:   analysis/SVM_1_ORG73BR1.Rmd
+    Modified:   analysis/SVM_SMALL_MIXED_DENSE_ORGS.Rmd
+    Modified:   code/zscore_heatmaps.R
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/SVM_1_ORG46BR1.Rmd</code>) and
+HTML (<code>docs/SVM_1_ORG46BR1.html</code>) files. If you’ve configured
+a remote Git repository (see <code>?wflow_git_remote</code>), click on
+the hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/kitadalvi/OC_ML_image_analyses_single_agents/blob/6f7dc2988de046c325c066cccca3949a1be942bf/analysis/SVM_1_ORG46BR1.Rmd" target="_blank">6f7dc29</a>
+</td>
+<td>
+kitadalvi
+</td>
+<td>
+2025-11-10
+</td>
+<td>
+dose comparison added
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<style type="text/css">
+
+body{ /* Normal  */
+      font-size: 16px;
+  }
+td {  /* Table  */
+  font-size: 14px;
+  white-space: nowrap;
+}
+h1.title {
+  font-size: 32px;
+  color: Black;
+}
+h1 { /* Header 1 */
+  font-size: 24px;
+  color: Black;
+}
+h2 { /* Header 2 */
+    font-size: 20px;
+  color: Black;
+}
+h3 { /* Header 3 */
+  font-size: 18px;
+  color: Black;
+}
+h4 { /* Header 4 */
+  font-size: 18px;
+  color: Black;
+}
+h5 { /* Normal  */
+  font-size: 16px;
+  color: Black;
+  class = "author"
+}
+h6 { /* Normal  */
+  font-size: 16px;
+  color: Black;
+  class = "data"
+}
+a, a:hover {
+  color: #7d2b8b
+}
+code.r{ /* Code block */
+    font-size: 12px;
+}
+pre { /* Code block - determines code spacing between lines */
+    font-size: 14px;
+}
+</style>
+<style type="text/css">
+#TOC { /* Normal  */
+  color: Black; 
+  border-color: #7d2b8b
+}
+a {
+color: Black;
+}
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    background-color: #7d2b8b;
+    border-color: #7d2b8b;
+}
+</style>
+<style>
+div.a {
+  text-indent: 50px;
+}
+</style>
+<style>
+.nav-pills>li>a {
+    position: relative;
+    display: block;
+    color: #3c2372;
+    border: 1px solid #7d2b8b;
+    background-color: #ffffff;
+
+    }
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: #ffffff;
+    background-color: #7d2b8b;
+    border: 1px solid #ffffff;
+
+    }
+</style>
+<style>
+
+.tabset-dropdown > .nav-tabs {
+    display: inline-block;
+    max-height: 500px;
+    min-height: 44px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #7d2b8b;
+    border-radius: 4px;
+    color:#7d2b8b;
+}
+</style>
+<div id="information" class="section level1">
+<h1>Information</h1>
+<p>The purpose of this screen was to develop an image-based
+classification to characterize dead or alive organoids in addition to
+standard CTG analyses<br> We address organoid heterogeneity by creating
+an image-based signature for independent quantification of spheroids
+killed by cancer drugs. <br></p>
+<p>The readouts from the high-content image analysis include morphology,
+intensity, and texture features of the spheroids in BF and Hoechst
+live-cell images.</p>
+<div id="conditions" class="section level2">
+<h2>Conditions</h2>
+<ul>
+<li>Alive/ healthy control (Vehicle control Wells from patient
+ORG46BR1)<br />
+</li>
+<li>Dead organoids (high dose drug control Wells)<br />
+</li>
+<li>Unknown phenotypes (all other Wells)</li>
+</ul>
+<p><br></p>
+</div>
+<div id="instrument" class="section level2">
+<h2>Instrument</h2>
+<p>Cytation 10 (1 field @ 4X magnification)</p>
+</div>
+<div id="compound-classes" class="section level2">
+<h2>Compound Classes</h2>
+<p>The following classes (bins) were assigned to Wells averages in
+control Wells: <br></p>
+<ul>
+<li><strong>1. Controls with healthy/alive phenotype</strong><br />
+</li>
+<li><strong>2. Controls with dead phenotype</strong></li>
+<li><strong>3. Unknown Wells</strong> (all other Wells)</li>
+</ul>
+</div>
+<div id="required-r-packages" class="section level2">
+<h2>Required R packages</h2>
+<p>tidyverse, e1071, plotly, rminer, matrixStats</p>
+<pre class="r"><code># load the required packages
+library(e1071)
+library(tidyverse)
+library(platetools)
+library(gridExtra)
+library(ggpubr)
+library(DT)
+library(plotly)
+library(knitr)
+library(kableExtra)
+library(reshape2)
+library(caret)
+# library(factoextra)
+library(dendextend)
+library(data.table)
+# library(rminer)
+library(matrixStats)
+library(viridis)
+library(here)
+
+library(assertthat)
+library(corrplot)
+library(NbClust)
+library(pheatmap)
+library(RColorBrewer)
+library(Rtsne)
+library(writexl)
+library(patchwork)
+
+
+
+library(drc)
+library(tidyr)
+library(stringr)
+
+
+# check if here() correctly identified the directory
+here::here()</code></pre>
+<pre><code>[1] &quot;/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents&quot;</code></pre>
+<pre class="r"><code># additional functions
+source(here::here(&quot;code/heatmap_metadata.R&quot;))
+
+Mode &lt;- function(x, na.rm = FALSE) {
+    if (na.rm) {
+        x = x[!is.na(x)]
+    }
+
+    ux &lt;- unique(x)
+    return(ux[which.max(tabulate(match(x, ux)))])
+}
+
+
+# fix facetted ggplotly axis labels (widw = long axis labels, narrow = short
+# axis labels)
+layout_ggplotly_wide &lt;- function(gg, x = -0.06, y = -0.05) {
+    # The 1 and 2 goes into the list that contains the options for the x and y
+    # axis labels respectively
+    gg[[&quot;x&quot;]][[&quot;layout&quot;]][[&quot;annotations&quot;]][[1]][[&quot;y&quot;]] &lt;- x
+    gg[[&quot;x&quot;]][[&quot;layout&quot;]][[&quot;annotations&quot;]][[2]][[&quot;x&quot;]] &lt;- y
+    gg
+}
+
+layout_ggplotly_narrow &lt;- function(gg, x = -0.02, y = -0.055) {
+    # The 1 and 2 goes into the list that contains the options for the x and y
+    # axis labels respectively
+    gg[[&quot;x&quot;]][[&quot;layout&quot;]][[&quot;annotations&quot;]][[1]][[&quot;y&quot;]] &lt;- x
+    gg[[&quot;x&quot;]][[&quot;layout&quot;]][[&quot;annotations&quot;]][[2]][[&quot;x&quot;]] &lt;- y
+    gg
+}
+
+# set the file prefix
+
+prefix &lt;- &quot;OC_ORG46BR1&quot;
+patient &lt;- &quot;ORG46BR1&quot;</code></pre>
+<p><br></p>
+<hr />
+</div>
+</div>
+<div id="qc-considerations" class="section level1">
+<h1>QC considerations</h1>
+<p>We used the Vehicle and Media wells as controls. <br></p>
+<hr />
+</div>
+<div id="data-processing" class="section level1">
+<h1>Data processing</h1>
+<div id="data-annotation-and-import" class="section level2">
+<h2>Data annotation and import</h2>
+<p>Raw single organoid data was imported from CellProfiler outputs and
+CTG with annotations was imported from previous R outputs. The following
+Wells were excluded from Media and DMSO controls: H13-23, O13-23,
+N13-15, G13-15, I13-15, D14, K14, F3, M3. <br></p>
+<p><em>in addition to Staurosporine and high-dose Mitomycin, we added
+high-dose Doxorubicin and high-dose Topotecan to the positive
+controls.</em></p>
+<pre class="r"><code># per-image data
+all_data_raw &lt;- list.files(gsub(&quot; &quot;, &quot;&quot;, paste(here::here(&quot;data/raw_data/staining/SingleOrganoid/&quot;))),
+    pattern = &quot;*ORG46BR1.csv&quot;, full.names = T) %&gt;%
+    map_df(~fread(.)) %&gt;%
+    mutate(VCFG_Plate_ID = 1) %&gt;%
+    dplyr::select(VCFG_Plate_ID, Plate_ID = Metadata_Plate...7, Well_ID = Metadata_Well...11,
+        ImageNumber, ObjectNumber, contains(c(&quot;AreaShape&quot;, &quot;Intensity&quot;, &quot;Texture&quot;,
+            &quot;Neighbors&quot;, &quot;Spheroids&quot;, &quot;RadialDistribution&quot;)))
+
+
+annotationsCTG &lt;- read_csv(here::here(&quot;data/OC_ORG46BR1_CTG.csv&quot;)) %&gt;%
+    dplyr::select(-WELL_ID)</code></pre>
+<p>Normalise CTG to media and DMSO controls.</p>
+<pre class="r"><code>annotationsCTG &lt;- read_csv(here::here(&quot;data/OC_ORG46BR1_CTG.csv&quot;))
+
+# calculate normalised values
+norm_CTG &lt;- annotationsCTG %&gt;%
+    filter(Compound_ID %in% c(&quot;Media&quot;, &quot;DMSO&quot;)) %&gt;%
+    ### list excluded wells below.
+filter(!Well_ID %in% c(&quot;H13&quot;, &quot;H14&quot;, &quot;H15&quot;, &quot;H16&quot;, &quot;H17&quot;, &quot;H18&quot;, &quot;H19&quot;, &quot;H20&quot;, &quot;H21&quot;,
+    &quot;H22&quot;, &quot;H23&quot;, &quot;O13&quot;, &quot;O14&quot;, &quot;O15&quot;, &quot;O16&quot;, &quot;O17&quot;, &quot;O18&quot;, &quot;O19&quot;, &quot;O20&quot;, &quot;O21&quot;,
+    &quot;O22&quot;, &quot;O23&quot;, &quot;N13&quot;, &quot;N14&quot;, &quot;N15&quot;, &quot;G13&quot;, &quot;G14&quot;, &quot;G15&quot;, &quot;I13&quot;, &quot;I14&quot;, &quot;I15&quot;,
+    &quot;D14&quot;, &quot;K14&quot;, &quot;F3&quot;, &quot;M3&quot;)) %&gt;%
+    group_by(Patient) %&gt;%
+    dplyr::summarise(neg_median = median(CTG)) %&gt;%
+    inner_join(annotationsCTG, ., by = c(&quot;Patient&quot;)) %&gt;%
+    mutate(CTG = CTG/neg_median) %&gt;%
+    dplyr::select(-neg_median) %&gt;%
+    ### list exxluded wells below.
+filter(!Well_ID %in% c(&quot;H13&quot;, &quot;H14&quot;, &quot;H15&quot;, &quot;H16&quot;, &quot;H17&quot;, &quot;H18&quot;, &quot;H19&quot;, &quot;H20&quot;, &quot;H21&quot;,
+    &quot;H22&quot;, &quot;H23&quot;, &quot;O13&quot;, &quot;O14&quot;, &quot;O15&quot;, &quot;O16&quot;, &quot;O17&quot;, &quot;O18&quot;, &quot;O19&quot;, &quot;O20&quot;, &quot;O21&quot;,
+    &quot;O22&quot;, &quot;O23&quot;, &quot;N13&quot;, &quot;N14&quot;, &quot;N15&quot;, &quot;G13&quot;, &quot;G14&quot;, &quot;G15&quot;, &quot;I13&quot;, &quot;I14&quot;, &quot;I15&quot;,
+    &quot;D14&quot;, &quot;K14&quot;, &quot;F3&quot;, &quot;M3&quot;))</code></pre>
+<p>Bins were added to positive, negative, and library wells.</p>
+<pre class="r"><code>all_data_with_bins &lt;- all_data_raw %&gt;%
+    filter(!Well_ID %in% c(&quot;H13&quot;, &quot;H14&quot;, &quot;H15&quot;, &quot;H16&quot;, &quot;H17&quot;, &quot;H18&quot;, &quot;H19&quot;, &quot;H20&quot;,
+        &quot;H21&quot;, &quot;H22&quot;, &quot;H23&quot;, &quot;O13&quot;, &quot;O14&quot;, &quot;O15&quot;, &quot;O16&quot;, &quot;O17&quot;, &quot;O18&quot;, &quot;O19&quot;, &quot;O20&quot;,
+        &quot;O21&quot;, &quot;O22&quot;, &quot;O23&quot;, &quot;N13&quot;, &quot;N14&quot;, &quot;N15&quot;, &quot;G13&quot;, &quot;G14&quot;, &quot;G15&quot;, &quot;I13&quot;, &quot;I14&quot;,
+        &quot;I15&quot;, &quot;D14&quot;, &quot;K14&quot;, &quot;F3&quot;, &quot;M3&quot;)) %&gt;%
+    left_join(., norm_CTG, by = c(&quot;Well_ID&quot;)) %&gt;%
+    na.omit()
+
+# Now join this back to the original data and create the Bin column
+all_data_with_bins &lt;- all_data_with_bins %&gt;%
+    mutate(Bin = case_when(Description %in% c(&quot;negative_control&quot;) ~ &quot;negative_control&quot;,
+        Description %in% c(&quot;positive_control&quot;) ~ &quot;positive_control&quot;, TRUE ~ &quot;Sample&quot;)) %&gt;%
+    dplyr::select(Bin, Plate_ID, Replicate, ObjectNumber, WELL_ID, Concentration,
+        Units, Description, Compound_ID, Patient, CTG, contains(c(&quot;AreaShape&quot;, &quot;Intensity&quot;,
+            &quot;Texture&quot;, &quot;Location&quot;, &quot;Neighbors&quot;, &quot;Spheroids&quot;, &quot;RadialDistribution&quot;)))
+# filter(AreaShape_Area &gt;= 2000)
+
+write.csv(all_data_with_bins, here::here(paste0(&quot;output/&quot;, patient, &quot;/all_data_with_bins.csv&quot;)))</code></pre>
+</div>
+<div id="data-overview" class="section level2">
+<h2>Data overview</h2>
+<p>Compare raw data of all dead and alive control Wells it the current
+Patient.</p>
+<pre class="r"><code>### Compare spheroid size between positive and negative controls
+plot &lt;- all_data_with_bins %&gt;%
+    filter(!AreaShape_Area &lt; 1000) %&gt;%
+    filter(Bin %in% c(&quot;negative_control&quot;, &quot;positive_control&quot;)) %&gt;%
+    ggplot(., aes(y = AreaShape_Area, x = as.factor(Bin), group = Patient)) + geom_point(aes(colour = as.factor(Bin)),
+    alpha = 0.5, position = position_jitter(width = 0.2, height = 0.2)) + theme(axis.text.x = element_text()) +
+    labs(title = &quot;Spheroid Area&quot;, y = &quot;raw area per single organoid (px2)&quot;, x = &quot;Patient&quot;) +
+    theme(legend.position = &quot;none&quot;, axis.text.x = element_text(angle = 45, colour = &quot;black&quot;,
+        hjust = 1), axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0,
+        l = 10)), axis.title.x = element_blank(), plot.title = element_text(margin = margin(t = 10,
+        r = 0, b = 5, l = 0), size = 14), plot.subtitle = element_text(margin = margin(t = 0,
+        r = 0, b = 10, l = 0), size = 6), strip.text.x = element_text(size = 8))
+
+
+### Compare spatial intensity distribution between positive and negative
+### cointrols
+plot2 &lt;- all_data_with_bins %&gt;%
+    filter(!AreaShape_Area &lt; 1000) %&gt;%
+    filter(Bin %in% c(&quot;negative_control&quot;, &quot;positive_control&quot;)) %&gt;%
+    ggplot(., aes(y = RadialDistribution_MeanFrac_CropBF_4of4, x = as.factor(Bin),
+        group = Patient)) + geom_point(aes(colour = as.factor(Bin)), alpha = 0.5,
+    position = position_jitter(width = 0.2, height = 0.2)) + theme(axis.text.x = element_text()) +
+    labs(title = &quot;BF Radial Distribution&quot;, y = &quot;raw BF Radial Distrib single organoid&quot;,
+        x = &quot;Patient&quot;) + theme(legend.position = &quot;none&quot;, axis.text.x = element_text(angle = 45,
+    colour = &quot;black&quot;, hjust = 1), axis.title.y = element_text(margin = margin(t = 0,
+    r = 10, b = 0, l = 10)), axis.title.x = element_blank(), plot.title = element_text(margin = margin(t = 10,
+    r = 0, b = 5, l = 0), size = 14), plot.subtitle = element_text(margin = margin(t = 0,
+    r = 0, b = 10, l = 0), size = 6), strip.text.x = element_text(size = 8))
+
+
+### Compare viability (log2(CTG) )across positive and negative controls
+plot3 &lt;- all_data_with_bins %&gt;%
+    filter(!AreaShape_Area &lt; 1000) %&gt;%
+    filter(Bin %in% c(&quot;negative_control&quot;, &quot;positive_control&quot;)) %&gt;%
+    ggplot(., aes(y = log2(CTG), x = as.factor(Bin), group = Patient)) + geom_point(aes(colour = as.factor(Bin)),
+    alpha = 0.5, position = position_jitter(width = 0.2, height = 0.2)) + theme(axis.text.x = element_text()) +
+    labs(title = &quot;CTG raw&quot;, y = &quot;raw CTG (log2) per WELL_ID&quot;, x = &quot;Patient&quot;) + theme(legend.position = &quot;none&quot;,
+    axis.text.x = element_text(angle = 45, colour = &quot;black&quot;, hjust = 1), axis.title.y = element_text(margin = margin(t = 0,
+        r = 10, b = 0, l = 10)), axis.title.x = element_blank(), plot.title = element_text(margin = margin(t = 10,
+        r = 0, b = 5, l = 0), size = 14), plot.subtitle = element_text(margin = margin(t = 0,
+        r = 0, b = 10, l = 0), size = 6), strip.text.x = element_text(size = 8))
+
+
+plot</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-5-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot2</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-5-2.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot3</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-5-3.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### interactive plot plotly::ggplotly(plot, tooltip = c(&#39;Cell_Line&#39;,
+### &#39;Count_Spheroids&#39;))
+
+### remove plot variables from environment to clear up space
+rm(plot, plot2, plot3)</code></pre>
+<p>Next, we generate an overlayed histogram of spheroid area distribtion
+to compare positive and negative controls and mark the respective median
+values. As expected, median spheroid area of negative controls (cells
+that are “likely alive” in Media/DMSO) is larger than positive controls
+(cells that are “likely dead” in Straurosporine/ Doxorubicin/ Mitomycin
+C/ Topotecan).</p>
+<pre class="r"><code># Filter and process data
+data_with_medians &lt;- all_data_with_bins %&gt;%
+    filter(Bin %in% c(&quot;negative_control&quot;, &quot;positive_control&quot;)) %&gt;%
+    group_by(Bin) %&gt;%
+    summarize(Median = median(AreaShape_Area, na.rm = TRUE)) %&gt;%
+    ungroup()
+
+# Histogram with density overlay
+histogram_plot &lt;- all_data_with_bins %&gt;%
+    filter(Bin %in% c(&quot;negative_control&quot;, &quot;positive_control&quot;)) %&gt;%
+    ggplot(aes(x = AreaShape_Area, fill = Bin, color = Bin)) + geom_histogram(aes(y = ..density..),
+    bins = 100, alpha = 0.4, position = &quot;identity&quot;) + geom_density(alpha = 0.6) +
+    xlim(0, 6000) + geom_vline(data = data_with_medians, aes(xintercept = Median,
+    color = Bin), linetype = &quot;dashed&quot;, size = 0.8) + labs(title = &quot;Spheroid Area Distribution by Bin - all sizes&quot;,
+    x = &quot;Spheroid Area (px²)&quot;, y = &quot;Density&quot;) + theme_minimal() + theme(legend.position = &quot;top&quot;,
+    axis.text.x = element_text(angle = 0, hjust = 0.5), plot.title = element_text(size = 14,
+        face = &quot;bold&quot;))
+
+# Display the histogram
+print(histogram_plot)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Display the median values
+print(data_with_medians)</code></pre>
+<pre><code># A tibble: 2 × 2
+  Bin              Median
+  &lt;chr&gt;             &lt;int&gt;
+1 negative_control    840
+2 positive_control    630</code></pre>
+<p><strong>Filter out tiny organoids (&lt;1000 in Area) because they are
+in all wells and bias the single organoid classification of the negative
+controls.</strong></p>
+<pre class="r"><code># Filter and process data
+data_with_medians &lt;- all_data_with_bins %&gt;%
+    filter(Bin %in% c(&quot;negative_control&quot;, &quot;positive_control&quot;)) %&gt;%
+    filter(!AreaShape_Area &lt; 1000) %&gt;%
+    group_by(Bin) %&gt;%
+    summarize(Median = median(AreaShape_Area, na.rm = TRUE)) %&gt;%
+    ungroup()
+
+# Histogram with density overlay
+histogram_plot &lt;- all_data_with_bins %&gt;%
+    filter(!AreaShape_Area &lt; 1000) %&gt;%
+    filter(Bin %in% c(&quot;negative_control&quot;, &quot;positive_control&quot;)) %&gt;%
+    ggplot(aes(x = AreaShape_Area, fill = Bin, color = Bin)) + geom_histogram(aes(y = ..density..),
+    bins = 100, alpha = 0.4, position = &quot;identity&quot;) + geom_density(alpha = 0.6) +
+    xlim(0, 6000) + geom_vline(data = data_with_medians, aes(xintercept = Median,
+    color = Bin), linetype = &quot;dashed&quot;, size = 0.8) + labs(title = &quot;Spheroid Area Distribution by Bin (small ones exluded)&quot;,
+    x = &quot;Spheroid Area (px²)&quot;, y = &quot;Density&quot;) + theme_minimal() + theme(legend.position = &quot;top&quot;,
+    axis.text.x = element_text(angle = 0, hjust = 0.5), plot.title = element_text(size = 14,
+        face = &quot;bold&quot;))
+
+# Display the histogram
+print(histogram_plot)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Display the median values
+print(data_with_medians)</code></pre>
+<pre><code># A tibble: 2 × 2
+  Bin              Median
+  &lt;chr&gt;             &lt;int&gt;
+1 negative_control   1442
+2 positive_control   1280</code></pre>
+</div>
+<div id="feature-cleanup" class="section level2">
+<h2>Feature cleanup</h2>
+<div id="remove-na-nans-inf-and-others" class="section level3">
+<h3>Remove NA, NaNs, Inf and others</h3>
+<pre class="r"><code># First, create a function that checks if a column contains NA, NaN, or Inf
+# values
+check_column &lt;- function(column) {
+    any(is.na(column)) || any(is.nan(column)) || any(is.infinite(column))
+}
+
+# Next, create a list of the column names in the data frame
+column_names &lt;- names(all_data_with_bins)
+
+# Loop through the column names and check if the corresponding column should be
+# removed
+to_remove &lt;- c()
+for (column_name in column_names[13:length(column_names)]) {
+    column &lt;- all_data_with_bins[[column_name]]
+    if (check_column(column) || is.character(column) || all(column %in% c(0, -1)) ||
+        any(grepl(&quot;Execution|Align|Height|Group_|ImageNumber|EulerNumber|_Center_|Scaling|Threshold|Width|Channel|Location&quot;,
+            column_name))) {
+        to_remove &lt;- c(to_remove, column_name)
+    }
+}
+
+# Remove the columns that should be removed
+all_data_clean &lt;- all_data_with_bins %&gt;%
+    dplyr::select(-to_remove) %&gt;%
+    filter(!AreaShape_Area &lt; 1000)
+
+clean_features &lt;- names(all_data_clean[, -c(1:13)])
+write.csv(all_data_clean, here::here(paste0(&quot;output/&quot;, patient, &quot;/all_data_clean.csv&quot;)))
+
+write.csv(all_data_clean, here::here(paste0(&quot;output/&quot;, patient, &quot;/Feature_reduced_raw_data.csv&quot;)))</code></pre>
+<p>Of the total feature count of 214 there were 15 removed during
+feature clean-up</p>
+</div>
+<div id="remove-highly-correlated-features" class="section level3">
+<h3>Remove highly correlated features</h3>
+<p>All features with a Pearson’s correlation &gt; 0.9 were removed.</p>
+<pre class="r"><code># Remove highly correlated features
+raw2 &lt;- all_data_clean
+x &lt;- raw2[, 13:ncol(raw2)]
+x2 &lt;- data.frame(lapply(x, as.numeric))
+x3 &lt;- x2[!sapply(x2, function(x) any(is.na(x)))]
+y &lt;- raw2[, 1:12]
+all_features &lt;- colnames(x3)
+
+# make correlation_threshold function
+correlation_threshold &lt;- function(variables, sample, cutoff = 0.9, method = &quot;pearson&quot;) {
+    excluded_indexes &lt;- sample %&gt;%
+        dplyr::select(.dots = variables) %&gt;%
+        cor(method = method) %&gt;%
+        caret::findCorrelation(cutoff = cutoff)
+
+    variables[excluded_indexes]
+}
+
+CorData &lt;- correlation_threshold(all_features, x3)
+Cleaned &lt;- x3[!(names(x3) %in% CorData)]
+CleanedAn &lt;- bind_cols(y, Cleaned)
+cleaned_features &lt;- colnames(Cleaned)
+
+
+data_all_short &lt;- CleanedAn
+
+# remove all Samples (bin 3) and only keep the controls for classification
+control_short &lt;- data_all_short %&gt;%
+    filter(!Bin == &quot;Sample&quot;)
+
+write.csv(data_all_short, here::here(paste0(&quot;output/&quot;, patient, &quot;/data_all_short.csv&quot;)))
+write.csv(CorData, here::here(paste0(&quot;output/&quot;, patient, &quot;/CorData_removed.csv&quot;)))</code></pre>
+<p>There were 69 feature left after feature exclusion. <br></p>
+<pre class="r"><code>### prepare the data frame back to long long format data = better for
+### visualisation purposes
+
+raw2 &lt;- CleanedAn %&gt;%
+    data.frame()
+
+id &lt;- colnames(raw2[c(1:10)])
+
+features &lt;- colnames(raw2[, 11:ncol(raw2)])
+
+CleanedAn_melt &lt;- raw2 %&gt;%
+    reshape2::melt(id.vars = id, measure.vars = features)</code></pre>
+</div>
+<div id="download-feature-reduced-raw-data-set" class="section level3">
+<h3>Download feature reduced, raw data set</h3>
+<p>Download the raw data set used for Training and Testing of the SVM
+model from PRIME (“Feature_reduced_raw_data.csv”).</p>
+<p><br></p>
+</div>
+</div>
+<div id="feature-correlation" class="section level2">
+<h2>Feature correlation</h2>
+<p>A correlation matrix was generated to investigate the relationship
+between each pair of features after feature reduction. A useful
+application of this plot may be to see which features are correlated
+with changes in cell area. <br> <br></p>
+<pre class="r"><code># use only numerical data for correlation matrix
+melt_cor1 &lt;- data_all_short %&gt;%
+    dplyr::select(-c(1:11))
+
+# generate correlation matrix
+dat.cor = cor(melt_cor1, method = c(&quot;pearson&quot;))
+
+# str(melt_cor1)
+
+# plot
+corrplot(dat.cor, tl.col = &quot;black&quot;, order = &quot;hclust&quot;, hclust.method = &quot;complete&quot;,
+    tl.cex = 0.45)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-11-1.png" width="6000" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># save the plot as a PDF pdf(gsub(&#39; &#39;, &#39;&#39;, paste(&#39;output/SVM_plots/&#39;, &#39;PN_SVM&#39;,
+# &#39;_Feature_Correlation&#39;, &#39;.pdf&#39;)), width = 7, height = 7) corrplot(dat.cor,
+# tl.col = &#39;black&#39;, order = &#39;hclust&#39;, hclust.method = &#39;complete&#39;, tl.cex = 0.5)
+# dev.off()</code></pre>
+</div>
+</div>
+<div id="train-the-svm-model" class="section level1">
+<h1>Train the SVM model</h1>
+<div id="split-data-into-training-and-test-data-set"
+class="section level2">
+<h2>Split data into training and test data set</h2>
+<p>80% of the controls are used for training, the remaining 20% of data
+points will be used to test the SVM algorithm. <br> Now we make a data
+frame of the data, turning Bin (category 1 or 2) into a factor
+variable.</p>
+<pre class="r"><code>### convert back to dataframa
+dat2 &lt;- control_short %&gt;%
+    as.data.frame() %&gt;%
+    dplyr::select(-c(2:11))
+
+### convert bin to a factor - needed for categorical classification models
+dat2[, 1] &lt;- as.factor(dat2[, 1])
+
+### Number of observations
+n &lt;- nrow(dat2)
+
+### number of observations needed to constitute 80% of observations for
+### training set
+ntrain &lt;- round(n * 0.8)
+
+### Set seed for reproducible results
+set.seed(461)
+
+### Take random sample of indexes of size ntrain from n
+tindex &lt;- sample(n, ntrain)
+
+### Create training set using indexes from full dataset
+train_dat2 &lt;- dat2[tindex, ]
+
+### Create test set of remaining 20% of idexes not used in training set
+test_dat2 &lt;- dat2[-tindex, ]</code></pre>
+<p><br></p>
+</div>
+<div id="centering-and-scaling" class="section level2">
+<h2>Centering and Scaling</h2>
+<p>Below, 80% of the data are used to estimate the location and scale of
+the predictors. The function <em>preProcess</em> doesn’t actually
+pre-process the data. <br> <em>predict.preProcess</em> is used to
+pre-process this and other data sets (e.g. test set and validation
+set).</p>
+<pre class="r"><code>preProcValues &lt;- preProcess(train_dat2, method = c(&quot;center&quot;, &quot;scale&quot;))
+
+trainTransformed &lt;- predict(preProcValues, train_dat2)
+testTransformed &lt;- predict(preProcValues, test_dat2)</code></pre>
+</div>
+<div id="training-without-tuning" class="section level2">
+<h2>Training without tuning</h2>
+<p>After that, we make a call to svm on this data frame, using Bin as
+the response variable and other variables as the predictors. The data
+frame will have unpacked the matrix x into 2 columns named
+negative_control and positive_control.</p>
+<pre class="r"><code>### Training SVM to classify based on &quot;Bin&quot; factor variable (positive control VS negative control), based on all OTHER features 
+
+svmfit2 = svm(Bin ~ ., 
+              data = trainTransformed, 
+              kernel=&quot;radial&quot;, # kernel = radial for nonlinear relationships
+              probability=TRUE) # model will generate probability estimates based on probability = TRUE
+
+summary(svmfit2)</code></pre>
+<pre><code>
+Call:
+svm(formula = Bin ~ ., data = trainTransformed, kernel = &quot;radial&quot;, 
+    probability = TRUE)
+
+
+Parameters:
+   SVM-Type:  C-classification 
+ SVM-Kernel:  radial 
+       cost:  1 
+
+Number of Support Vectors:  319
+
+ ( 157 162 )
+
+
+Number of Classes:  2 
+
+Levels: 
+ negative_control positive_control</code></pre>
+<pre class="r"><code>### Number of columns in the data frame, excluding the response variable
+num_features &lt;- ncol(trainTransformed) - 1 
+
+### Calculate default gamma
+### smaller gamma = broader influence, larger gamma = tighter influence
+default_gamma &lt;- 1 / num_features 
+
+default_gamma</code></pre>
+<pre><code>[1] 0.01428571</code></pre>
+<p>We tell SVM that the kernel is <strong>radial</strong>, the tune-in
+parameter cost is 1 and the gamma is 0.0142857.</p>
+</div>
+<div id="prediction-and-confusion-matrix"
+class="section level2 tabset tabset-fade tabset-pills">
+<h2 class="tabset tabset-fade tabset-pills">Prediction and Confusion
+Matrix</h2>
+<div id="true-labels" class="section level3">
+<h3>True labels</h3>
+<p>Here is the result of the prediction of the training set, comparing
+the result of SVM “Prediction” and the class data provided by us in Bin
+variable as “Reference”.</p>
+<pre class="r"><code>### Test predictions on training set data
+pred &lt;- predict(svmfit2, trainTransformed, probability = TRUE)
+system.time(pred &lt;- predict(svmfit2, trainTransformed))</code></pre>
+<pre><code>   user  system elapsed 
+  0.011   0.000   0.011 </code></pre>
+<pre class="r"><code>### Evaluate performance
+cf &lt;- confusionMatrix(pred, trainTransformed$Bin)
+cf</code></pre>
+<pre><code>Confusion Matrix and Statistics
+
+                  Reference
+Prediction         negative_control positive_control
+  negative_control              244               24
+  positive_control               33              171
+                                          
+               Accuracy : 0.8792          
+                 95% CI : (0.8464, 0.9072)
+    No Information Rate : 0.5869          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.7526          
+                                          
+ Mcnemar&#39;s Test P-Value : 0.2893          
+                                          
+            Sensitivity : 0.8809          
+            Specificity : 0.8769          
+         Pos Pred Value : 0.9104          
+         Neg Pred Value : 0.8382          
+             Prevalence : 0.5869          
+         Detection Rate : 0.5169          
+   Detection Prevalence : 0.5678          
+      Balanced Accuracy : 0.8789          
+                                          
+       &#39;Positive&#39; Class : negative_control
+                                          </code></pre>
+<pre class="r"><code>fourfoldplot(as.table(cf), color = c(&quot;yellow&quot;, &quot;pink&quot;), main = &quot;Confusion Matrix&quot;)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="scrambled-category-labels" class="section level3">
+<h3>Scrambled category labels</h3>
+<pre class="r"><code>### Randomly scramble bin (control) labels of training data set
+trainTransformed_scr &lt;- transform(trainTransformed, Bin = sample(Bin))</code></pre>
+<p>By randomising/scrambling the category labels, we create a data set
+that should not be predicted correctly and indeed, the prediction
+accuracy for the scrambled data drops down to 52%.</p>
+<pre class="r"><code>pred_scr &lt;- predict(svmfit2, trainTransformed_scr, probability = TRUE)
+
+cf &lt;- confusionMatrix(pred_scr, trainTransformed_scr$Bin)
+cf</code></pre>
+<pre><code>Confusion Matrix and Statistics
+
+                  Reference
+Prediction         negative_control positive_control
+  negative_control              161              110
+  positive_control              116               85
+                                          
+               Accuracy : 0.5212          
+                 95% CI : (0.475, 0.5671) 
+    No Information Rate : 0.5869          
+    P-Value [Acc &gt; NIR] : 0.9983          
+                                          
+                  Kappa : 0.017           
+                                          
+ Mcnemar&#39;s Test P-Value : 0.7394          
+                                          
+            Sensitivity : 0.5812          
+            Specificity : 0.4359          
+         Pos Pred Value : 0.5941          
+         Neg Pred Value : 0.4229          
+             Prevalence : 0.5869          
+         Detection Rate : 0.3411          
+   Detection Prevalence : 0.5742          
+      Balanced Accuracy : 0.5086          
+                                          
+       &#39;Positive&#39; Class : negative_control
+                                          </code></pre>
+<pre class="r"><code>fourfoldplot(as.table(cf), color = c(&quot;yellow&quot;, &quot;pink&quot;), main = &quot;Confusion Matrix&quot;)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="tuning-svm" class="section level1">
+<h1>Tuning SVM</h1>
+<p>The kernel argument has a variety of possible types including linear,
+polynomial, radial, and sigmoid. We use kernel=”radial” for this
+classification problem. You can tune the operation of svm() with two
+additional arguments: gamma and cost, where gamma is the argument for
+use by the kernel function, and cost allows us to specify the cost of a
+violation to the margin. When cost is small, the margins will be wide,
+resulting in many support vectors. You can experiment with different
+values of gamma and cost to find the best classification accuracy.</p>
+<p><strong>Here, changing cost from 1 to 8 and changing gamma from 0.01
+to 0.05 improved the model performance from 87% to 98%
+accuracy.</strong></p>
+<pre class="r"><code># Define new values for gamma and cost
+new_gamma &lt;- 0.05
+new_cost &lt;- 8
+
+# Create the SVM model with the new gamma and cost values
+svm_model_after_tune = svm(Bin ~ ., data = trainTransformed, kernel = &quot;radial&quot;, gamma = default_gamma,
+    cost = new_cost, probability = TRUE)
+
+summary(svm_model_after_tune)</code></pre>
+<pre><code>
+Call:
+svm(formula = Bin ~ ., data = trainTransformed, kernel = &quot;radial&quot;, 
+    gamma = default_gamma, cost = new_cost, probability = TRUE)
+
+
+Parameters:
+   SVM-Type:  C-classification 
+ SVM-Kernel:  radial 
+       cost:  8 
+
+Number of Support Vectors:  303
+
+ ( 147 156 )
+
+
+Number of Classes:  2 
+
+Levels: 
+ negative_control positive_control</code></pre>
+<pre class="r"><code>save(svm_model_after_tune, file = here::here(paste0(&quot;output/&quot;, patient, &quot;/svm_model_after_tune.RData&quot;)))</code></pre>
+<pre class="r"><code>load(here::here(paste0(&quot;output/&quot;, patient, &quot;/svm_model_after_tune.RData&quot;)))</code></pre>
+<pre class="r"><code># svm_tune &lt;- tune(svm, Bin~., data = trainTransformed, kernel=&#39;radial&#39;,
+# ranges=list(cost=10^(-2:3), gamma=c(.00001, .001,.01,.1,.5,1)) )
+
+# save(svm_tune, file = here::here(&#39;output/svm_tune.RData&#39;))
+# load(here::here(&#39;output/svm_tune.RData&#39;))
+
+# print(svm_tune) print(svm_tune$performances) performances &lt;-
+# svm_tune$performances plot(performances)</code></pre>
+<div id="prediction-and-confusion-matrix-with-new-model"
+class="section level2">
+<h2>Prediction and Confusion Matrix with new model</h2>
+<pre class="r"><code>pred2 &lt;- predict(svm_model_after_tune, trainTransformed, probability = TRUE)
+
+cf &lt;- confusionMatrix(pred2, trainTransformed$Bin)
+cf</code></pre>
+<pre><code>Confusion Matrix and Statistics
+
+                  Reference
+Prediction         negative_control positive_control
+  negative_control              275                4
+  positive_control                2              191
+                                          
+               Accuracy : 0.9873          
+                 95% CI : (0.9725, 0.9953)
+    No Information Rate : 0.5869          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.9737          
+                                          
+ Mcnemar&#39;s Test P-Value : 0.6831          
+                                          
+            Sensitivity : 0.9928          
+            Specificity : 0.9795          
+         Pos Pred Value : 0.9857          
+         Neg Pred Value : 0.9896          
+             Prevalence : 0.5869          
+         Detection Rate : 0.5826          
+   Detection Prevalence : 0.5911          
+      Balanced Accuracy : 0.9861          
+                                          
+       &#39;Positive&#39; Class : negative_control
+                                          </code></pre>
+<pre class="r"><code>fourfoldplot(as.table(cf), color = c(&quot;yellow&quot;, &quot;pink&quot;), main = &quot;Confusion Matrix&quot;)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="plot-model-characteristics" class="section level1">
+<h1>Plot Model Characteristics</h1>
+<div id="decision-values"
+class="section level2 tabset tabset-fade tabset-pills">
+<h2 class="tabset tabset-fade tabset-pills">Decision Values</h2>
+<div id="true-labels-1" class="section level3">
+<h3>True labels</h3>
+<p>You can also learn something when you display the Decision Values
+(DV) calculated by SVM using the svmfit2$DV component of the fitted
+model, versus the assigned Category labels.</p>
+<pre class="r"><code>DV &lt;- svm_model_after_tune$decision.values
+
+prob &lt;- attr(pred2, &quot;probabilities&quot;)
+plot(trainTransformed$Bin, DV, ylab = &quot;DV&quot;, xlab = &quot;Category&quot;)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-22-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># plot(SV[,1], SV[,2])
+
+# plot(prob, pch = 19, ylab=&#39;probability of category 2&#39;, xlab=&#39;probability of
+# category 1&#39;)
+
+# bind probabilities and Bin labels together
+trainTransformed_x &lt;- trainTransformed %&gt;%
+    mutate(id = row_number())
+prob_x &lt;- prob %&gt;%
+    data.frame() %&gt;%
+    mutate(id = row_number())
+
+
+trainTransformed_prob &lt;- left_join(prob_x, trainTransformed_x, by = c(&quot;id&quot;)) %&gt;%
+    dplyr::mutate(prob_alive = negative_control, prob_dead = positive_control, true_labels = Bin) %&gt;%
+    dplyr::select(-c(negative_control, positive_control, id))
+
+plot2 &lt;- trainTransformed_prob %&gt;%
+    ggplot(., aes(y = prob_alive, x = true_labels, group = true_labels)) + geom_point(aes(colour = true_labels),
+    alpha = 0.5, position = position_jitter(width = 0.2, height = 0.2)) + theme(axis.text.x = element_text()) +
+    labs(title = &quot;True labels vs Probabilities&quot;, y = &quot;Probability of being categorised as cystic&quot;,
+        x = &quot;true labels&quot;) + geom_hline(aes(yintercept = 0.5), linetype = &quot;solid&quot;,
+    color = &quot;black&quot;) + theme(legend.title = element_text(), legend.text = element_blank(),
+    axis.text.x = element_text(angle = 25, colour = &quot;black&quot;), axis.title.y = element_text(margin = margin(t = 0,
+        r = 30, b = 0, l = 30)), axis.title.x = element_text(margin = margin(t = 10,
+        r = 0, b = 30, l = 0)), plot.title = element_text(margin = margin(t = 10,
+        r = 0, b = 5, l = 0), size = 14), plot.subtitle = element_text(margin = margin(t = 0,
+        r = 0, b = 10, l = 0), size = 6), strip.text.x = element_text(size = 8))
+
+
+plot2</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-22-2.png" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># plotly::ggplotly(plot2, tooltip = c(&#39;prob_alive&#39;, &#39;true_labels&#39;))
+
+
+# save the plot as a PDF pdf(gsub(&#39; &#39;, &#39;&#39;, paste(&#39;output/SVM_plots/&#39;, &#39;PN_SVM&#39;,
+# &#39;_DV_after_tuning&#39;, &#39;.pdf&#39;)), width = 3, height = 3)
+# plot(trainTransformed$Bin, DV, ylab=&#39;DV&#39;, xlab=&#39;Category&#39;) dev.off()</code></pre>
+</div>
+<div id="scrambled-labels" class="section level3">
+<h3>Scrambled labels</h3>
+<pre class="r"><code>DV &lt;- svm_model_after_tune$decision.values
+
+prob_scr &lt;- attr(pred_scr, &quot;probabilities&quot;)
+plot(trainTransformed_scr$Bin, DV, ylab = &quot;DV&quot;, xlab = &quot;Category&quot;)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-23-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># plot(SV[,1], SV[,2])
+
+# plot(prob_scr, pch = 19, ylab=&#39;probability of category 2&#39;, xlab=&#39;probability
+# of category 1&#39;)
+
+
+# bind probabilities and Bin labels together
+trainTransformed_scr_x &lt;- trainTransformed_scr %&gt;%
+    mutate(id = row_number())
+prob_scr_x &lt;- prob_scr %&gt;%
+    data.frame() %&gt;%
+    mutate(id = row_number())
+# names(pred_x)[1] &lt;- &#39;pred_tox&#39;
+
+trainTransformed_prob &lt;- left_join(prob_scr_x, trainTransformed_scr_x, by = c(&quot;id&quot;)) %&gt;%
+    dplyr::mutate(prob_alive = negative_control, prob_dead = positive_control, scrambled_labels = Bin) %&gt;%
+    dplyr::select(-c(negative_control, positive_control, id))
+
+plot2 &lt;- trainTransformed_prob %&gt;%
+    ggplot(., aes(y = prob_alive, x = scrambled_labels, group = scrambled_labels)) +
+    geom_point(aes(colour = scrambled_labels), alpha = 0.5, position = position_jitter(width = 0.2,
+        height = 0.2)) + theme(axis.text.x = element_text()) + labs(title = &quot;Scrambled labels vs Probabilities&quot;,
+    y = &quot;Probability of being categorised as cystic&quot;, x = &quot;scrambled labels&quot;) + geom_hline(aes(yintercept = 0.5),
+    linetype = &quot;solid&quot;, color = &quot;black&quot;) + theme(legend.title = element_text(), legend.text = element_blank(),
+    axis.text.x = element_text(angle = 25, colour = &quot;black&quot;), axis.title.y = element_text(margin = margin(t = 0,
+        r = 30, b = 0, l = 30)), axis.title.x = element_text(margin = margin(t = 10,
+        r = 0, b = 30, l = 0)), plot.title = element_text(margin = margin(t = 10,
+        r = 0, b = 5, l = 0), size = 14), plot.subtitle = element_text(margin = margin(t = 0,
+        r = 0, b = 10, l = 0), size = 6), strip.text.x = element_text(size = 8))
+
+
+
+
+plot2</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-23-2.png" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># plotly::ggplotly(plot2, tooltip = c(&#39;prob_alive&#39;, &#39;scrambled_labels&#39;))
+
+
+
+# save the plot as a PDF pdf(gsub(&#39; &#39;, &#39;&#39;, paste(&#39;output/SVM_plots/&#39;, &#39;PN_SVM&#39;,
+# &#39;_DV_after_label_randomisation&#39;, &#39;.pdf&#39;)), width = 3, height = 3)
+# plot(trainTransformed_scr$Bin, DV, ylab=&#39;DV&#39;, xlab=&#39;Category&#39;) dev.off()</code></pre>
+</div>
+</div>
+<div id="contributions-of-the-variables-to-the-model-performance"
+class="section level2">
+<h2>Contributions of the variables to the model performance</h2>
+<p>This list ranks the Importance values of each imaging feature
+regarding their contribution to the model performance.</p>
+<pre class="r"><code>w &lt;- t(svm_model_after_tune$coefs) %*% svm_model_after_tune$SV  # weight vectors
+w &lt;- apply(w, 2, function(v) {
+    sqrt(sum(v^2))
+})  # weight
+w &lt;- sort(w, decreasing = T) %&gt;%
+    data.frame()
+w &lt;- setDT(w, keep.rownames = TRUE)[]
+colnames(w) &lt;- c(&quot;Feature&quot;, &quot;Importance&quot;)
+
+datatable(w, extensions = c(&quot;Buttons&quot;, &quot;Scroller&quot;), rownames = FALSE, options = list(dom = &quot;Blrt&quot;,
+    lengthMenu = list(c(10, 30), c(&quot;10&quot;, &quot;30&quot;)), pageLength = 10, buttons = list(list(extend = &quot;csv&quot;,
+        filename = &quot;IMP_Names&quot;), list(extend = &quot;excel&quot;, filename = &quot;IMP_Names&quot;, title = &quot;IMP_Names&quot;)),
+    searching = FALSE, scrollX = TRUE))</code></pre>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-b1d00622938cabf939d9" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-b1d00622938cabf939d9">{"x":{"filter":"none","vertical":false,"extensions":["Buttons","Scroller"],"data":[["Neighbors_SecondClosestObjectNumber_Expanded","Texture_DifferenceVariance_CropDAPI_3_03_256","Texture_DifferenceVariance_CropBF_3_03_256","Texture_Correlation_CropDAPI_3_00_256","RadialDistribution_FracAtD_CropBF_1of4","Texture_InverseDifferenceMoment_CropBF_3_00_256","Texture_InverseDifferenceMoment_CropBF_3_01_256","AreaShape_BoundingBoxMaximum_Y","Intensity_IntegratedIntensity_CropDAPI","Texture_DifferenceEntropy_CropBF_3_02_256","RadialDistribution_RadialCV_CropBF_4of4","Texture_InverseDifferenceMoment_CropBF_3_02_256","Texture_InfoMeas2_CropDAPI_3_02_256","Intensity_MaxIntensity_CropBF","Texture_Entropy_CropDAPI_3_00_256","Texture_Correlation_CropBF_3_02_256","RadialDistribution_MeanFrac_CropDAPI_3of4","RadialDistribution_MeanFrac_CropDAPI_4of4","Texture_SumVariance_CropDAPI_3_01_256","Texture_Correlation_CropDAPI_3_02_256","AreaShape_Solidity","Intensity_MADIntensity_CropBF","Intensity_MinIntensity_CropBF","Intensity_IntegratedIntensityEdge_CropDAPI","RadialDistribution_RadialCV_CropDAPI_1of4","Neighbors_NumberOfNeighbors_Expanded","Texture_Correlation_CropBF_3_00_256","Neighbors_SecondClosestDistance_Expanded","Texture_Contrast_CropBF_3_00_256","Texture_InfoMeas1_CropBF_3_00_256","RadialDistribution_RadialCV_CropDAPI_4of4","Texture_InfoMeas1_CropDAPI_3_02_256","AreaShape_Eccentricity","Texture_AngularSecondMoment_CropDAPI_3_01_256","AreaShape_Extent","Intensity_MaxIntensity_CropDAPI","Neighbors_FirstClosestDistance_Expanded","Intensity_StdIntensityEdge_CropDAPI","Texture_Correlation_CropDAPI_3_01_256","RadialDistribution_RadialCV_CropDAPI_2of4","RadialDistribution_FracAtD_CropBF_3of4","RadialDistribution_RadialCV_CropBF_1of4","AreaShape_BoundingBoxMaximum_X","Intensity_MADIntensity_CropDAPI","Neighbors_AngleBetweenNeighbors_Expanded","RadialDistribution_MeanFrac_CropDAPI_2of4","Neighbors_PercentTouching_Expanded","RadialDistribution_RadialCV_CropBF_3of4","Texture_InverseDifferenceMoment_CropBF_3_03_256","Texture_Correlation_CropDAPI_3_03_256","Intensity_MassDisplacement_CropBF","RadialDistribution_RadialCV_CropDAPI_3of4","Intensity_MaxIntensityEdge_CropDAPI","Intensity_StdIntensityEdge_CropBF","Intensity_MassDisplacement_CropDAPI","RadialDistribution_MeanFrac_CropDAPI_1of4","AreaShape_MaximumRadius","Intensity_MinIntensityEdge_CropDAPI","Intensity_IntegratedIntensityEdge_CropBF","Texture_SumEntropy_CropBF_3_01_256","Texture_InfoMeas2_CropBF_3_00_256","Intensity_MaxIntensityEdge_CropBF","Texture_Entropy_CropBF_3_03_256","AreaShape_Orientation","RadialDistribution_RadialCV_CropBF_2of4","Texture_AngularSecondMoment_CropBF_3_03_256","AreaShape_Area","Intensity_MinIntensityEdge_CropBF","Texture_SumAverage_CropBF_3_02_256","Texture_Contrast_CropDAPI_3_02_256"],[52.79142629769476,47.85276347610828,32.51459282604396,30.5611295900784,30.25283790401958,30.05052653466002,28.2725985125835,28.25228547029763,28.17421130328812,28.12226049848332,28.05246739608635,27.57740747525598,26.49569293958356,26.01850921414681,24.90864167077202,23.70386898711564,22.26224191491649,21.84875415235568,21.62819583257343,20.8124261069296,20.80342972684278,19.46545717681691,19.20805533178498,18.40727042799187,16.63901007615132,16.12148821909551,15.73457600270107,15.45949094714748,15.04979650951624,14.85324722111962,14.70320123648804,14.69964456527654,14.49516243683347,14.13017642341361,13.09382336542866,13.02368129120358,12.70048654719324,12.63988790018028,12.42832670572922,12.30405026420254,11.98688523509284,11.19878781303076,10.69212118338901,10.44838807322467,10.42631943946934,10.06242418935417,9.587053563938387,8.984733062989093,8.362540425273199,7.888295091179858,7.878802569126638,7.504743969921918,6.640587975217561,6.206276049821602,5.885877339254897,5.443217203934439,5.416908070083573,5.348758277660946,5.228990925486699,5.135318629501494,4.733649969262844,3.940921079500036,3.31565277159115,2.684054009455005,1.795730276472651,1.335335676027028,0.7021463789722135,0.2509768521836477,0.1569604550275104,0.03577601681032902]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Feature<\/th>\n      <th>Importance<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blrt","lengthMenu":[[10,30],["10","30"]],"pageLength":10,"buttons":[{"extend":"csv","filename":"IMP_Names"},{"extend":"excel","filename":"IMP_Names","title":"IMP_Names"}],"searching":false,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":1},{"name":"Feature","targets":0},{"name":"Importance","targets":1}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="testing" class="section level1">
+<h1>Testing</h1>
+<p>Now we can use the predict() function with the trained SVM model to
+make predictions using the test set. The result is delivered as a factor
+variable containing the predicted classes for each observation in the
+test set. Next, we can use the confusionMatrix() function to create a
+“confusion matrix” for checking the accuracy of the model. <br></p>
+<div id="testing-with-correct-labels" class="section level2">
+<h2>Testing with correct labels</h2>
+<p>Testing the SVM model on the last 20% of data gives a 82% accuracy in
+prediction.</p>
+<pre class="r"><code>prediction &lt;- predict(svm_model_after_tune, testTransformed, probability = TRUE)
+
+cf &lt;- confusionMatrix(prediction, testTransformed$Bin)
+cf</code></pre>
+<pre><code>Confusion Matrix and Statistics
+
+                  Reference
+Prediction         negative_control positive_control
+  negative_control               54                9
+  positive_control               12               43
+                                          
+               Accuracy : 0.822           
+                 95% CI : (0.7409, 0.8863)
+    No Information Rate : 0.5593          
+    P-Value [Acc &gt; NIR] : 1.457e-09       
+                                          
+                  Kappa : 0.6412          
+                                          
+ Mcnemar&#39;s Test P-Value : 0.6625          
+                                          
+            Sensitivity : 0.8182          
+            Specificity : 0.8269          
+         Pos Pred Value : 0.8571          
+         Neg Pred Value : 0.7818          
+             Prevalence : 0.5593          
+         Detection Rate : 0.4576          
+   Detection Prevalence : 0.5339          
+      Balanced Accuracy : 0.8226          
+                                          
+       &#39;Positive&#39; Class : negative_control
+                                          </code></pre>
+<pre class="r"><code>fourfoldplot(as.table(cf), color = c(&quot;yellow&quot;, &quot;pink&quot;), main = &quot;Confusion Matrix&quot;)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="testing-with-scrambled-labels" class="section level2">
+<h2>Testing with scrambled labels</h2>
+<p>Testing the SVM model on the last 20% of data after scrambling the
+category labels gives a random 52% accuracy in prediction.</p>
+<pre class="r"><code>test_dat2_scr &lt;- transform(testTransformed, Bin = sample(Bin))
+
+prediction_scr &lt;- predict(svm_model_after_tune, test_dat2_scr, probability = TRUE)
+
+cf &lt;- confusionMatrix(prediction_scr, test_dat2_scr$Bin)
+cf</code></pre>
+<pre><code>Confusion Matrix and Statistics
+
+                  Reference
+Prediction         negative_control positive_control
+  negative_control               37               26
+  positive_control               29               26
+                                          
+               Accuracy : 0.5339          
+                 95% CI : (0.4398, 0.6263)
+    No Information Rate : 0.5593          
+    P-Value [Acc &gt; NIR] : 0.7424          
+                                          
+                  Kappa : 0.0602          
+                                          
+ Mcnemar&#39;s Test P-Value : 0.7874          
+                                          
+            Sensitivity : 0.5606          
+            Specificity : 0.5000          
+         Pos Pred Value : 0.5873          
+         Neg Pred Value : 0.4727          
+             Prevalence : 0.5593          
+         Detection Rate : 0.3136          
+   Detection Prevalence : 0.5339          
+      Balanced Accuracy : 0.5303          
+                                          
+       &#39;Positive&#39; Class : negative_control
+                                          </code></pre>
+<pre class="r"><code>fourfoldplot(as.table(cf), color = c(&quot;yellow&quot;, &quot;pink&quot;), main = &quot;Confusion Matrix&quot;)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="view-how-all-organoids-are-categorised" class="section level1">
+<h1>View how all organoids are categorised</h1>
+<p>Here is a table of all the conditions and a display of the
+pre-assigned category (1, 2, 3) and the probability of being alive
+(negative_control) or dead (positive_control). <br></p>
+<p>The data is displayed as the original raw data (rather than the
+centred and scaled data format that was used to build the model).</p>
+<pre class="r"><code>dat2 &lt;- control_short %&gt;%
+    as.data.frame() %&gt;%
+    dplyr::select(-c(2:11))
+dat2[, 1] &lt;- as.factor(dat2[, 1])  # Convert Bin to a factor
+
+
+data_all_short_all &lt;- data_all_short %&gt;%
+    dplyr::select(Bin, everything())
+write.csv(data_all_short_all, here::here(paste0(&quot;output/&quot;, patient, &quot;/data_all_short_all1.csv&quot;)))
+
+dat_V &lt;- data_all_short_all %&gt;%
+    as.data.frame() %&gt;%
+    dplyr::select(-c(2:11))
+dat_V[, 1] &lt;- as.factor(dat_V[, 1])  # Convert Bin to a factor
+
+LibTransformed &lt;- predict(preProcValues, dat_V)  #centering and scaling
+
+
+prediction &lt;- predict(svm_model_after_tune, LibTransformed, probability = TRUE)
+prob &lt;- attr(prediction, &quot;probabilities&quot;)
+
+confusionMatrix(prediction, LibTransformed$Bin)</code></pre>
+<pre><code>Confusion Matrix and Statistics
+
+                  Reference
+Prediction         negative_control positive_control Sample
+  negative_control              329               13   1822
+  positive_control               14              234    611
+  Sample                          0                0      0
+
+Overall Statistics
+                                          
+               Accuracy : 0.1862          
+                 95% CI : (0.1725, 0.2006)
+    No Information Rate : 0.8048          
+    P-Value [Acc &gt; NIR] : 1               
+                                          
+                  Kappa : 0.0913          
+                                          
+ Mcnemar&#39;s Test P-Value : &lt;2e-16          
+
+Statistics by Class:
+
+                     Class: negative_control Class: positive_control
+Sensitivity                           0.9592                 0.94737
+Specificity                           0.3153                 0.77486
+Pos Pred Value                        0.1520                 0.27241
+Neg Pred Value                        0.9837                 0.99399
+Prevalence                            0.1135                 0.08171
+Detection Rate                        0.1088                 0.07741
+Detection Prevalence                  0.7158                 0.28415
+Balanced Accuracy                     0.6372                 0.86111
+                     Class: Sample
+Sensitivity                 0.0000
+Specificity                 1.0000
+Pos Pred Value                 NaN
+Neg Pred Value              0.1952
+Prevalence                  0.8048
+Detection Rate              0.0000
+Detection Prevalence        0.0000
+Balanced Accuracy           0.5000</code></pre>
+<pre class="r"><code>summary = data.frame(data_all_short_all, as.numeric(levels(prediction))[prediction])
+write.csv(summary, here::here(paste0(&quot;output/&quot;, patient, &quot;/summary_morphology_ORG46BR1.csv&quot;)))</code></pre>
+<div id="all-organoids" class="section level2">
+<h2>All organoids</h2>
+<p>Link to download “pred_all_data.csv” from PRIME</p>
+<pre class="r"><code>pred_all_data = data.frame(prob, data_all_short_all)
+
+# Group by WELL_ID and count ObjectNumber rows
+well_object_count &lt;- data_all_short_all %&gt;%
+    group_by(WELL_ID, Description, Patient) %&gt;%
+    summarise(Object_count = n())
+
+well_object_count_norm &lt;- well_object_count %&gt;%
+    filter(Description %in% c(&quot;negative_control&quot;)) %&gt;%
+    group_by(Patient) %&gt;%
+    dplyr::summarise(neg_median = median(Object_count)) %&gt;%
+    inner_join(well_object_count, ., by = c(&quot;Patient&quot;)) %&gt;%
+    mutate(Object_count = Object_count/neg_median) %&gt;%
+    dplyr::select(-neg_median)
+
+
+pred_all_data_norm &lt;- pred_all_data %&gt;%
+    dplyr::select(WELL_ID, Description, Patient, AreaShape_Area) %&gt;%
+    filter(Description %in% c(&quot;negative_control&quot;)) %&gt;%
+    group_by(Patient) %&gt;%
+    dplyr::summarise(neg_median = median(AreaShape_Area)) %&gt;%
+    inner_join(pred_all_data, ., by = c(&quot;Patient&quot;)) %&gt;%
+    mutate(AreaShape_Area = AreaShape_Area/neg_median) %&gt;%
+    dplyr::select(WELL_ID, Description, Patient, AreaShape_Area) %&gt;%
+    group_by(WELL_ID, Patient) %&gt;%
+    dplyr::summarise(AreaShape_Area = median(AreaShape_Area))
+
+
+pred_all_data_mean &lt;- pred_all_data %&gt;%
+    ungroup() %&gt;%
+    dplyr::select(-AreaShape_Area) %&gt;%
+    left_join(., pred_all_data_norm, by = c(&quot;WELL_ID&quot;, &quot;Patient&quot;)) %&gt;%
+    dplyr::select(Plate_ID, Replicate, Patient, Description, Compound_ID, Concentration,
+        WELL_ID, CTG, Bin, AreaShape_Area, negative_control, positive_control) %&gt;%
+    group_by(Plate_ID, WELL_ID, Patient, Description, Compound_ID, Concentration) %&gt;%
+    dplyr::mutate(prob_alive = mean(negative_control), prob_dead = mean(positive_control),
+        Area = mean(AreaShape_Area)) %&gt;%
+    dplyr::select(-c(positive_control, negative_control, AreaShape_Area)) %&gt;%
+    unique() %&gt;%
+    mutate(across(where(is.numeric), ~round(.x, 2))) %&gt;%
+    ungroup()
+
+write.csv(pred_all_data, here::here(paste0(&quot;output/&quot;, patient, &quot;/pred_all_data_ORG46BR1.csv&quot;)))
+
+
+
+# select_pred_all_data &lt;- pred_all_data %&gt;% filter(!Description == &#39;Empty&#39; &amp;
+# Condition %in% c(&#39;3RR+F&#39;, &#39;3R+LY&#39;))
+
+
+
+
+# datatable(pred_all_data, extensions = c(&#39;Buttons&#39;, &#39;Scroller&#39;), rownames =
+# FALSE, options = list( dom = &#39;Blrt&#39;, lengthMenu = list(c(10, 20), c(&#39;10&#39;,
+# &#39;20&#39;)), pageLength = 10, buttons = list(list(extend = &#39;csv&#39;, filename =
+# &#39;prediction&#39;), list(extend = &#39;excel&#39;, filename = &#39;prediction&#39;, title =
+# &#39;prediction&#39;)), searching = TRUE, scrollX = TRUE ))
+
+write.csv(pred_all_data, here::here(paste0(&quot;output/&quot;, patient, &quot;pred_all_data.csv&quot;)))</code></pre>
+</div>
+<div id="average-predictions" class="section level2">
+<h2>Average predictions</h2>
+<p>Link to download and “pred_all_data_mean.csv”.</p>
+<pre class="r"><code>datatable(pred_all_data_mean, extensions = c(&quot;Buttons&quot;, &quot;Scroller&quot;), rownames = FALSE,
+    options = list(dom = &quot;Blrt&quot;, lengthMenu = list(c(10, 30), c(&quot;10&quot;, &quot;30&quot;)), pageLength = 10,
+        buttons = list(list(extend = &quot;csv&quot;, filename = &quot;pred_all_data_mean&quot;), list(extend = &quot;excel&quot;,
+            filename = &quot;pred_all_data_mean&quot;, title = &quot;pred_all_data_mean&quot;)), searching = FALSE,
+        scrollX = TRUE))</code></pre>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-c349d00a44ceaa7ffbf9" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-c349d00a44ceaa7ffbf9">{"x":{"filter":"none","vertical":false,"extensions":["Buttons","Scroller"],"data":[["ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1","ORG46BR1"],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],["Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46","Org46"],["positive_control","positive_control","positive_control","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","positive_control","positive_control","positive_control","positive_control","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","positive_control","positive_control","positive_control","positive_control","positive_control","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","Sample","negative_control","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","positive_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","positive_control","positive_control","positive_control","positive_control","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","positive_control","positive_control","positive_control","positive_control","positive_control","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","Sample","negative_control","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","positive_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample"],["Staurosporine","Staurosporine","Staurosporine","Media","Carboplatin","Carboplatin","Carboplatin","Carboplatin","Carboplatin","Carboplatin","Media","Carboplatin","Carboplatin","Carboplatin","Carboplatin","Staurosporine","Staurosporine","Staurosporine","Staurosporine","Staurosporine","Staurosporine","Staurosporine","5-Fluouracil","5-Fluouracil","5-Fluouracil","TritonX","Docetaxel","Docetaxel","Docetaxel","Docetaxel","Docetaxel","Docetaxel","TritonX","Docetaxel","Docetaxel","Docetaxel","Docetaxel","5-Fluouracil","5-Fluouracil","5-Fluouracil","5-Fluouracil","5-Fluouracil","5-Fluouracil","5-Fluouracil","Leucovorin","Leucovorin","Leucovorin","DMSO","Cisplatin","Cisplatin","Cisplatin","Cisplatin","Cisplatin","DMSO","Cisplatin","Cisplatin","Cisplatin","Cisplatin","Leucovorin","Leucovorin","Leucovorin","Leucovorin","Leucovorin","Leucovorin","Leucovorin","Irinotecan","Irinotecan","Irinotecan","Media","Paclitaxel","Paclitaxel","Paclitaxel","Paclitaxel","Paclitaxel","Paclitaxel","Media","Paclitaxel","Paclitaxel","Paclitaxel","Paclitaxel","Irinotecan","Irinotecan","Irinotecan","Irinotecan","Irinotecan","Irinotecan","Irinotecan","Oxaliplatin","Oxaliplatin","Oxaliplatin","TritonX","Topotecan","Topotecan","Topotecan","Topotecan","Topotecan","Topotecan","TritonX","Topotecan","Topotecan","Topotecan","Topotecan","Oxaliplatin","Oxaliplatin","Oxaliplatin","Oxaliplatin","Oxaliplatin","Oxaliplatin","Doxorubicin","Doxorubicin","Doxorubicin","Mitomycin C","Mitomycin C","Mitomycin C","Mitomycin C","DMSO","Mitomycin C","Mitomycin C","Mitomycin C","Mitomycin C","Doxorubicin","Doxorubicin","Doxorubicin","Doxorubicin","Doxorubicin","Doxorubicin","Doxorubicin","Gemcitabine","Gemcitabine","Gemcitabine","Media","Gemcitabine","Gemcitabine","Gemcitabine","Gemcitabine","Gemcitabine","Gemcitabine","Gemcitabine","Staurosporine","Staurosporine","Staurosporine","Carboplatin","Carboplatin","Carboplatin","Carboplatin","TritonX","Carboplatin","Carboplatin","Carboplatin","Carboplatin","Staurosporine","Staurosporine","Staurosporine","Staurosporine","Staurosporine","Staurosporine","Staurosporine","5-Fluouracil","5-Fluouracil","5-Fluouracil","DMSO","Docetaxel","Docetaxel","Docetaxel","Docetaxel","Docetaxel","Docetaxel","DMSO","Docetaxel","Docetaxel","Docetaxel","Docetaxel","5-Fluouracil","5-Fluouracil","5-Fluouracil","5-Fluouracil","5-Fluouracil","5-Fluouracil","5-Fluouracil","Leucovorin","Leucovorin","Leucovorin","Media","Cisplatin","Cisplatin","Cisplatin","Cisplatin","Cisplatin","Media","Cisplatin","Cisplatin","Cisplatin","Cisplatin","Leucovorin","Leucovorin","Leucovorin","Leucovorin","Leucovorin","Leucovorin","Leucovorin","Irinotecan","Irinotecan","Irinotecan","TritonX","Paclitaxel","Paclitaxel","Paclitaxel","Paclitaxel","Paclitaxel","Paclitaxel","TritonX","Paclitaxel","Paclitaxel","Paclitaxel","Paclitaxel","Irinotecan","Irinotecan","Irinotecan","Irinotecan","Irinotecan","Irinotecan","Irinotecan","Oxaliplatin","Oxaliplatin","Oxaliplatin","DMSO","Topotecan","Topotecan","Topotecan","Topotecan","Topotecan","Topotecan","DMSO","Topotecan","Topotecan","Topotecan","Topotecan","Oxaliplatin","Oxaliplatin","Oxaliplatin","Oxaliplatin","Oxaliplatin","Oxaliplatin","Doxorubicin","Doxorubicin","Doxorubicin","Mitomycin C","Mitomycin C","Mitomycin C","Mitomycin C","Media","Mitomycin C","Mitomycin C","Mitomycin C","Mitomycin C","Doxorubicin","Doxorubicin","Doxorubicin","Doxorubicin","Doxorubicin","Doxorubicin","Doxorubicin","Gemcitabine","Gemcitabine","Gemcitabine","Media","Gemcitabine","Gemcitabine","Gemcitabine","Gemcitabine","Gemcitabine","Gemcitabine","Gemcitabine"],[0.5,0.2,0.1,0,20,10,7.5,5,2,1,0,0.75,0.5,0.2,0.1,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,0,20,10,7.5,5,2,1,0,0.75,0.5,0.2,0.1,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,0,10,7.5,5,2,1,0,0.75,0.5,0.2,0.1,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,0,20,10,7.5,5,2,1,0,0.75,0.5,0.2,0.1,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,0,20,10,7.5,5,2,1,0,0.75,0.5,0.2,0.1,10,7.5,5,2,1,0.75,0.5,0.2,0.1,7.5,5,2,1,0,0.75,0.5,0.2,0.1,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,0,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,7.5,5,2,1,0,0.75,0.5,0.2,0.1,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,0,20,10,7.5,5,2,1,0,0.75,0.5,0.2,0.1,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,0,10,7.5,5,2,1,0,0.75,0.5,0.2,0.1,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,0,20,10,7.5,5,2,1,0,0.75,0.5,0.2,0.1,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,0,20,10,7.5,5,2,1,0,0.75,0.5,0.2,0.1,10,7.5,5,2,1,0.75,0.5,0.2,0.1,7.5,5,2,1,0,0.75,0.5,0.2,0.1,20,10,7.5,5,2,1,0.75,0.5,0.2,0.1,0,20,10,7.5,5,2,1,0.75],["B10","B11","B12","B13","B14","B15","B16","B17","B18","B19","B02","B20","B21","B22","B23","B03","B04","B05","B06","B07","B08","B09","C10","C11","C12","C13","C14","C15","C16","C17","C18","C19","C02","C20","C21","C22","C23","C03","C04","C05","C06","C07","C08","C09","D10","D11","D12","D13","D15","D16","D17","D18","D19","D02","D20","D21","D22","D23","D03","D04","D05","D06","D07","D08","D09","E10","E11","E12","E13","E14","E15","E16","E17","E18","E19","E02","E20","E21","E22","E23","E03","E04","E05","E06","E07","E08","E09","F10","F11","F12","F13","F14","F15","F16","F17","F18","F19","F02","F20","F21","F22","F23","F04","F05","F06","F07","F08","F09","G10","G11","G12","G16","G17","G18","G19","G02","G20","G21","G22","G23","G03","G04","G05","G06","G07","G08","G09","H10","H11","H12","H02","H03","H04","H05","H06","H07","H08","H09","I10","I11","I12","I16","I17","I18","I19","I02","I20","I21","I22","I23","I03","I04","I05","I06","I07","I08","I09","J10","J11","J12","J13","J14","J15","J16","J17","J18","J19","J02","J20","J21","J22","J23","J03","J04","J05","J06","J07","J08","J09","K10","K11","K12","K13","K15","K16","K17","K18","K19","K02","K20","K21","K22","K23","K03","K04","K05","K06","K07","K08","K09","L10","L11","L12","L13","L14","L15","L16","L17","L18","L19","L02","L20","L21","L22","L23","L03","L04","L05","L06","L07","L08","L09","M10","M11","M12","M13","M14","M15","M16","M17","M18","M19","M02","M20","M21","M22","M23","M04","M05","M06","M07","M08","M09","N10","N11","N12","N16","N17","N18","N19","N02","N20","N21","N22","N23","N03","N04","N05","N06","N07","N08","N09","O10","O11","O12","O2","O03","O04","O05","O06","O07","O08","O09"],[0.13,0.3,0.47,0.99,0.65,0.87,0.93,1.11,0.95,0.99,0.96,0.9399999999999999,1.07,1.15,0.97,0.02,0.02,0.04,0.06,0.06,0.08,0.08,0.9,1.3,1.29,1.15,0.41,0.45,0.4,0.37,0.34,0.42,1.01,0.29,0.42,0.34,0.27,0.83,0.88,1.09,1.09,0.91,1.11,1.19,1.27,1.55,0.87,0.8100000000000001,0.54,0.68,0.82,0.93,0.95,1.31,0.96,1.44,1.18,1.07,1.22,1.44,1.22,0.97,0.95,1.33,1.28,0.91,1.01,0.9399999999999999,0.85,0.37,0.39,0.4,0.34,0.37,0.27,1.19,0.32,0.27,0.35,0.47,0.18,0.19,0.22,0.32,0.29,0.5600000000000001,0.44,1.24,1.27,1.26,1.1,0.13,0.11,0.11,0.13,0.21,0.1,1.2,0.15,0.17,0.31,0.25,0.96,0.87,1.07,1.13,1.64,1.06,1.01,0.95,1.04,0.16,0.16,0.26,0.25,1.14,0.32,0.38,0.84,0.9,0.24,0.12,0.08,0.15,0.51,0.62,0.72,0.38,0.25,0.3,1.02,0.2,0.16,0.25,0.29,0.14,0.21,0.29,0.24,0.44,0.42,1.35,1.17,0.89,0.98,1.01,0.95,0.98,0.89,1.19,0.02,0.02,0.07000000000000001,0.09,0.07000000000000001,0.11,0.13,1.41,1.37,1.16,0.79,0.36,0.5,0.37,0.39,0.38,0.22,1.37,0.31,0.3,0.31,0.27,0.72,0.78,0.87,0.99,1.08,0.98,1.23,1.09,0.92,1.24,0.75,0.41,0.64,0.7,1.04,0.63,1.45,0.93,0.99,1.24,1.01,1.23,1.22,0.88,1.12,1.09,1.07,0.83,0.64,1.16,1.19,0.9399999999999999,0.49,0.3,0.34,0.27,0.26,0.26,1.59,0.27,0.3,0.27,0.28,0.27,0.22,0.22,0.29,0.25,0.5600000000000001,0.53,1.02,0.85,0.95,0.95,0.11,0.07000000000000001,0.08,0.08,0.12,0.07000000000000001,1.01,0.1,0.13,0.14,0.18,0.92,0.77,1.02,0.98,1.44,1.27,0.68,0.98,1.17,0.11,0.13,0.25,0.39,1.01,0.52,0.5600000000000001,0.71,0.93,0.22,0.12,0.09,0.15,0.47,0.7,0.62,0.31,0.3,0.25,0.77,0.27,0.16,0.21,0.23,0.15,0.22,0.27],["positive_control","positive_control","positive_control","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","positive_control","positive_control","positive_control","positive_control","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","positive_control","positive_control","positive_control","positive_control","positive_control","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","Sample","negative_control","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","positive_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","positive_control","positive_control","positive_control","positive_control","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","positive_control","positive_control","positive_control","positive_control","positive_control","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","Sample","negative_control","Sample","Sample","Sample","Sample","positive_control","positive_control","positive_control","positive_control","Sample","Sample","Sample","Sample","Sample","Sample","negative_control","Sample","Sample","Sample","Sample","Sample","Sample","Sample"],[0.22,0.27,0.36,0.78,0.5,0.73,0.55,0.82,0.7,0.54,0.83,0.63,0.64,0.8100000000000001,0.6,0.19,0.18,0.12,0.11,0.23,0.16,0.16,0.79,0.8100000000000001,0.51,0.9,0.76,0.64,0.74,0.55,0.6,0.6,0.84,0.5,0.58,0.53,0.54,0.61,0.48,0.74,0.6899999999999999,0.74,0.65,0.54,0.86,0.63,0.46,0.83,0.6,0.65,0.65,0.45,0.67,0.76,0.63,0.76,0.78,0.61,0.79,0.74,0.61,0.74,0.75,0.76,0.47,0.68,0.68,0.47,0.87,0.66,0.53,0.62,0.52,0.58,0.47,0.82,0.58,0.46,0.66,0.63,0.62,0.62,0.62,0.55,0.45,0.5,0.52,0.74,0.76,0.74,0.74,0.26,0.13,0.24,0.11,0.3,0.34,0.83,0.47,0.2,0.34,0.32,0.57,0.65,0.68,0.8,0.67,0.74,0.68,0.75,0.72,0.25,0.23,0.24,0.57,0.85,0.59,0.59,0.52,0.64,0.19,0.19,0.16,0.13,0.64,0.57,0.7,0.28,0.42,0.4,0.83,0.38,0.35,0.5,0.57,0.34,0.21,0.52,0.19,0.29,0.22,0.8100000000000001,0.73,0.61,0.74,0.77,0.8100000000000001,0.64,0.75,0.67,0.26,0.18,0.21,0.19,0.12,0.19,0.23,0.79,0.68,0.67,0.86,0.64,0.68,0.84,0.75,0.76,0.52,0.88,0.62,0.47,0.5600000000000001,0.66,0.54,0.8,0.83,0.84,0.8100000000000001,0.54,0.6,0.71,0.85,0.82,0.82,0.77,0.77,0.76,0.78,0.79,0.8,0.83,0.86,0.82,0.6899999999999999,0.78,0.83,0.73,0.7,0.82,0.72,0.79,0.57,0.8100000000000001,0.82,0.88,0.73,0.53,0.63,0.6899999999999999,0.64,0.67,0.76,0.46,0.73,0.75,0.73,0.62,0.62,0.63,0.58,0.2,0.43,0.62,0.8,0.79,0.72,0.9,0.18,0.23,0.3,0.21,0.24,0.48,0.86,0.4,0.45,0.46,0.75,0.8,0.84,0.75,0.75,0.85,0.75,0.6,0.68,0.72,0.19,0.33,0.32,0.64,0.86,0.63,0.59,0.79,0.77,0.13,0.2,0.2,0.25,0.71,0.66,0.76,0.57,0.43,0.7,0.89,0.62,0.34,0.51,0.61,0.52,0.45,0.54],[0.78,0.73,0.64,0.22,0.5,0.27,0.45,0.18,0.3,0.46,0.17,0.37,0.36,0.19,0.4,0.8100000000000001,0.82,0.88,0.89,0.77,0.84,0.84,0.21,0.19,0.49,0.1,0.24,0.36,0.26,0.45,0.4,0.4,0.16,0.5,0.42,0.47,0.46,0.39,0.52,0.26,0.31,0.26,0.35,0.46,0.14,0.37,0.54,0.17,0.4,0.35,0.35,0.55,0.33,0.24,0.37,0.24,0.22,0.39,0.21,0.26,0.39,0.26,0.25,0.24,0.53,0.32,0.32,0.53,0.13,0.34,0.47,0.38,0.48,0.42,0.53,0.18,0.42,0.54,0.34,0.37,0.38,0.38,0.38,0.45,0.55,0.5,0.48,0.26,0.24,0.26,0.26,0.74,0.87,0.76,0.89,0.7,0.66,0.17,0.53,0.8,0.66,0.68,0.43,0.35,0.32,0.2,0.33,0.26,0.32,0.25,0.28,0.75,0.77,0.76,0.43,0.15,0.41,0.41,0.48,0.36,0.8100000000000001,0.8100000000000001,0.84,0.87,0.36,0.43,0.3,0.72,0.58,0.6,0.17,0.62,0.65,0.5,0.43,0.66,0.79,0.48,0.8100000000000001,0.71,0.78,0.19,0.27,0.39,0.26,0.23,0.19,0.36,0.25,0.33,0.74,0.82,0.79,0.8100000000000001,0.88,0.8100000000000001,0.77,0.21,0.32,0.33,0.14,0.36,0.32,0.16,0.25,0.24,0.48,0.12,0.38,0.53,0.44,0.34,0.46,0.2,0.17,0.16,0.19,0.46,0.4,0.29,0.15,0.18,0.18,0.23,0.23,0.24,0.22,0.21,0.2,0.17,0.14,0.18,0.31,0.22,0.17,0.27,0.3,0.18,0.28,0.21,0.43,0.19,0.18,0.12,0.27,0.47,0.37,0.31,0.36,0.33,0.24,0.54,0.27,0.25,0.27,0.38,0.38,0.37,0.42,0.8,0.57,0.38,0.2,0.21,0.28,0.1,0.82,0.77,0.7,0.79,0.76,0.52,0.14,0.6,0.55,0.54,0.25,0.2,0.16,0.25,0.25,0.15,0.25,0.4,0.32,0.28,0.8100000000000001,0.67,0.68,0.36,0.14,0.37,0.41,0.21,0.23,0.87,0.8,0.8,0.75,0.29,0.34,0.24,0.43,0.57,0.3,0.11,0.38,0.66,0.49,0.39,0.48,0.55,0.46],[1.02,0.88,0.99,1.12,0.99,0.85,1.44,1.05,0.93,0.86,0.83,0.89,0.89,0.9399999999999999,1.11,1.14,0.95,0.91,1.04,0.77,0.77,0.87,1.13,1.11,0.92,1.13,0.75,0.93,1.17,0.91,0.77,0.95,1.07,0.87,1.03,0.91,0.9399999999999999,1.15,1.11,1.18,1.09,0.9399999999999999,1.17,1.02,1.01,0.79,1.01,0.97,1.15,0.91,1.19,1,1.12,1.01,0.87,1.03,1.35,0.92,0.96,0.98,1.02,0.88,1.15,1.27,0.97,0.83,1,1.06,0.86,0.89,0.8,1,0.79,0.9,1.08,1.06,0.98,0.93,0.97,0.88,0.82,0.87,1.14,0.84,1.03,0.91,0.83,0.88,1.14,0.84,0.91,2.19,1.06,1.68,0.8100000000000001,0.87,0.85,1.17,1.11,0.8,0.86,0.85,1.12,0.98,0.84,1.02,1.26,0.92,1.09,0.8,0.98,0.85,0.74,0.96,1.11,1.2,1.02,0.85,0.93,1.05,0.8100000000000001,1.29,0.91,0.84,1.12,0.89,0.9,0.98,0.89,0.9399999999999999,1.08,0.92,0.84,1.16,1.27,0.91,0.82,0.8100000000000001,1.19,0.9399999999999999,0.76,0.95,0.95,0.93,0.9399999999999999,1.02,1.11,0.92,0.92,1.14,0.83,0.79,1.12,0.83,0.75,1.6,1.21,0.96,0.76,0.85,0.88,0.87,0.8100000000000001,0.97,0.96,0.86,0.83,1.03,0.98,1.33,1.5,1.01,0.92,0.86,0.95,1.05,0.93,0.82,0.9399999999999999,0.87,0.8100000000000001,0.87,0.98,0.95,0.88,0.98,1.05,0.98,1.17,0.95,0.93,1.01,0.8,0.96,0.9399999999999999,0.91,0.9,1.04,0.89,0.87,0.92,0.78,1.06,1.09,0.99,1.1,0.96,1.33,0.86,0.78,0.99,0.85,1.58,0.87,0.79,0.92,1.02,1.03,1.12,0.9,2.42,0.91,0.89,1.11,1,0.97,0.84,0.95,0.84,0.99,1.17,0.77,1.12,1.01,0.89,0.79,1.25,0.95,0.88,0.88,1,1,0.99,0.93,0.96,0.9399999999999999,0.84,0.78,0.93,0.97,0.84,0.82,1.07,0.82,1.04,0.91,0.99,0.91,0.87,0.79,0.86,1.04,0.83,1.09,0.9,1.01,1.1,0.76,0.79,0.82,0.84,0.98,0.8]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Plate_ID<\/th>\n      <th>Replicate<\/th>\n      <th>Patient<\/th>\n      <th>Description<\/th>\n      <th>Compound_ID<\/th>\n      <th>Concentration<\/th>\n      <th>WELL_ID<\/th>\n      <th>CTG<\/th>\n      <th>Bin<\/th>\n      <th>prob_alive<\/th>\n      <th>prob_dead<\/th>\n      <th>Area<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"Blrt","lengthMenu":[[10,30],["10","30"]],"pageLength":10,"buttons":[{"extend":"csv","filename":"pred_all_data_mean"},{"extend":"excel","filename":"pred_all_data_mean","title":"pred_all_data_mean"}],"searching":false,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,5,7,9,10,11]},{"name":"Plate_ID","targets":0},{"name":"Replicate","targets":1},{"name":"Patient","targets":2},{"name":"Description","targets":3},{"name":"Compound_ID","targets":4},{"name":"Concentration","targets":5},{"name":"WELL_ID","targets":6},{"name":"CTG","targets":7},{"name":"Bin","targets":8},{"name":"prob_alive","targets":9},{"name":"prob_dead","targets":10},{"name":"Area","targets":11}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>write.csv(pred_all_data_mean, here::here(paste0(&quot;output/&quot;, patient, &quot;/pred_all_data_mean_ORG46BR1.csv&quot;)))</code></pre>
+</div>
+<div id="heat-map" class="section level2">
+<h2>Heat map</h2>
+<p><br></p>
+<p>Plot the Patient average probability of the population being alive by
+Compound and Concentration.</p>
+<pre class="r"><code># create a unique ID column
+data_heat &lt;- pred_all_data_mean %&gt;%
+    unite(Batch, c(Plate_ID), sep = &quot; - &quot;, remove = FALSE)
+
+plate_list &lt;- unique(data_heat$Batch)
+
+for (i in plate_list) {
+
+    data_plot &lt;- data_heat %&gt;%
+        filter(Batch == i)
+
+    # calculate the min, median and max of the dataset in order to set the same
+    # scale for all plates
+    feature_vect &lt;- data_plot$prob_alive
+
+    med &lt;- median(feature_vect)
+    max &lt;- max(feature_vect)
+    min &lt;- min(feature_vect)
+
+    # make plots
+    plots &lt;- data_plot %&gt;%
+        dplyr::group_by(Batch) %&gt;%
+        dplyr::do(plots = platetools::raw_map(data = .$prob_alive, well = .$WELL_ID,
+            plate = 384) + ggtitle(.$Batch[1]) + scale_fill_gradient2(low = &quot;blue&quot;,
+            mid = &quot;white&quot;, high = &quot;red&quot;, midpoint = med, limits = c(floor(min), ceiling(max))) +
+            theme(plot.title = element_text(size = 22), axis.text.x = element_text(size = 4),
+                axis.text.y = element_text(size = 4)))
+
+    myplots &lt;- list()
+    for (i in 1:length(unique(data_plot$Batch))) {
+        p1 &lt;- eval(substitute(print(plots$plots[[i]]), list(i = i)))
+        myplots[[i]] &lt;- p1
+    }
+
+}</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-30-1.png" width="50%" height="2%" /></p>
+</div>
+<div id="correlation-ctg-vs-svm-probabilities"
+class="section level2 tabset tabset-fade tabset-pills">
+<h2 class="tabset tabset-fade tabset-pills">Correlation CTG vs SVM
+probabilities</h2>
+<pre class="r"><code>library(purrr)
+
+# Step 1: Compute R^2 for each patient
+r2_by_patient &lt;- pred_all_data_mean %&gt;%
+    group_by(Patient) %&gt;%
+    nest() %&gt;%
+    mutate(model = map(data, ~lm(prob_alive ~ CTG, data = .x)), summary_model = map(model,
+        ~base::summary(.x)), r2 = map_dbl(summary_model, ~.$r.squared)) %&gt;%
+    dplyr::select(Patient, r2)
+
+# Step 2: Make the plot and annotate with R^2 values for each facet
+normplot1 &lt;- pred_all_data_mean %&gt;%
+    ggplot(., aes(x = CTG, y = prob_alive, group = Patient)) + geom_point(aes(colour = Patient,
+    text = paste(&quot;Compound_Name:&quot;, Compound_ID, &quot;&lt;br&gt;CTG:&quot;, CTG, &quot;&lt;br&gt;Concentration:&quot;,
+        Concentration, &quot;&lt;br&gt;ML classificaton:&quot;, prob_alive, &quot;&lt;br&gt;Well_ID:&quot;, WELL_ID)),
+    alpha = 0.8, size = 1.6) + geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;black&quot;,
+    linetype = &quot;dashed&quot;) + geom_text(data = r2_by_patient, aes(label = sprintf(&quot;R^2 = %.2f&quot;,
+    r2), x = Inf, y = Inf), hjust = 1, vjust = 1, inherit.aes = FALSE, size = 5) +
+    labs(title = &quot;CTG Norm vs SVM probabilities \n&quot;, x = &quot;CTG Raw&quot;, y = &quot;Probability of being alive&quot;) +
+    theme_bw() + theme(axis.title.x = element_text(margin = margin(t = 10, r = 10,
+    b = 20, l = 20)), axis.title.y = element_text(margin = margin(t = 0, r = 10,
+    b = 0, l = 20)), axis.text.x = element_text(angle = 0, colour = &quot;black&quot;, size = 10,
+    hjust = 1), axis.text.y = element_text(colour = &quot;black&quot;, size = 10), strip.text = element_text(size = 11),
+    plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14),
+    plot.margin = margin(t = 0, r = 30, b = 0, l = 30), legend.position = &quot;none&quot;)
+
+print(normplot1)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-31-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># plotly::ggplotly(normplot1, tooltip = c(&#39;text&#39;))</code></pre>
+</div>
+<div id="svm-probabilities-dose-response-curves-compared-to-ctg"
+class="section level2">
+<h2>SVM-probabilities dose-response curves compared to CTG</h2>
+<pre class="r"><code>raw2 &lt;- pred_all_data_mean %&gt;%
+    data.frame() %&gt;%
+    left_join(., well_object_count_norm, by = c(&quot;WELL_ID&quot;, &quot;Patient&quot;, &quot;Description&quot;))
+
+id &lt;- colnames(raw2[c(1:7, 9)])
+
+features &lt;- colnames(raw2[c(8, 10, 12, 13)])
+
+pred_all_data_melt &lt;- raw2 %&gt;%
+    reshape2::melt(id.vars = id, measure.vars = features)
+
+
+data_norm_plot &lt;- pred_all_data_melt %&gt;%
+    filter(!Concentration == 0) %&gt;%
+    group_by(Compound_ID, Plate_ID, Patient, Concentration, variable) %&gt;%
+    summarise_at(vars(value), funs(mean, sd))
+
+normplot &lt;- data_norm_plot %&gt;%
+    unite(&quot;Identifyer&quot;, c(Plate_ID, Patient), sep = &quot;_&quot;, remove = FALSE) %&gt;%
+    ggplot(., aes(x = Concentration, y = mean, group = variable)) + geom_point(aes(colour = variable),
+    alpha = 0.8, size = 1.6) + geom_errorbar(aes(ymin = mean - sd, ymax = mean +
+    sd), width = 0.2, size = 0.2) + geom_line(aes(colour = variable), alpha = 0.8,
+    size = 0.8) + geom_hline(aes(yintercept = 1), linetype = &quot;solid&quot;, size = 0.2) +
+    facet_wrap(~Compound_ID, ncol = 3) + scale_x_continuous(trans = &quot;log10&quot;, labels = scales::number_format(accuracy = 0.1)) +
+    labs(title = &quot;SVM results ORG46BR1\n&quot;, x = &quot;Log10 Concentration (uM)&quot;, y = &quot;Probability of being alive&quot;) +
+    theme_bw() + theme(axis.title.x = element_text(margin = margin(t = 10, r = 10,
+    b = 20, l = 20)), axis.title.y = element_text(margin = margin(t = 0, r = 10,
+    b = 0, l = 20)), axis.text.x = element_text(angle = 25, colour = &quot;black&quot;, size = 10,
+    hjust = 1), axis.text.y = element_text(colour = &quot;black&quot;, size = 10), strip.text = element_text(size = 12),
+    plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14),
+    plot.margin = margin(t = 0, r = 30, b = 0, l = 30))
+
+normplot</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-32-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="single-organoid-results" class="section level2">
+<h2>Single organoid results</h2>
+<pre class="r"><code># avoid the use of scientific notation 
+options(scipen=999)
+
+
+p1 &lt;- pred_all_data %&gt;% 
+  filter(!Concentration ==0) %&gt;% 
+  ggplot(., aes(x = as.factor(Concentration), y = negative_control, fill = Compound_ID)) +  # Converted Concentration to factor for discrete x-axis
+  geom_violin(width = 0.8, alpha = 1) +  # Violin plot
+  geom_hline(aes(yintercept = 0.50), linetype = &quot;solid&quot;) +  # Horizontal line
+  labs(
+    title = &quot;Dose-Response of Single Organoids&quot;,
+    y = &quot;Response (Probability of being categorised as alive)&quot;,
+    x = &quot;Concentration (uM)&quot;
+  ) +
+  facet_wrap(~Compound_ID, ncol = 3) +  
+  theme(
+    legend.title = element_text(),
+    legend.text = element_blank(),
+    axis.text.x = element_text(angle = 90, colour = &quot;black&quot;, size = 8),
+    axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 10)),
+    axis.title.x = element_text(margin = margin(t = 10, r = 10, b = 20, l = 20)),
+    plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14),
+    strip.text.x = element_text(size = 14),
+    legend.position = &quot;none&quot;
+  )
+
+print(p1)</code></pre>
+<p><img src="figure/SVM_1_ORG46BR1.Rmd/unnamed-chunk-33-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p><br></p>
+<p><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/v4-shims.css"></p>
+ 
+<hr />
+<p style="text-align: center;">
+Analysed by Susanne Ramm</a>
+</p>
+<p style="text-align: center;">
+<span style="color: #7d2b8b;"><em><a
+href="mailto:Susanne.Ramm@petermac.org"
+class="email">Susanne.Ramm@petermac.org</a></em></span>
+</p>
+<p style="text-align: center;">
+<a href="https://www.petermac.org/research/core-facilities/victorian-centre-functional-genomics"><span
+style="color: #7d2b8b;">Victorian Centre for Functional
+Genomics</span></a>
+</p>
+<!-- Needs the "fab" prefix, V5 <i class="fab fa-twitter"></i> -->
+<p style="text-align: center;">
+<a href="https://twitter.com/VCFGconnect">
+<i class="fa fa-twitter"></i></a>
+</p>
+<p> </p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: aarch64-apple-darwin20
+Running under: macOS 15.2
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Australia/Melbourne
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] drc_3.0-1          MASS_7.3-65        patchwork_1.3.0    writexl_1.5.4     
+ [5] Rtsne_0.17         RColorBrewer_1.1-3 pheatmap_1.0.12    NbClust_3.0.1     
+ [9] corrplot_0.95      assertthat_0.2.1   here_1.0.1         viridis_0.6.5     
+[13] viridisLite_0.4.2  matrixStats_1.5.0  data.table_1.17.0  dendextend_1.19.0 
+[17] caret_7.0-1        lattice_0.22-7     reshape2_1.4.4     kableExtra_1.4.0  
+[21] knitr_1.50         plotly_4.10.4      DT_0.33            ggpubr_0.6.0      
+[25] gridExtra_2.3      platetools_0.1.7   lubridate_1.9.4    forcats_1.0.0     
+[29] stringr_1.5.1      dplyr_1.1.4        purrr_1.0.4        readr_2.1.5       
+[33] tidyr_1.3.1        tibble_3.2.1       ggplot2_4.0.0      tidyverse_2.0.0   
+[37] e1071_1.7-16       workflowr_1.7.1   
+
+loaded via a namespace (and not attached):
+  [1] rstudioapi_0.17.1    jsonlite_2.0.0       magrittr_2.0.3      
+  [4] TH.data_1.1-3        farver_2.1.2         rmarkdown_2.29      
+  [7] fs_1.6.6             vctrs_0.6.5          rstatix_0.7.2       
+ [10] htmltools_0.5.8.1    plotrix_3.8-4        broom_1.0.8         
+ [13] Formula_1.2-5        pROC_1.18.5          sass_0.4.10         
+ [16] parallelly_1.43.0    bslib_0.9.0          htmlwidgets_1.6.4   
+ [19] sandwich_3.1-1       plyr_1.8.9           zoo_1.8-14          
+ [22] cachem_1.1.0         whisker_0.4.1        lifecycle_1.0.4     
+ [25] iterators_1.0.14     pkgconfig_2.0.3      Matrix_1.7-3        
+ [28] R6_2.6.1             fastmap_1.2.0        future_1.40.0       
+ [31] digest_0.6.37        ps_1.9.1             rprojroot_2.0.4     
+ [34] crosstalk_1.2.1      labeling_0.4.3       timechange_0.3.0    
+ [37] mgcv_1.9-3           httr_1.4.7           abind_1.4-8         
+ [40] compiler_4.4.0       proxy_0.4-27         bit64_4.6.0-1       
+ [43] withr_3.0.2          S7_0.2.0             backports_1.5.0     
+ [46] carData_3.0-5        ggsignif_0.6.4       lava_1.8.1          
+ [49] gtools_3.9.5         ModelMetrics_1.2.2.2 tools_4.4.0         
+ [52] httpuv_1.6.15        future.apply_1.11.3  nnet_7.3-20         
+ [55] glue_1.8.0           callr_3.7.6          nlme_3.1-168        
+ [58] promises_1.3.2       grid_4.4.0           getPass_0.2-4       
+ [61] generics_0.1.3       recipes_1.2.1        gtable_0.3.6        
+ [64] tzdb_0.5.0           class_7.3-23         hms_1.1.3           
+ [67] utf8_1.2.4           xml2_1.3.8           car_3.1-3           
+ [70] foreach_1.5.2        pillar_1.10.2        vroom_1.6.5         
+ [73] later_1.4.2          splines_4.4.0        bit_4.6.0           
+ [76] survival_3.8-3       tidyselect_1.2.1     git2r_0.36.2        
+ [79] svglite_2.1.3        stats4_4.4.0         xfun_0.52           
+ [82] hardhat_1.4.1        timeDate_4041.110    stringi_1.8.7       
+ [85] lazyeval_0.2.2       yaml_2.3.10          evaluate_1.0.3      
+ [88] codetools_0.2-20     cli_3.6.4            rpart_4.1.24        
+ [91] systemfonts_1.3.1    processx_3.8.6       jquerylib_0.1.4     
+ [94] dichromat_2.0-0.1    Rcpp_1.1.0           globals_0.16.3      
+ [97] parallel_4.4.0       gower_1.0.2          listenv_0.9.1       
+[100] mvtnorm_1.3-3        ipred_0.9-15         scales_1.4.0        
+[103] prodlim_2024.06.25   crayon_1.5.3         rlang_1.1.6         
+[106] multcomp_1.4-28      formatR_1.14        </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

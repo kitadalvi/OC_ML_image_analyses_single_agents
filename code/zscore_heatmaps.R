@@ -68,10 +68,19 @@ df <- df[rows_of_interest,features_cystic[1:5]]
 
 
 ### create heatmap of z scores
-pheatmap(df,
+org60br3 <- pheatmap(df,
          scale = "none",    # already Z-scored
          color = hcl.colors(50, "BluYl"),
-         clustering_distance_rows = "euclidean",
-         clustering_distance_cols = "euclidean",
-         clustering_method = "complete",
-         main = "Z-score Heatmap of 5 most important features \nby Drug (ORG70BR2)")
+         main = "Z-score Heatmap of 5 most important \nfeatures by Drug (ORG60BR3)",
+         cluster_rows = FALSE,
+         cellwidth = 35)
+
+org70br1 <- pheatmap(df[rows_of_interest,],
+                     scale = "none",    # already Z-scored
+                     color = hcl.colors(50, "BluYl"),
+                     main = "Z-score Heatmap of 5 most important \nfeatures by Drug (ORG70BR1)",
+                     cluster_rows = FALSE,
+                     cellwidth = 30)
+
+
+

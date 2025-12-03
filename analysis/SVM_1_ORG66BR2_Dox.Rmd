@@ -679,7 +679,9 @@ Here is the result of the prediction of the training set, comparing the result o
 pred <- predict(svmfit2,trainTransformed, probability  = TRUE)
 #system.time(pred <- predict(svmfit2,trainTransformed))
 
-confusionMatrix(pred,trainTransformed$Bin)
+cf <- confusionMatrix(pred,trainTransformed$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 
@@ -696,7 +698,9 @@ By randomising/scrambling the category labels, we create a data set that should 
 ```{r}
 pred_scr <- predict(svmfit2,trainTransformed_scr, probability = TRUE) 
 
-confusionMatrix(pred_scr,trainTransformed_scr$Bin)
+cf <- confusionMatrix(pred_scr,trainTransformed_scr$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 # Tuning SVM 
@@ -757,7 +761,9 @@ load(here::here("output/",patient,"svm_model_after_tune.RData"))
 ```{r}
 pred2 <- predict(svm_model_after_tune,trainTransformed, probability = TRUE)
 
-confusionMatrix(pred2,trainTransformed$Bin)
+cf <- confusionMatrix(pred2,trainTransformed$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 
@@ -910,7 +916,9 @@ Testing the SVM model on the last 20% of data gives a 94% accuracy in prediction
 ```{r}
 prediction <- predict(svm_model_after_tune, testTransformed, probability = TRUE)
 
-confusionMatrix(prediction,testTransformed$Bin)
+cf <- confusionMatrix(prediction,testTransformed$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 ## Testing with scrambled labels
@@ -922,7 +930,9 @@ test_dat2_scr <- transform(testTransformed, Bin = sample(Bin) )
 
 prediction_scr <- predict(svm_model_after_tune, test_dat2_scr, probability = TRUE)
 
-confusionMatrix(prediction_scr,test_dat2_scr$Bin)
+cf <- confusionMatrix(prediction_scr,test_dat2_scr$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 # View how all organoids are categorised 
@@ -1198,7 +1208,6 @@ normplot <- data_norm_plot %>%
         plot.margin = margin(t = 0, r = 30, b = 0, l = 30))
 
 normplot
-
 
 ```
 

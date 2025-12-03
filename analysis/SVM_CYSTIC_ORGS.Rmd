@@ -336,7 +336,7 @@ plot3
 
 
 ### interactive plot
-plotly::ggplotly(plot, tooltip = c("Cell_Line", "Count_Spheroids"))
+#plotly::ggplotly(plot, tooltip = c("Cell_Line", "Count_Spheroids"))
 
 ### remove plot variables from environment to clear up space
 rm(plot,plot2, plot3)

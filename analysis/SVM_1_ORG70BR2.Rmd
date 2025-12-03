@@ -368,7 +368,7 @@ plot3
 
 
 ### interactive plot
-plotly::ggplotly(plot, tooltip = c("Cell_Line", "Count_Spheroids"))
+#plotly::ggplotly(plot, tooltip = c("Cell_Line", "Count_Spheroids"))
 
 ### remove plot variables from environment to clear up space
 rm(plot,plot2, plot3)
@@ -707,7 +707,9 @@ By randomising/scrambling the category labels, we create a data set that should 
 ```{r}
 pred_scr <- predict(svmfit2,trainTransformed_scr, probability = TRUE) 
 
-confusionMatrix(pred_scr,trainTransformed_scr$Bin)
+cf <- confusionMatrix(pred_scr,trainTransformed_scr$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 
 ```
 
@@ -940,7 +942,9 @@ test_dat2_scr <- transform(testTransformed, Bin = sample(Bin) )
 
 prediction_scr <- predict(svm_model_after_tune, test_dat2_scr, probability = TRUE)
 
-confusionMatrix(prediction_scr,test_dat2_scr$Bin)
+cf <- confusionMatrix(prediction_scr,test_dat2_scr$Bin)
+cf
+fourfoldplot(as.table(cf),color=c("yellow","pink"),main = "Confusion Matrix")
 ```
 
 # View how all organoids are categorised 
@@ -958,7 +962,7 @@ dat2[, 1] <- as.factor(dat2[, 1])  # Convert Bin to a factor
 
 data_all_short_all <- data_all_short %>% 
   dplyr::select(Bin, everything()) 
-write.csv(data_all_short_all, here::here(paste0("output/",patient,"/data_all_short_all1.csv")))
+#write.csv(data_all_short_all, here::here(paste0("output/",patient,"/data_all_short_all1.csv")))
 
 dat_V <- data_all_short_all%>% as.data.frame() %>% 
   dplyr::select(-c(2:11))
@@ -973,7 +977,7 @@ prob <- attr(prediction, "probabilities")
 confusionMatrix(prediction, LibTransformed$Bin)
 
 summary = data.frame(data_all_short_all, as.numeric(levels(prediction))[prediction])
-write.csv(summary, here::here(paste0("output/",patient,"/summary_morphology_ORG70BR2.csv")))
+#write.csv(summary, here::here(paste0("output/",patient,"/summary_morphology_ORG70BR2.csv")))
 ```
 
 
@@ -1045,7 +1049,7 @@ pred_all_data_mean<- pred_all_data %>% ungroup() %>% dplyr::select(-AreaShape_Ar
   #scrollX = TRUE
 #))
 
-write.csv(pred_all_data, here::here(paste0("output/",patient,"/pred_all_data.csv")))
+#write.csv(pred_all_data, here::here(paste0("output/",patient,"/pred_all_data.csv")))
 ```
 
 
@@ -1068,7 +1072,7 @@ datatable(pred_all_data_mean, extensions = c('Buttons', 'Scroller'), rownames = 
   scrollX = TRUE
 ))
 
-write.csv(pred_all_data_mean, here::here(paste0("output/",patient,"/pred_all_data_mean_ORG70BR2.csv")))
+#write.csv(pred_all_data_mean, here::here(paste0("output/",patient,"/pred_all_data_mean_ORG70BR2.csv")))
 ```
 
 
@@ -1221,7 +1225,32 @@ normplot
 
 ```
 
+```{r, fig.height=10, fig.width=10}
+plot_data <- data_norm_plot[data_norm_plot$variable == 'CTG' | data_norm_plot$variable == 'prob_alive',]
+normplot <- plot_data %>%
+  unite("Identifyer", c(Plate_ID, Patient), sep = "_", remove = FALSE) %>% 
+  ggplot(., aes(x = Concentration, 
+                y = mean,
+                group = variable,
+                colour = variable)) +
+  facet_wrap(~Compound_ID, ncol = 3, scales = 'fixed')  +
+  scale_x_continuous(trans = "log10", labels = scales::number_format(accuracy = 0.1)) + 
+  geom_smooth(method = 'loess') +
+  scale_colour_manual(values = c("CTG"="red", "prob_alive"="blue")) +
+  labs(title = "SVM results ORG70BR2\n",
+       x = "Log10 Concentration (uM)",
+       y = "Probability of being alive") +
+  theme_light()+
+  theme(axis.title.x = element_text(margin = margin(t = 10, r = 10, b = 20, l = 20)), 
+        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 20)),
+        axis.text.x = element_text(angle = 25, colour = "black", size = 10, hjust = 1),
+        axis.text.y = element_text(colour = "black", size = 10),
+        strip.text = element_text(size = 12),
+        plot.title = element_text(margin = margin(t = 10, r = 0, b = 5, l = 0), size = 14), 
+        plot.margin = margin(t = 0, r = 30, b = 0, l = 30))
+normplot
 
+```
 
 
 ## Single organoid results
