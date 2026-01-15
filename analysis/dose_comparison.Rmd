@@ -13,6 +13,7 @@ library(ggplot2)
 library(dplyr)
 library(DT)
 ```
+
 ```{r}
 create_dt <-  function(x){
   datatable(x,
@@ -24,6 +25,9 @@ create_dt <-  function(x){
 }
 ```
 
+## Notes
+
+• Calculate auc vals using CTG curve + MESS to compare to Olivia's AUC vals (23/12/25)
 
 ```{r}
 ORG38BR2 <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/ORG38BR2/pred_all_data_mean_ORG38BR2.csv',header = TRUE)
@@ -73,6 +77,9 @@ df <- combined %>%
   filter(!Compound_ID %in% c("Media", "DMSO", 'TritonX', 'Staurosporine'))
 
 write.csv(df, file = '/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/mean_average_prob_across_organoids.csv')
+```
+
+```{r}
 df <- read.csv('/Users/dalvinikita/Documents/7_GitHub/20241205_OC_ML_image_analyses_single_agents/output/mean_average_prob_across_organoids.csv', header=T)
 
 ### annotating dose
@@ -139,9 +146,144 @@ for (organoid in samples) {
     auc_df_mean <- auc_df %>%
       group_by(Concentration) %>%
       summarise(mean = mean(prob_alive, na.rm = TRUE)) 
-    neutral_auc <- max(auc_df_mean$Concentration) - min(auc_df_mean)
+    neutral_auc <- max(auc_df_mean$Concentration) - min(auc_df_mean$Concentration)
     result_df[result_df$drug == compound,]$neutral_auc <- neutral_auc
-    auc_val <- MESS::auc(auc_df_mean$Concentration, auc_df_mean$mean, type ="linear")
+    auc_val <- MESS::auc(auc_df_mean$Concentration, auc_df_mean$mean, type = 'linear')
+    result_df[result_df$drug == compound,]$auc_val <- auc_val
+  }
+  
+  result_df <- result_df %>%
+    mutate(relative_auc = paste(format(auc_val/neutral_auc, digits=2)))
+  result_dict[[organoid]] <- result_df
+}
+
+```
+
+### ORG38BR2
+```{r}
+create_dt(result_dict[['ORG38BR2']])
+```
+
+### ORG41BR1
+```{r}
+create_dt(result_dict[['ORG41BR1']])
+```
+
+### ORG41BR2
+```{r}
+create_dt(result_dict[['ORG41BR2']])
+```
+
+### ORG46BR1
+```{r}
+create_dt(result_dict[['ORG46BR1']])
+```
+
+### ORG49BR2
+```{r}
+create_dt(result_dict[['ORG49BR2']])
+```
+
+### ORG55BR1
+```{r}
+create_dt(result_dict[['ORG55BR1']])
+```
+
+### ORG55BR2
+```{r}
+create_dt(result_dict[['ORG55BR2']])
+```
+
+### ORG60BR3
+```{r}
+create_dt(result_dict[['ORG60BR3']])
+```
+
+### ORG61BR1
+```{r}
+create_dt(result_dict[['ORG61BR1']])
+```
+
+### ORG61BR2
+```{r}
+create_dt(result_dict[['ORG61BR2']])
+```
+
+### ORG64BR3
+```{r}
+create_dt(result_dict[['ORG64BR3']])
+```
+
+### ORG65BR1
+```{r}
+create_dt(result_dict[['ORG65BR1']])
+```
+
+### ORG65BR2
+```{r}
+create_dt(result_dict[['ORG65BR2']])
+```
+
+### ORG66BR2
+```{r}
+create_dt(result_dict[['ORG66BR2']])
+```
+
+### ORG66BR3
+```{r}
+create_dt(result_dict[['ORG66BR3']])
+```
+
+### ORG70BR1
+```{r}
+create_dt(result_dict[['ORG70BR1']])
+```
+
+### ORG70BR2
+```{r}
+create_dt(result_dict[['ORG70BR2']])
+```
+
+### ORG73BR1
+```{r}
+create_dt(result_dict[['ORG73BR1']])
+```
+
+### ORG76BR1
+```{r}
+create_dt(result_dict[['ORG76BR1']])
+```
+
+## Relative AUC of pred_probs and log(conc) {.tabset}
+
+```{r}
+samples <- levels(as.factor(combined$Plate_ID))
+compounds <- levels(as.factor(combined$Compound_ID))
+
+### loop through roganoids to create a dataframe for each ORG line
+result_dict <- list()
+
+for (organoid in samples) {
+  data <- combined[combined$Plate_ID == organoid,]
+  
+  patient <- rep(organoid, length(compounds))
+  neutral_auc <- rep(0, length(compounds))
+  auc_val <- rep(0, length(compounds))
+  
+  result_df <- data.frame(patient = patient,
+                           drug = compounds,
+                           neutral_auc = neutral_auc,
+                           auc_val = auc_val)
+  
+  for (compound in compounds){
+    auc_df <- data[data$Compound_ID == compound, c("Compound_ID","Concentration","prob_alive")]
+    auc_df_mean <- auc_df %>%
+      group_by(Concentration) %>%
+      summarise(mean = mean(prob_alive, na.rm = TRUE)) %>%
+      mutate(log_conc = log(Concentration))
+    neutral_auc <- max(auc_df_mean$log_conc) - min(auc_df_mean$log_conc)
+    result_df[result_df$drug == compound,]$neutral_auc <- neutral_auc
+    auc_val <- MESS::auc(auc_df_mean$log_conc, auc_df_mean$mean, type = 'linear')
     result_df[result_df$drug == compound,]$auc_val <- auc_val
   }
   
